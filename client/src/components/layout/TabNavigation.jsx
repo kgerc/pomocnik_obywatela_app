@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageSquare, Heart, User, Bell, TrendingUp } from 'lucide-react';
+import { MessageSquare, Heart, User, Bell, TrendingUp, Edit } from 'lucide-react';
 
 const TabNavigation = ({ activeTab, setActiveTab, favoritesCount }) => {
   const tabs = [
@@ -8,6 +8,7 @@ const TabNavigation = ({ activeTab, setActiveTab, favoritesCount }) => {
     { id: 'favorites', icon: Heart, label: `Ulubione ${favoritesCount > 0 ? `(${favoritesCount})` : ''}` },
     { id: 'notifications', icon: Bell, label: 'Powiadomienia' },
     { id: 'dotacje', icon: TrendingUp, label: 'Dotacje' },
+    { id: 'pisma', icon: Edit, label: 'Pisma i Wnioski' }
   ];
 
   return (

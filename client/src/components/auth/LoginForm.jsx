@@ -247,18 +247,6 @@ const LoginForm = () => {
             </Link>
           </div>
         </form>
-
-        {/* Demo credentials */}
-        <div style={{
-          marginTop: '30px',
-          padding: '15px',
-          background: '#f8f9fb',
-          borderRadius: '8px',
-          fontSize: '13px',
-          color: '#5a6c7d'
-        }}>
-          <strong>Demo:</strong> demo@example.com / demo123
-        </div>
       </div>
 
       <style>{`

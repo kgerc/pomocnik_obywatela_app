@@ -6,6 +6,7 @@ import PersonalizationTab from '../components/tabs/PersonalizationTab';
 import FavoritesTab from '../components/tabs/FavoritesTab';
 import NotificationsTab from '../components/tabs/NotificationsTab';
 import DotacjeTab from '../components/tabs/DotacjeTab';
+import PismaTab from '../components/tabs/PismaTab';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSwiadczenia } from '../hooks/useSwiadczenia';
 import { personalizationAPI } from '../services/api';
@@ -128,6 +129,11 @@ const MainApp = () => {
         {/* Dotacje Tab */}
         {activeTab === 'dotacje' && (
           <DotacjeTab />
+        )}
+
+        {/* Pisma Tab */}
+        {activeTab === 'pisma' && (
+          <PismaTab />
         )}
       </div>
     </div>
