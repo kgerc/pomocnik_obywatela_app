@@ -45,7 +45,7 @@ app.use('/api/personalization', personalizationRoutes);
 app.use(errorHandler);
 
 // 404 handler
-app.use('*', (req, res) => {
+app.use((req, res) => {
   res.status(404).json({ message: 'Endpoint not found' });
 });
 
@@ -65,4 +65,4 @@ app.listen(PORT, async () => {
   }
 });
 
-export default server;
+export default app;
