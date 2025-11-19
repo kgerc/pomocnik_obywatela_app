@@ -61,7 +61,7 @@ const Header = () => {
               fontSize: '14px',
               margin: 0
             }}>
-              Witaj, {user?.email}
+              Witaj, {user?.user_metadata?.full_name || user?.email}
             </p>
           </div>
         </div>
