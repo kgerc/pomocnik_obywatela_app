@@ -7,6 +7,7 @@ import FavoritesTab from '../components/tabs/FavoritesTab';
 import NotificationsTab from '../components/tabs/NotificationsTab';
 import DotacjeTab from '../components/tabs/DotacjeTab';
 import PismaTab from '../components/tabs/PismaTab';
+import HistoriaTab from '../components/tabs/HistoriaTab';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSwiadczenia } from '../hooks/useSwiadczenia';
 import { personalizationAPI } from '../services/api';
@@ -134,6 +135,11 @@ const MainApp = () => {
         {/* Pisma Tab */}
         {activeTab === 'pisma' && (
           <PismaTab />
+        )}
+
+        {/* Historia Tab */}
+        {activeTab === 'historia' && (
+          <HistoriaTab />
         )}
       </div>
     </div>

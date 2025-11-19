@@ -13,6 +13,7 @@ import dotacjeRoutes from './routes/dotacje.js';
 import favoritesRoutes from './routes/favorites.js';
 import historyRoutes from './routes/history.js';
 import personalizationRoutes from './routes/personalization.js';
+import userDocumentsRouter from './routes/userDocuments.js';
 
 // Middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -40,6 +41,7 @@ app.use('/api/dotacje', dotacjeRoutes);
 app.use('/api/favorites', favoritesRoutes);
 app.use('/api/history', historyRoutes);
 app.use('/api/personalization', personalizationRoutes);
+app.use('/api/documents', userDocumentsRouter);
 
 // Error handling
 app.use(errorHandler);

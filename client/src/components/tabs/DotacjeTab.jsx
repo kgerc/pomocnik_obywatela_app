@@ -59,7 +59,7 @@ const DotacjeTab = () => {
 
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       
       const prompt = `Jesteś doradcą ds. dotacji w Polsce. Użytkownik szuka: "${dotacjeQuery}"\n\nDostępne programy:\n${contextForAI}\n\nOdpowiedz krótko (2-3 zdania):
       1. Które programy pasują do potrzeb użytkownika

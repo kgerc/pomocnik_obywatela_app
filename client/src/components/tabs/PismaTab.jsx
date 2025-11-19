@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Edit, Sparkles, Search, Loader, FileText, AlertCircle, ExternalLink, Download } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { usePisma } from '../../hooks/usePisma';
+import SaveDocumentButton from '../common/SaveDocumentButton';
 
 const PismaTab = () => {
   const [pismaQuery, setPismaQuery] = useState('');
@@ -57,7 +58,7 @@ const PismaTab = () => {
 
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       
       const prompt = `Jesteś asystentem prawnym w Polsce. Odpowiadaj TYLKO po polsku.
 
@@ -379,29 +380,41 @@ const PismoCard = ({ pismo }) => (
       flexWrap: 'wrap'
     }}>
       {pismo.pdf ? (
-        <a
-          href={pismo.pdf}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-            color: 'white',
-            padding: '10px 20px',
-            borderRadius: '8px',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '14px',
-            transition: 'transform 0.2s'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-        >
-          <Download size={16} />
-          Pobierz PDF
-        </a>
+        <>
+          <a
+            href={pismo.pdf}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+              color: 'white',
+              padding: '10px 20px',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              fontWeight: '600',
+              fontSize: '14px',
+              transition: 'transform 0.2s'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+          >
+            <Download size={16} />
+            Pobierz PDF
+          </a>
+          <SaveDocumentButton
+            documentData={{
+              title: pismo.nazwa,
+              description: pismo.opis,
+              fileUrl: pismo.pdf,
+              fileName: `${pismo.nazwa}.pdf`,
+              sourceType: 'pismo',
+              sourceId: pismo.id
+            }}
+          />
+        </>
       ) : (
         <a
           href={pismo.link}
@@ -496,54 +509,68 @@ const PismoCardSmall = ({ pismo }) => (
       {pismo.opis}
     </p>
 
-    {pismo.pdf ? (
-      <a
-        href={pismo.pdf}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '8px',
-          background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-          color: 'white',
-          padding: '10px 15px',
-          borderRadius: '8px',
-          textDecoration: 'none',
-          fontWeight: '600',
-          fontSize: '14px',
-          width: '100%'
-        }}
-      >
-        <Download size={16} />
-        Pobierz PDF
-      </a>
-    ) : (
-      <a
-        href={pismo.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '8px',
-          background: '#f8f9fb',
-          color: '#2c5aa0',
-          padding: '10px 15px',
-          borderRadius: '8px',
-          textDecoration: 'none',
-          fontWeight: '600',
-          fontSize: '14px',
-          border: '2px solid #2c5aa0',
-          width: '100%'
-        }}
-      >
-        <ExternalLink size={16} />
-        Zobacz więcej
-      </a>
-    )}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {pismo.pdf ? (
+        <>
+          <a
+            href={pismo.pdf}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+              color: 'white',
+              padding: '10px 15px',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              fontWeight: '600',
+              fontSize: '14px',
+              width: '100%'
+            }}
+          >
+            <Download size={16} />
+            Pobierz PDF
+          </a>
+          <SaveDocumentButton
+            documentData={{
+              title: pismo.nazwa,
+              description: pismo.opis,
+              fileUrl: pismo.pdf,
+              fileName: `${pismo.nazwa}.pdf`,
+              sourceType: 'pismo',
+              sourceId: pismo.id
+            }}
+          />
+        </>
+      ) : (
+        <a
+          href={pismo.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            background: '#f8f9fb',
+            color: '#2c5aa0',
+            padding: '10px 15px',
+            borderRadius: '8px',
+            textDecoration: 'none',
+            fontWeight: '600',
+            fontSize: '14px',
+            border: '2px solid #2c5aa0',
+            width: '100%'
+          }}
+        >
+          <ExternalLink size={16} />
+          Zobacz więcej
+        </a>
+      )}
+    </div>
   </div>
 );
 

@@ -76,7 +76,7 @@ const ChatInterface = ({ onToggleFavorite, isFavorite }) => {
       // Wywołaj Gemini AI
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       
       const prompt = `Jesteś asystentem obywatela w Polsce. Odpowiadaj TYLKO po polsku. Użytkownik pyta: "${query}"\n\nDostępne świadczenia w bazie danych:\n${contextForAI}\n\nOdpowiedz krótko i konkretnie (max 3-4 zdania):
       1. Które świadczenie/a pasują do pytania użytkownika

@@ -102,10 +102,48 @@ export const personalizationAPI = {
 
 // API dla AI
 export const aiAPI = {
-  chat: (query, context) => 
+  chat: (query, context) =>
     apiCall('/api/ai/chat', {
       method: 'POST',
       body: JSON.stringify({ query, context }),
+    }),
+};
+
+// API dla dokumentów użytkownika
+export const userDocumentsAPI = {
+  getAll: (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return apiCall(`/api/documents${queryString ? `?${queryString}` : ''}`);
+  },
+  getById: (id) => apiCall(`/api/documents/${id}`),
+  search: (query) => apiCall(`/api/documents/search?q=${encodeURIComponent(query)}`),
+  getStats: () => apiCall('/api/documents/stats'),
+  upload: (file, metadata) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('title', metadata.title);
+    if (metadata.description) formData.append('description', metadata.description);
+    if (metadata.tags) formData.append('tags', JSON.stringify(metadata.tags));
+
+    return apiCall('/api/documents/upload', {
+      method: 'POST',
+      body: formData,
+      headers: {} // Usuń Content-Type, przeglądarka ustawi automatycznie z boundary
+    });
+  },
+  saveFromApp: (documentData) =>
+    apiCall('/api/documents/save-from-app', {
+      method: 'POST',
+      body: JSON.stringify(documentData),
+    }),
+  update: (id, updates) =>
+    apiCall(`/api/documents/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    }),
+  delete: (id) =>
+    apiCall(`/api/documents/${id}`, {
+      method: 'DELETE',
     }),
 };
 
@@ -117,4 +155,5 @@ export default {
   history: historyAPI,
   personalization: personalizationAPI,
   ai: aiAPI,
+  userDocuments: userDocumentsAPI,
 };
