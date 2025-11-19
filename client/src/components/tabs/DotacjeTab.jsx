@@ -1,82 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TrendingUp, Sparkles, Search, Loader, Building2, AlertCircle, ExternalLink } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-
-// Przykładowa baza dotacji - w produkcji to byłoby z API
-const dotacjeDB = [
-  {
-    id: 'dotacja-1',
-    nazwa: 'Czyste Powietrze 2025',
-    sektor: 'Energia i środowisko',
-    status: 'Aktywny',
-    kwota_max: 'do 90 tys. zł',
-    opis: 'Program dofinansowania wymiany źródeł ciepła i termomodernizacji budynków jednorodzinnych.',
-    beneficjenci: ['Osoby fizyczne', 'Właściciele domów'],
-    termin: 'Ciągły nabór do wyczerpania środków',
-    link: 'https://www.gov.pl/web/nfosigw/czyste-powietrze',
-    slowa_kluczowe: ['energia', 'ogrzewanie', 'fotowoltaika', 'ekologia', 'dom', 'czyste powietrze']
-  },
-  {
-    id: 'dotacja-2',
-    nazwa: 'PARP - Wsparcie dla startupów',
-    sektor: 'Przedsiębiorczość',
-    status: 'Aktywny',
-    kwota_max: 'do 500 tys. zł',
-    opis: 'Dofinansowanie dla nowo powstałych firm innowacyjnych w początkowej fazie rozwoju.',
-    beneficjenci: ['Startupy', 'Przedsiębiorcy', 'Innowatorzy'],
-    termin: '31 grudnia 2025',
-    link: 'https://www.parp.gov.pl',
-    slowa_kluczowe: ['startup', 'firma', 'biznes', 'innowacje', 'przedsiębiorczość']
-  },
-  {
-    id: 'dotacja-3',
-    nazwa: 'NCN - Granty badawcze',
-    sektor: 'Nauka',
-    status: 'Nabór otwarty',
-    kwota_max: 'do 2 mln zł',
-    opis: 'Finansowanie projektów badawczych w dziedzinie nauk podstawowych i stosowanych.',
-    beneficjenci: ['Uniwersytety', 'Instytuty badawcze', 'Naukowcy'],
-    termin: '15 marca 2026',
-    link: 'https://www.ncn.gov.pl',
-    slowa_kluczowe: ['nauka', 'badania', 'uniwersytet', 'grant', 'projekt naukowy']
-  }
-];
-
-const findBestDotacje = (query, limit = 3) => {
-  const queryLower = query.toLowerCase();
-  const scored = dotacjeDB.map(dotacja => {
-    let score = 0;
-    
-    dotacja.slowa_kluczowe.forEach(keyword => {
-      if (queryLower.includes(keyword.toLowerCase())) {
-        score += 10;
-      }
-    });
-    
-    if (queryLower.includes(dotacja.nazwa.toLowerCase())) {
-      score += 20;
-    }
-    
-    if (queryLower.includes(dotacja.sektor.toLowerCase())) {
-      score += 15;
-    }
-    
-    return { ...dotacja, score };
-  });
-  
-  return scored
-    .filter(d => d.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, limit);
-};
+import { useDotacje } from '../../hooks/useDotacje';
 
 const DotacjeTab = () => {
   const [dotacjeQuery, setDotacjeQuery] = useState('');
   const [dotacjeLoading, setDotacjeLoading] = useState(false);
   const [dotacjeResult, setDotacjeResult] = useState(null);
   const [selectedSektor, setSelectedSektor] = useState('wszystkie');
+  const [sektory, setSektory] = useState(['wszystkie']);
+  const [filteredDotacje, setFilteredDotacje] = useState([]);
+  
+  const { dotacje, loading, error, fetchAll, search, getBySektor, getSektory } = useDotacje();
 
-  const sektory = ['wszystkie', 'Energia i środowisko', 'Przedsiębiorczość', 'Nauka', 'Kultura', 'Rolnictwo'];
+  // Pobierz dotacje i sektory przy montowaniu komponentu
+  useEffect(() => {
+    const loadData = async () => {
+      await fetchAll();
+      const sektoryData = await getSektory();
+      setSektory(['wszystkie', ...sektoryData]);
+    };
+    loadData();
+  }, []);
+
+  // Filtruj dotacje gdy zmieni się sektor
+  useEffect(() => {
+    const filterDotacje = async () => {
+      if (selectedSektor === 'wszystkie') {
+        setFilteredDotacje(dotacje);
+      } else {
+        const filtered = await getBySektor(selectedSektor);
+        setFilteredDotacje(filtered);
+      }
+    };
+    filterDotacje();
+  }, [selectedSektor, dotacje]);
 
   const handleDotacjeSearch = async () => {
     if (!dotacjeQuery.trim()) return;
@@ -84,7 +42,7 @@ const DotacjeTab = () => {
     setDotacjeLoading(true);
     
     try {
-      const matches = findBestDotacje(dotacjeQuery);
+      const matches = await search(dotacjeQuery);
       
       if (matches.length === 0) {
         setDotacjeResult({
@@ -135,9 +93,37 @@ const DotacjeTab = () => {
     }
   };
 
-  const displayedDotacje = selectedSektor === 'wszystkie' 
-    ? dotacjeDB 
-    : dotacjeDB.filter(d => d.sektor === selectedSektor);
+  if (loading) {
+    return (
+      <div style={{
+        background: 'white',
+        borderRadius: '16px',
+        padding: '60px',
+        marginBottom: '20px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+        textAlign: 'center'
+      }}>
+        <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
+        <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie dotacji...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{
+        background: 'white',
+        borderRadius: '16px',
+        padding: '30px',
+        marginBottom: '20px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+      }}>
+        <AlertCircle size={48} color="#c33" style={{ marginBottom: '20px' }} />
+        <h3 style={{ color: '#c33', marginBottom: '10px' }}>Błąd ładowania dotacji</h3>
+        <p style={{ color: '#5a6c7d' }}>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{
@@ -291,7 +277,7 @@ const DotacjeTab = () => {
               transition: 'all 0.2s'
             }}
           >
-            {sektor}
+            {sektor} ({sektor === 'wszystkie' ? dotacje.length : dotacje.filter(d => d.sektor === sektor).length})
           </button>
         ))}
       </div>
@@ -301,7 +287,7 @@ const DotacjeTab = () => {
         display: 'grid',
         gap: '20px'
       }}>
-        {displayedDotacje.map(dotacja => (
+        {filteredDotacje.map(dotacja => (
           <DotacjaCard key={dotacja.id} dotacja={dotacja} />
         ))}
       </div>
@@ -366,7 +352,7 @@ const DotacjaCard = ({ dotacja }) => (
             fontSize: '13px',
             fontWeight: '600'
           }}>
-            {dotacja.status}
+            {dotacja.status || 'aktywna'}
           </span>
         </div>
       </div>
@@ -402,59 +388,63 @@ const DotacjaCard = ({ dotacja }) => (
       {dotacja.opis}
     </p>
 
-    <div style={{
-      background: 'white',
-      padding: '15px',
-      borderRadius: '8px',
-      marginBottom: '15px'
-    }}>
-      <h5 style={{
-        fontSize: '14px',
-        fontWeight: '700',
-        color: '#2c3e50',
-        marginBottom: '8px',
+    {dotacja.beneficjenci && dotacja.beneficjenci.length > 0 && (
+      <div style={{
+        background: 'white',
+        padding: '15px',
+        borderRadius: '8px',
+        marginBottom: '15px'
+      }}>
+        <h5 style={{
+          fontSize: '14px',
+          fontWeight: '700',
+          color: '#2c3e50',
+          marginBottom: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          <Building2 size={16} color="#2c5aa0" />
+          Beneficjenci:
+        </h5>
+        <div style={{
+          display: 'flex',
+          gap: '8px',
+          flexWrap: 'wrap'
+        }}>
+          {dotacja.beneficjenci.map((ben, benIdx) => (
+            <span key={benIdx} style={{
+              background: '#f8f9fb',
+              color: '#5a6c7d',
+              padding: '6px 12px',
+              borderRadius: '6px',
+              fontSize: '13px',
+              border: '1px solid #e1e8ed'
+            }}>
+              {ben}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {dotacja.termin && (
+      <div style={{
+        background: 'white',
+        padding: '15px',
+        borderRadius: '8px',
+        marginBottom: '15px',
         display: 'flex',
         alignItems: 'center',
-        gap: '8px'
+        gap: '10px'
       }}>
-        <Building2 size={16} color="#2c5aa0" />
-        Beneficjenci:
-      </h5>
-      <div style={{
-        display: 'flex',
-        gap: '8px',
-        flexWrap: 'wrap'
-      }}>
-        {dotacja.beneficjenci.map((ben, benIdx) => (
-          <span key={benIdx} style={{
-            background: '#f8f9fb',
-            color: '#5a6c7d',
-            padding: '6px 12px',
-            borderRadius: '6px',
-            fontSize: '13px',
-            border: '1px solid #e1e8ed'
-          }}>
-            {ben}
-          </span>
-        ))}
+        <AlertCircle size={20} color="#ff9800" />
+        <div>
+          <strong style={{ color: '#2c3e50' }}>Termin:</strong>{' '}
+          <span style={{ color: '#5a6c7d' }}>{dotacja.termin}</span>
+        </div>
       </div>
-    </div>
-
-    <div style={{
-      background: 'white',
-      padding: '15px',
-      borderRadius: '8px',
-      marginBottom: '15px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '10px'
-    }}>
-      <AlertCircle size={20} color="#ff9800" />
-      <div>
-        <strong style={{ color: '#2c3e50' }}>Termin:</strong>{' '}
-        <span style={{ color: '#5a6c7d' }}>{dotacja.termin}</span>
-      </div>
-    </div>
+    )}
 
     <a
       href={dotacja.link}

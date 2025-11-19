@@ -38,6 +38,8 @@ export const swiadczeniaAPI = {
   getAll: () => apiCall('/api/swiadczenia'),
   getById: (id) => apiCall(`/api/swiadczenia/${id}`),
   search: (query) => apiCall(`/api/swiadczenia/search?q=${encodeURIComponent(query)}`),
+  getByCategory: (category) => apiCall(`/api/swiadczenia/category/${encodeURIComponent(category)}`),
+  getCategories: () => apiCall('/api/swiadczenia/categories'),
 };
 
 // API dla pism
@@ -45,7 +47,8 @@ export const pismaAPI = {
   getAll: () => apiCall('/api/pisma'),
   getById: (id) => apiCall(`/api/pisma/${id}`),
   search: (query) => apiCall(`/api/pisma/search?q=${encodeURIComponent(query)}`),
-  getByCategory: (category) => apiCall(`/api/pisma/category/${category}`),
+  getByCategory: (category) => apiCall(`/api/pisma/category/${encodeURIComponent(category)}`),
+  getCategories: () => apiCall('/api/pisma/categories'),
 };
 
 // API dla dotacji
@@ -53,7 +56,9 @@ export const dotacjeAPI = {
   getAll: () => apiCall('/api/dotacje'),
   getById: (id) => apiCall(`/api/dotacje/${id}`),
   search: (query) => apiCall(`/api/dotacje/search?q=${encodeURIComponent(query)}`),
-  getBySektor: (sektor) => apiCall(`/api/dotacje/sektor/${sektor}`),
+  getBySektor: (sektor) => apiCall(`/api/dotacje/sektor/${encodeURIComponent(sektor)}`),
+  getSektory: () => apiCall('/api/dotacje/sektory'),
+  getActive: () => apiCall('/api/dotacje/active'),
 };
 
 // API dla ulubionych
