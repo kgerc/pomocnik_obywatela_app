@@ -4,12 +4,15 @@ import TabNavigation from '../components/layout/TabNavigation';
 import ChatTab from '../components/tabs/ChatTab';
 import PersonalizationTab from '../components/tabs/PersonalizationTab';
 import FavoritesTab from '../components/tabs/FavoritesTab';
+import NotificationsTab from '../components/tabs/NotificationsTab';
+import DotacjeTab from '../components/tabs/DotacjeTab';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSwiadczenia } from '../hooks/useSwiadczenia';
 import { personalizationAPI } from '../services/api';
 
 const MainApp = () => {
   const [activeTab, setActiveTab] = useState('chat');
+  const [query, setQuery] = useState('');
   const { favorites, toggleFavorite: toggleFavAPI, isFavorite } = useFavorites();
   const { swiadczenia, fetchAll } = useSwiadczenia();
   const [personalizationData, setPersonalizationData] = useState({
@@ -112,6 +115,19 @@ const MainApp = () => {
             favoriteSwiadczenia={favoriteSwiadczenia}
             onToggleFavorite={handleToggleFavorite}
           />
+        )}
+
+        {/* Notifications Tab */}
+        {activeTab === 'notifications' && (
+          <NotificationsTab
+            setActiveTab={setActiveTab}
+            setQuery={setQuery}
+          />
+        )}
+
+        {/* Dotacje Tab */}
+        {activeTab === 'dotacje' && (
+          <DotacjeTab />
         )}
       </div>
     </div>

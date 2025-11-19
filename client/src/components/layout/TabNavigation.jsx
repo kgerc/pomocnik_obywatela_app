@@ -1,11 +1,13 @@
 import React from 'react';
-import { MessageSquare, Heart, User } from 'lucide-react';
+import { MessageSquare, Heart, User, Bell, TrendingUp } from 'lucide-react';
 
 const TabNavigation = ({ activeTab, setActiveTab, favoritesCount }) => {
   const tabs = [
     { id: 'chat', icon: MessageSquare, label: 'Chat' },
     { id: 'personalization', icon: User, label: 'Personalizacja' },
     { id: 'favorites', icon: Heart, label: `Ulubione ${favoritesCount > 0 ? `(${favoritesCount})` : ''}` },
+    { id: 'notifications', icon: Bell, label: 'Powiadomienia' },
+    { id: 'dotacje', icon: TrendingUp, label: 'Dotacje' },
   ];
 
   return (
