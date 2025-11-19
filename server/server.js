@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+// Database
+import { initDatabase } from './config/database.js';
+
 // Routes
 import authRoutes from './routes/auth.js';
 import swiadczeniaRoutes from './routes/swiadczenia.js';
@@ -46,10 +49,20 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Endpoint not found' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📍 API available at http://localhost:${PORT}`);
   console.log(`🔍 Health check: http://localhost:${PORT}/health`);
+  
+  // Initialize database connection
+  try {
+    await initDatabase();
+    console.log('✅ Database initialized successfully');
+  } catch (error) {
+    console.error('❌ Database initialization failed:', error.message);
+    console.error('   Please check your Supabase configuration in .env');
+    process.exit(1);
+  }
 });
 
 export default app;
