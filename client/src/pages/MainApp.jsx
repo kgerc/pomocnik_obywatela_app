@@ -8,8 +8,11 @@ import NotificationsTab from '../components/tabs/NotificationsTab';
 import DotacjeTab from '../components/tabs/DotacjeTab';
 import PismaTab from '../components/tabs/PismaTab';
 import HistoriaTab from '../components/tabs/HistoriaTab';
+import PremiumGate from '../components/premium/PremiumGate';
+import SubscriptionCard from '../components/premium/SubscriptionCard';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSwiadczenia } from '../hooks/useSwiadczenia';
+import { useSubscription } from '../hooks/useSubscription';
 import { personalizationAPI } from '../services/api';
 
 const MainApp = () => {
@@ -76,7 +79,12 @@ const MainApp = () => {
         margin: '0 auto'
       }}>
         <Header />
-        
+
+        {/* Subscription Card */}
+        <div style={{ marginBottom: '20px' }}>
+          <SubscriptionCard />
+        </div>
+
         <div style={{
           background: 'white',
           borderRadius: '16px',
@@ -84,34 +92,38 @@ const MainApp = () => {
           marginBottom: '20px',
           boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
         }}>
-          <TabNavigation 
+          <TabNavigation
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             favoritesCount={favorites.length}
           />
         </div>
 
-        {/* Chat Tab */}
+        {/* Chat Tab - PREMIUM */}
         {activeTab === 'chat' && (
-          <ChatTab 
-            onToggleFavorite={handleToggleFavorite}
-            isFavorite={isFavorite}
-          />
+          <PremiumGate feature="asystenta AI">
+            <ChatTab
+              onToggleFavorite={handleToggleFavorite}
+              isFavorite={isFavorite}
+            />
+          </PremiumGate>
         )}
 
-        {/* Personalization Tab */}
+        {/* Personalization Tab - PREMIUM */}
         {activeTab === 'personalization' && (
-          <PersonalizationTab
-            personalizationData={personalizationData}
-            setPersonalizationData={setPersonalizationData}
-            savePersonalization={savePersonalization}
-            recommendations={recommendations}
-            onToggleFavorite={handleToggleFavorite}
-            isFavorite={isFavorite}
-          />
+          <PremiumGate feature="personalizacji świadczeń">
+            <PersonalizationTab
+              personalizationData={personalizationData}
+              setPersonalizationData={setPersonalizationData}
+              savePersonalization={savePersonalization}
+              recommendations={recommendations}
+              onToggleFavorite={handleToggleFavorite}
+              isFavorite={isFavorite}
+            />
+          </PremiumGate>
         )}
 
-        {/* Favorites Tab */}
+        {/* Favorites Tab - FREE */}
         {activeTab === 'favorites' && (
           <FavoritesTab
             favoriteSwiadczenia={favoriteSwiadczenia}
@@ -119,25 +131,29 @@ const MainApp = () => {
           />
         )}
 
-        {/* Notifications Tab */}
+        {/* Notifications Tab - PREMIUM */}
         {activeTab === 'notifications' && (
-          <NotificationsTab
-            setActiveTab={setActiveTab}
-            setQuery={setQuery}
-          />
+          <PremiumGate feature="powiadomień">
+            <NotificationsTab
+              setActiveTab={setActiveTab}
+              setQuery={setQuery}
+            />
+          </PremiumGate>
         )}
 
-        {/* Dotacje Tab */}
+        {/* Dotacje Tab - PREMIUM */}
         {activeTab === 'dotacje' && (
-          <DotacjeTab />
+          <PremiumGate feature="przeglądu dotacji">
+            <DotacjeTab />
+          </PremiumGate>
         )}
 
-        {/* Pisma Tab */}
+        {/* Pisma Tab - FREE */}
         {activeTab === 'pisma' && (
           <PismaTab />
         )}
 
-        {/* Historia Tab */}
+        {/* Historia Tab - FREE */}
         {activeTab === 'historia' && (
           <HistoriaTab />
         )}

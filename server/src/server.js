@@ -14,6 +14,7 @@ import favoritesRoutes from './routes/favorites.js';
 import historyRoutes from './routes/history.js';
 import personalizationRoutes from './routes/personalization.js';
 import userDocumentsRouter from './routes/userDocuments.js';
+import stripeRouter from './routes/stripe.js';
 
 // Middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -25,6 +26,11 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
+
+// IMPORTANT: Stripe webhook must be registered BEFORE express.json()
+// to receive raw body for signature verification
+app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }), stripeRouter);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -42,6 +48,7 @@ app.use('/api/favorites', favoritesRoutes);
 app.use('/api/history', historyRoutes);
 app.use('/api/personalization', personalizationRoutes);
 app.use('/api/documents', userDocumentsRouter);
+app.use('/api/stripe', stripeRouter);
 
 // Error handling
 app.use(errorHandler);

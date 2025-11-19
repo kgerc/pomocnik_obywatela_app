@@ -1,15 +1,15 @@
 import React from 'react';
-import { MessageSquare, Heart, User, Bell, TrendingUp, Edit, History } from 'lucide-react';
+import { MessageSquare, Heart, User, Bell, TrendingUp, Edit, History, Crown } from 'lucide-react';
 
 const TabNavigation = ({ activeTab, setActiveTab, favoritesCount }) => {
   const tabs = [
-    { id: 'chat', icon: MessageSquare, label: 'Chat' },
-    { id: 'personalization', icon: User, label: 'Personalizacja' },
-    { id: 'favorites', icon: Heart, label: `Ulubione ${favoritesCount > 0 ? `(${favoritesCount})` : ''}` },
-    { id: 'historia', icon: History, label: 'Historia' },
-    { id: 'notifications', icon: Bell, label: 'Powiadomienia' },
-    { id: 'dotacje', icon: TrendingUp, label: 'Dotacje' },
-    { id: 'pisma', icon: Edit, label: 'Pisma i Wnioski' }
+    { id: 'chat', icon: MessageSquare, label: 'Chat', premium: true },
+    { id: 'personalization', icon: User, label: 'Personalizacja', premium: true },
+    { id: 'favorites', icon: Heart, label: `Ulubione ${favoritesCount > 0 ? `(${favoritesCount})` : ''}`, premium: false },
+    { id: 'historia', icon: History, label: 'Historia', premium: false },
+    { id: 'notifications', icon: Bell, label: 'Powiadomienia', premium: true },
+    { id: 'dotacje', icon: TrendingUp, label: 'Dotacje', premium: true },
+    { id: 'pisma', icon: Edit, label: 'Pisma i Wnioski', premium: false }
   ];
 
   return (
@@ -35,7 +35,8 @@ const TabNavigation = ({ activeTab, setActiveTab, favoritesCount }) => {
             cursor: 'pointer',
             fontWeight: '600',
             fontSize: '14px',
-            transition: 'all 0.2s'
+            transition: 'all 0.2s',
+            position: 'relative'
           }}
           onMouseOver={(e) => {
             if (activeTab !== tab.id) {
@@ -50,6 +51,14 @@ const TabNavigation = ({ activeTab, setActiveTab, favoritesCount }) => {
         >
           <tab.icon size={18} />
           {tab.label}
+          {tab.premium && (
+            <Crown
+              size={14}
+              color={activeTab === tab.id ? '#ffd700' : '#ffd700'}
+              fill={activeTab === tab.id ? '#ffd700' : 'none'}
+              style={{ marginLeft: '-2px' }}
+            />
+          )}
         </button>
       ))}
     </div>
