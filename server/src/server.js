@@ -65,4 +65,4 @@ app.listen(PORT, async () => {
   }
 });
 
-export default app;
+export default server;
