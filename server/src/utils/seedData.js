@@ -17,7 +17,7 @@ const supabase = createClient(
 // Funkcja do wczytywania danych z plików JS
 async function loadDataFile(filename) {
   try {
-    const dataPath = path.join(__dirname, '../../data', filename);
+    const dataPath = path.join(__dirname, '../../../data', filename);
     const fileContent = await fs.readFile(dataPath, 'utf8');
     
     // Wyciągnij dane z eksportu
