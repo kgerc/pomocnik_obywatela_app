@@ -33,6 +33,7 @@ const SaveDocumentButton = ({ documentData, onSaveSuccess }) => {
         style={{
           display: 'inline-flex',
           alignItems: 'center',
+          justifyContent: 'center',
           gap: '8px',
           background: '#d1fae5',
           color: '#059669',
@@ -57,6 +58,7 @@ const SaveDocumentButton = ({ documentData, onSaveSuccess }) => {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
+        justifyContent: 'center',
         gap: '8px',
         background: saving ? '#ccc' : '#f8f9fb',
         color: saving ? '#999' : '#2c5aa0',
@@ -80,7 +82,7 @@ const SaveDocumentButton = ({ documentData, onSaveSuccess }) => {
       ) : (
         <>
           <Save size={16} />
-          Zapisz do moich dokumentów
+          Zapisz dokument
         </>
       )}
     </button>

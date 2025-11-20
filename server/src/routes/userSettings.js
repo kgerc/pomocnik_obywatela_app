@@ -38,24 +38,25 @@ router.put('/', authenticateUser, async (req, res) => {
 router.put('/profile', authenticateUser, async (req, res) => {
   try {
     const userId = req.user.id;
-    const { fullName, phone, address } = req.body;
+    const { fullName } = req.body;
 
-    // Zaktualizuj profil
+    // Zaktualizuj profil w auth.users metadata
     if (fullName !== undefined) {
-      await User.update(userId, { fullName });
-    }
+      const { error } = await supabase.auth.admin.updateUserById(userId, {
+        user_metadata: { full_name: fullName }
+      });
 
-    // Zaktualizuj ustawienia (telefon, adres)
-    if (phone !== undefined || address !== undefined) {
-      await UserSettings.update(userId, { phone, address });
+      if (error) throw error;
     }
 
     // Pobierz zaktualizowane dane
-    const user = await User.findById(userId);
+    const { data: userData, error: userError } = await supabase.auth.admin.getUserById(userId);
+    if (userError) throw userError;
+
     const settings = await UserSettings.findByUserId(userId);
 
     res.json({
-      user: user.toJSON(),
+      user: userData.user,
       settings: settings.toJSON()
     });
   } catch (error) {
@@ -68,6 +69,7 @@ router.put('/profile', authenticateUser, async (req, res) => {
 router.post('/change-password', authenticateUser, async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
 
     if (!currentPassword || !newPassword) {
       return res.status(400).json({ error: 'Wymagane oba hasła' });
@@ -77,10 +79,13 @@ router.post('/change-password', authenticateUser, async (req, res) => {
       return res.status(400).json({ error: 'Nowe hasło musi mieć minimum 6 znaków' });
     }
 
+    // Pobierz dane użytkownika
+    const { data: { user }, error: getUserError } = await supabase.auth.getUser(token);
+    if (getUserError) throw getUserError;
+
     // Najpierw zweryfikuj obecne hasło przez próbę logowania
-    const user = await supabase.auth.getUser(req.headers.authorization.split(' ')[1]);
     const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: user.data.user.email,
+      email: user.email,
       password: currentPassword
     });
 
@@ -88,14 +93,18 @@ router.post('/change-password', authenticateUser, async (req, res) => {
       return res.status(401).json({ error: 'Nieprawidłowe obecne hasło' });
     }
 
-    // Zmień hasło
-    const { error } = await supabase.auth.updateUser({
+    // Zmień hasło używając tokenu z requesta
+    const { data, error } = await supabase.auth.updateUser({
       password: newPassword
     });
 
     if (error) throw error;
 
-    res.json({ message: 'Hasło zostało zmienione' });
+    // Zwróć nową sesję, aby klient mógł zaktualizować token
+    res.json({
+      message: 'Hasło zostało zmienione',
+      session: data.session
+    });
   } catch (error) {
     console.error('Error changing password:', error);
     res.status(500).json({ error: error.message });

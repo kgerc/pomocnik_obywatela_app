@@ -3,13 +3,13 @@ import { MessageSquare, Heart, User, Bell, TrendingUp, Edit, History, Crown } fr
 
 const TabNavigation = ({ activeTab, setActiveTab, favoritesCount }) => {
   const tabs = [
-    { id: 'chat', icon: MessageSquare, label: 'Chat', premium: true },
-    { id: 'personalization', icon: User, label: 'Personalizacja', premium: true },
-    { id: 'favorites', icon: Heart, label: `Ulubione ${favoritesCount > 0 ? `(${favoritesCount})` : ''}`, premium: false },
+    { id: 'pisma', icon: Edit, label: 'Pisma', premium: false },
     { id: 'historia', icon: History, label: 'Historia', premium: false },
+    { id: 'chat', icon: MessageSquare, label: 'Chat', premium: true },
+    { id: 'favorites', icon: Heart, label: `Ulubione ${favoritesCount > 0 ? `(${favoritesCount})` : ''}`, premium: true },
+    { id: 'personalization', icon: User, label: 'Personalizacja', premium: true },
     { id: 'notifications', icon: Bell, label: 'Powiadomienia', premium: true },
-    { id: 'dotacje', icon: TrendingUp, label: 'Dotacje', premium: true },
-    { id: 'pisma', icon: Edit, label: 'Pisma i Wnioski', premium: false }
+    { id: 'dotacje', icon: TrendingUp, label: 'Dotacje', premium: true }
   ];
 
   return (

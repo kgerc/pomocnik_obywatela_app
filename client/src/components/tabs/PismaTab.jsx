@@ -453,7 +453,9 @@ const PismoCardSmall = ({ pismo }) => (
     padding: '20px',
     borderRadius: '12px',
     border: '2px solid #e1e8ed',
-    transition: 'all 0.3s ease'
+    transition: 'all 0.3s ease',
+    display: 'flex',
+    flexDirection: 'column'
   }}
   onMouseOver={(e) => {
     e.currentTarget.style.transform = 'translateY(-5px)';
@@ -511,7 +513,12 @@ const PismoCardSmall = ({ pismo }) => (
       {pismo.opis}
     </p>
 
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '10px',
+      marginTop: 'auto'
+    }}>
       {pismo.pdf ? (
         <>
           <a

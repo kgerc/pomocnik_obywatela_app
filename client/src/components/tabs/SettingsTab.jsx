@@ -1,30 +1,28 @@
 import React, { useState } from 'react';
 import {
-  User, Shield, Bell, Globe, Lock, Download, Trash2,
-  Save, Moon, Sun, Mail, Phone, MapPin, Key, CreditCard,
-  HelpCircle, AlertTriangle, CheckCircle, Crown, ExternalLink
+  User, Shield, Lock, Download, Trash2,
+  Save, Mail, Key, CreditCard,
+  HelpCircle, Crown, ExternalLink
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useSettings } from '../../hooks/useSettings';
 import { useSubscription } from '../../hooks/useSubscription';
+import { useToast } from '../../contexts/ToastContext';
 
 const SettingsTab = () => {
   const { user } = useAuth();
   const { settings, loading, updateSettings, updateProfile, changePassword, toggle2FA, exportData, deleteAccount } = useSettings();
   const { subscription, isPremium, createPortalSession } = useSubscription();
+  const { showSuccess, showError } = useToast();
 
   const [activeSection, setActiveSection] = useState('personal');
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({});
   const [passwordData, setPasswordData] = useState({ current: '', new: '', confirm: '' });
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
   const sections = [
     { id: 'personal', icon: User, label: 'Dane osobowe' },
     { id: 'security', icon: Shield, label: 'Bezpieczeństwo' },
-    { id: 'notifications', icon: Bell, label: 'Powiadomienia' },
-    { id: 'preferences', icon: Globe, label: 'Personalizacja' },
     { id: 'privacy', icon: Lock, label: 'Prywatność' },
     { id: 'subscription', icon: CreditCard, label: 'Subskrypcja' },
     { id: 'help', icon: HelpCircle, label: 'Pomoc' }
@@ -35,8 +33,6 @@ const SettingsTab = () => {
       setFormData({
         fullName: user?.user_metadata?.full_name || '',
         email: user?.email || '',
-        phone: settings.phone || '',
-        address: settings.address || '',
         theme: settings.theme || 'light',
         emailNotifications: settings.emailNotifications ?? true,
         smsNotifications: settings.smsNotifications ?? false,
@@ -47,22 +43,10 @@ const SettingsTab = () => {
     }
   }, [settings, user]);
 
-  const showSuccess = (message) => {
-    setSuccessMessage(message);
-    setTimeout(() => setSuccessMessage(''), 3000);
-  };
-
-  const showError = (message) => {
-    setErrorMessage(message);
-    setTimeout(() => setErrorMessage(''), 5000);
-  };
-
   const handleSaveProfile = async () => {
     try {
       await updateProfile({
-        fullName: formData.fullName,
-        phone: formData.phone,
-        address: formData.address
+        fullName: formData.fullName
       });
       setEditMode(false);
       showSuccess('Dane zostały zaktualizowane');
@@ -171,6 +155,7 @@ const SettingsTab = () => {
             editMode={editMode}
             setEditMode={setEditMode}
             handleSave={handleSaveProfile}
+            loading={loading}
           />
         );
 
@@ -184,23 +169,7 @@ const SettingsTab = () => {
             toggle2FA={toggle2FA}
             showSuccess={showSuccess}
             showError={showError}
-          />
-        );
-
-      case 'notifications':
-        return (
-          <NotificationsSection
-            formData={formData}
-            setFormData={setFormData}
-            handleSave={handleUpdateNotifications}
-          />
-        );
-
-      case 'preferences':
-        return (
-          <PreferencesSection
-            theme={formData.theme}
-            handleToggleTheme={handleToggleTheme}
+            loading={loading}
           />
         );
 
@@ -212,6 +181,7 @@ const SettingsTab = () => {
             handleUpdateGDPR={handleUpdateGDPR}
             handleExportData={handleExportData}
             handleDeleteAccount={handleDeleteAccount}
+            loading={loading}
           />
         );
 
@@ -239,41 +209,6 @@ const SettingsTab = () => {
       padding: '30px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
     }}>
-      {/* Messages */}
-      {successMessage && (
-        <div style={{
-          background: '#d1fae5',
-          border: '2px solid #10b981',
-          borderRadius: '8px',
-          padding: '12px 16px',
-          marginBottom: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          color: '#065f46'
-        }}>
-          <CheckCircle size={20} />
-          {successMessage}
-        </div>
-      )}
-
-      {errorMessage && (
-        <div style={{
-          background: '#fee',
-          border: '2px solid #fcc',
-          borderRadius: '8px',
-          padding: '12px 16px',
-          marginBottom: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          color: '#c33'
-        }}>
-          <AlertTriangle size={20} />
-          {errorMessage}
-        </div>
-      )}
-
       <h2 style={{
         fontSize: '24px',
         fontWeight: '700',
@@ -334,7 +269,7 @@ const SettingsTab = () => {
 };
 
 // Sub-components for each section
-const PersonalDataSection = ({ formData, setFormData, editMode, setEditMode, handleSave }) => (
+const PersonalDataSection = ({ formData, setFormData, editMode, setEditMode, handleSave, loading }) => (
   <div>
     <div style={{
       display: 'flex',
@@ -365,28 +300,31 @@ const PersonalDataSection = ({ formData, setFormData, editMode, setEditMode, han
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
             onClick={() => setEditMode(false)}
+            disabled={loading}
             style={{
               padding: '8px 16px',
               background: '#f8f9fb',
               color: '#5a6c7d',
               border: '2px solid #e1e8ed',
               borderRadius: '6px',
-              cursor: 'pointer',
+              cursor: loading ? 'not-allowed' : 'pointer',
               fontWeight: '600',
-              fontSize: '14px'
+              fontSize: '14px',
+              opacity: loading ? 0.6 : 1
             }}
           >
             Anuluj
           </button>
           <button
             onClick={handleSave}
+            disabled={loading}
             style={{
               padding: '8px 16px',
-              background: '#10b981',
+              background: loading ? '#ccc' : '#10b981',
               color: 'white',
               border: 'none',
               borderRadius: '6px',
-              cursor: 'pointer',
+              cursor: loading ? 'not-allowed' : 'pointer',
               fontWeight: '600',
               fontSize: '14px',
               display: 'flex',
@@ -395,7 +333,7 @@ const PersonalDataSection = ({ formData, setFormData, editMode, setEditMode, han
             }}
           >
             <Save size={16} />
-            Zapisz
+            {loading ? 'Zapisywanie...' : 'Zapisz'}
           </button>
         </div>
       )}
@@ -417,30 +355,11 @@ const PersonalDataSection = ({ formData, setFormData, editMode, setEditMode, han
         disabled={true}
         hint="Email nie może być zmieniony"
       />
-
-      <FormField
-        label="Numer telefonu"
-        icon={Phone}
-        value={formData.phone}
-        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-        disabled={!editMode}
-        placeholder="+48 123 456 789"
-      />
-
-      <FormField
-        label="Adres zamieszkania"
-        icon={MapPin}
-        value={formData.address}
-        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-        disabled={!editMode}
-        placeholder="ul. Przykładowa 1, 00-000 Warszawa"
-        multiline
-      />
     </div>
   </div>
 );
 
-const SecuritySection = ({ passwordData, setPasswordData, handleChangePassword, twoFactorEnabled, toggle2FA, showSuccess, showError }) => (
+const SecuritySection = ({ passwordData, setPasswordData, handleChangePassword, twoFactorEnabled, toggle2FA, showSuccess, showError, loading }) => (
   <div>
     <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#2c3e50', marginBottom: '20px' }}>
       Bezpieczeństwo
@@ -464,6 +383,7 @@ const SecuritySection = ({ passwordData, setPasswordData, handleChangePassword, 
           type="password"
           value={passwordData.current}
           onChange={(e) => setPasswordData({ ...passwordData, current: e.target.value })}
+          disabled={loading}
         />
 
         <FormField
@@ -472,6 +392,7 @@ const SecuritySection = ({ passwordData, setPasswordData, handleChangePassword, 
           type="password"
           value={passwordData.new}
           onChange={(e) => setPasswordData({ ...passwordData, new: e.target.value })}
+          disabled={loading}
         />
 
         <FormField
@@ -480,23 +401,25 @@ const SecuritySection = ({ passwordData, setPasswordData, handleChangePassword, 
           type="password"
           value={passwordData.confirm}
           onChange={(e) => setPasswordData({ ...passwordData, confirm: e.target.value })}
+          disabled={loading}
         />
 
         <button
           onClick={handleChangePassword}
+          disabled={loading}
           style={{
             padding: '12px 24px',
-            background: '#2c5aa0',
+            background: loading ? '#ccc' : '#2c5aa0',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
-            cursor: 'pointer',
+            cursor: loading ? 'not-allowed' : 'pointer',
             fontWeight: '600',
             fontSize: '15px',
             alignSelf: 'flex-start'
           }}
         >
-          Zmień hasło
+          {loading ? 'Zmiana hasła...' : 'Zmień hasło'}
         </button>
       </div>
     </div>
@@ -539,158 +462,7 @@ const SecuritySection = ({ passwordData, setPasswordData, handleChangePassword, 
   </div>
 );
 
-const NotificationsSection = ({ formData, setFormData, handleSave }) => (
-  <div>
-    <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#2c3e50', marginBottom: '20px' }}>
-      Powiadomienia
-    </h3>
-
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      {/* Kanały powiadomień */}
-      <div style={{
-        background: '#f8f9fb',
-        padding: '20px',
-        borderRadius: '12px'
-      }}>
-        <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#2c3e50', marginBottom: '16px' }}>
-          Kanały powiadomień
-        </h4>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <CheckboxField
-            label="Powiadomienia e-mail"
-            checked={formData.emailNotifications}
-            onChange={(checked) => setFormData({ ...formData, emailNotifications: checked })}
-          />
-
-          <CheckboxField
-            label="Powiadomienia SMS"
-            checked={formData.smsNotifications}
-            onChange={(checked) => setFormData({ ...formData, smsNotifications: checked })}
-          />
-        </div>
-      </div>
-
-      {/* Typy powiadomień */}
-      <div style={{
-        background: '#f8f9fb',
-        padding: '20px',
-        borderRadius: '12px'
-      }}>
-        <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#2c3e50', marginBottom: '16px' }}>
-          Typy powiadomień
-        </h4>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <CheckboxField
-            label="Nowe świadczenia"
-            checked={formData.notificationTypes?.newBenefits ?? true}
-            onChange={(checked) => setFormData({
-              ...formData,
-              notificationTypes: { ...formData.notificationTypes, newBenefits: checked }
-            })}
-          />
-
-          <CheckboxField
-            label="Zmiany w przepisach"
-            checked={formData.notificationTypes?.lawChanges ?? true}
-            onChange={(checked) => setFormData({
-              ...formData,
-              notificationTypes: { ...formData.notificationTypes, lawChanges: checked }
-            })}
-          />
-
-          <CheckboxField
-            label="Przypomnienia o terminach"
-            checked={formData.notificationTypes?.deadlineReminders ?? true}
-            onChange={(checked) => setFormData({
-              ...formData,
-              notificationTypes: { ...formData.notificationTypes, deadlineReminders: checked }
-            })}
-          />
-
-          <CheckboxField
-            label="Rekomendacje dokumentów"
-            checked={formData.notificationTypes?.documentRecommendations ?? true}
-            onChange={(checked) => setFormData({
-              ...formData,
-              notificationTypes: { ...formData.notificationTypes, documentRecommendations: checked }
-            })}
-          />
-        </div>
-      </div>
-
-      <button
-        onClick={handleSave}
-        style={{
-          padding: '12px 24px',
-          background: '#2c5aa0',
-          color: 'white',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer',
-          fontWeight: '600',
-          fontSize: '15px',
-          alignSelf: 'flex-start',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px'
-        }}
-      >
-        <Save size={18} />
-        Zapisz ustawienia
-      </button>
-    </div>
-  </div>
-);
-
-const PreferencesSection = ({ theme, handleToggleTheme }) => (
-  <div>
-    <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#2c3e50', marginBottom: '20px' }}>
-      Personalizacja
-    </h3>
-
-    <div style={{
-      background: '#f8f9fb',
-      padding: '20px',
-      borderRadius: '12px'
-    }}>
-      <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#2c3e50', marginBottom: '12px' }}>
-        Motyw aplikacji
-      </h4>
-
-      <p style={{ color: '#5a6c7d', fontSize: '14px', marginBottom: '16px' }}>
-        Obecnie: <strong>{theme === 'light' ? 'Jasny' : 'Ciemny'}</strong>
-      </p>
-
-      <button
-        onClick={handleToggleTheme}
-        style={{
-          padding: '12px 24px',
-          background: '#2c5aa0',
-          color: 'white',
-          border: 'none',
-          borderRadius: '8px',
-          cursor: 'pointer',
-          fontWeight: '600',
-          fontSize: '15px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px'
-        }}
-      >
-        {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-        Przełącz na {theme === 'light' ? 'ciemny' : 'jasny'}
-      </button>
-
-      <p style={{ color: '#5a6c7d', fontSize: '13px', marginTop: '12px' }}>
-        Uwaga: Funkcja w przygotowaniu. Motyw zostanie zastosowany po odświeżeniu strony.
-      </p>
-    </div>
-  </div>
-);
-
-const PrivacySection = ({ formData, setFormData, handleUpdateGDPR, handleExportData, handleDeleteAccount }) => (
+const PrivacySection = ({ formData, setFormData, handleUpdateGDPR, handleExportData, handleDeleteAccount, loading }) => (
   <div>
     <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#2c3e50', marginBottom: '20px' }}>
       Prywatność i RODO
@@ -716,6 +488,7 @@ const PrivacySection = ({ formData, setFormData, handleUpdateGDPR, handleExportD
               gdprConsents: { ...formData.gdprConsents, dataProcessing: checked }
             })}
             hint="Wymagane do korzystania z aplikacji"
+            disabled={loading}
           />
 
           <CheckboxField
@@ -725,6 +498,7 @@ const PrivacySection = ({ formData, setFormData, handleUpdateGDPR, handleExportD
               ...formData,
               gdprConsents: { ...formData.gdprConsents, marketing: checked }
             })}
+            disabled={loading}
           />
 
           <CheckboxField
@@ -734,24 +508,26 @@ const PrivacySection = ({ formData, setFormData, handleUpdateGDPR, handleExportD
               ...formData,
               gdprConsents: { ...formData.gdprConsents, newsletter: checked }
             })}
+            disabled={loading}
           />
         </div>
 
         <button
           onClick={handleUpdateGDPR}
+          disabled={loading}
           style={{
             marginTop: '16px',
             padding: '10px 20px',
-            background: '#2c5aa0',
+            background: loading ? '#ccc' : '#2c5aa0',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
-            cursor: 'pointer',
+            cursor: loading ? 'not-allowed' : 'pointer',
             fontWeight: '600',
             fontSize: '14px'
           }}
         >
-          Zapisz zgody
+          {loading ? 'Zapisywanie...' : 'Zapisz zgody'}
         </button>
       </div>
 
@@ -1071,23 +847,25 @@ const FormField = ({ label, icon: Icon, value, onChange, disabled, hint, placeho
   </div>
 );
 
-const CheckboxField = ({ label, checked, onChange, hint }) => (
+const CheckboxField = ({ label, checked, onChange, hint, disabled }) => (
   <div>
     <label style={{
       display: 'flex',
       alignItems: 'flex-start',
       gap: '10px',
-      cursor: 'pointer'
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.6 : 1
     }}>
       <input
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
+        disabled={disabled}
         style={{
           width: '18px',
           height: '18px',
           marginTop: '2px',
-          cursor: 'pointer'
+          cursor: disabled ? 'not-allowed' : 'pointer'
         }}
       />
       <div>

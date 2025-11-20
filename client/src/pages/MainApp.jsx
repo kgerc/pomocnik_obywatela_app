@@ -75,7 +75,7 @@ const MainApp = () => {
       padding: '20px'
     }}>
       <div style={{
-        maxWidth: '1000px',
+        maxWidth: '1015px',
         margin: '0 auto'
       }}>
         <Header setActiveTab={setActiveTab} />

@@ -4,13 +4,9 @@ class UserSettings {
   constructor(data) {
     this.id = data.id;
     this.userId = data.user_id || data.userId;
-    this.phone = data.phone;
-    this.address = data.address;
     this.theme = data.theme || 'light';
-    this.language = data.language || 'pl';
     this.emailNotifications = data.email_notifications ?? true;
     this.smsNotifications = data.sms_notifications ?? false;
-    this.pushNotifications = data.push_notifications ?? true;
     this.notificationTypes = data.notification_types || {
       newBenefits: true,
       lawChanges: true,
@@ -60,10 +56,8 @@ class UserSettings {
         .insert({
           user_id: userId,
           theme: 'light',
-          language: 'pl',
           email_notifications: true,
           sms_notifications: false,
-          push_notifications: true,
           notification_types: {
             newBenefits: true,
             lawChanges: true,
@@ -96,13 +90,9 @@ class UserSettings {
         updated_at: new Date()
       };
 
-      if (updates.phone !== undefined) updateData.phone = updates.phone;
-      if (updates.address !== undefined) updateData.address = updates.address;
       if (updates.theme !== undefined) updateData.theme = updates.theme;
-      if (updates.language !== undefined) updateData.language = updates.language;
       if (updates.emailNotifications !== undefined) updateData.email_notifications = updates.emailNotifications;
       if (updates.smsNotifications !== undefined) updateData.sms_notifications = updates.smsNotifications;
-      if (updates.pushNotifications !== undefined) updateData.push_notifications = updates.pushNotifications;
       if (updates.notificationTypes !== undefined) updateData.notification_types = updates.notificationTypes;
       if (updates.gdprConsents !== undefined) updateData.gdpr_consents = updates.gdprConsents;
       if (updates.twoFactorEnabled !== undefined) updateData.two_factor_enabled = updates.twoFactorEnabled;
@@ -171,13 +161,9 @@ class UserSettings {
     return {
       id: this.id,
       userId: this.userId,
-      phone: this.phone,
-      address: this.address,
       theme: this.theme,
-      language: this.language,
       emailNotifications: this.emailNotifications,
       smsNotifications: this.smsNotifications,
-      pushNotifications: this.pushNotifications,
       notificationTypes: this.notificationTypes,
       gdprConsents: this.gdprConsents,
       twoFactorEnabled: this.twoFactorEnabled,

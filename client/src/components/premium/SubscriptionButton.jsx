@@ -6,7 +6,7 @@ const SubscriptionButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { subscription, isPremium, loading, createPortalSession } = useSubscription();
 
-  if (loading || !isPremium || !subscription) {
+  if (!isPremium || !subscription) {
     return null;
   }
 

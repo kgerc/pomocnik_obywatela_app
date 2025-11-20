@@ -79,22 +79,19 @@ export const useSettings = () => {
 
     try {
       setLoading(true);
-      const token = session.access_token;
+      const { supabase } = await import('../services/supabaseClient');
 
-      const response = await fetch(`${API_URL}/api/settings/profile`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(profileData)
-      });
+      // Zaktualizuj profil w auth.users metadata używając client-side Supabase
+      if (profileData.fullName !== undefined) {
+        const { error } = await supabase.auth.updateUser({
+          data: { full_name: profileData.fullName }
+        });
 
-      if (!response.ok) throw new Error('Failed to update profile');
+        if (error) throw error;
+      }
 
-      const data = await response.json();
       setError(null);
-      return data;
+      return { message: 'Profil został zaktualizowany' };
     } catch (err) {
       console.error('Error updating profile:', err);
       setError(err.message);
@@ -105,31 +102,33 @@ export const useSettings = () => {
   };
 
   const changePassword = async (currentPassword, newPassword) => {
-    if (!session) {
+    if (!session || !user) {
       throw new Error('Brak sesji użytkownika');
     }
 
     try {
       setLoading(true);
-      const token = session.access_token;
+      const { supabase } = await import('../services/supabaseClient');
 
-      const response = await fetch(`${API_URL}/api/settings/change-password`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ currentPassword, newPassword })
+      // Najpierw zweryfikuj obecne hasło przez próbę logowania
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to change password');
+      if (signInError) {
+        throw new Error('Nieprawidłowe obecne hasło');
       }
 
-      const data = await response.json();
+      // Zmień hasło używając Supabase client-side
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) throw error;
+
       setError(null);
-      return data;
+      return { message: 'Hasło zostało zmienione' };
     } catch (err) {
       console.error('Error changing password:', err);
       setError(err.message);
