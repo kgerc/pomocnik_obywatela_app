@@ -16,6 +16,7 @@ import personalizationRoutes from './routes/personalization.js';
 import userDocumentsRouter from './routes/userDocuments.js';
 import stripeRouter from './routes/stripe.js';
 import userSettingsRouter from './routes/userSettings.js';
+import promoCodesRouter from './routes/promoCodes.js';
 
 // Middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -51,6 +52,7 @@ app.use('/api/personalization', personalizationRoutes);
 app.use('/api/documents', userDocumentsRouter);
 app.use('/api/stripe', stripeRouter);
 app.use('/api/settings', userSettingsRouter);
+app.use('/api/promo-codes', promoCodesRouter);
 
 // Error handling
 app.use(errorHandler);

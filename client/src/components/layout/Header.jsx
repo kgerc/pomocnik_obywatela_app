@@ -95,7 +95,7 @@ const Header = ({ setActiveTab }) => {
             }}
             title="Ustawienia"
           >
-            <Settings size={24} />
+            <Settings size={18} />
           </button>
 
           <button

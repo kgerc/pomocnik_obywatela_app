@@ -193,6 +193,7 @@ const PismaTab = () => {
             padding: '15px',
             fontSize: '16px',
             border: '2px solid #2c5aa0',
+            background: 'white',
             borderRadius: '8px',
             resize: 'vertical',
             fontFamily: 'inherit',
@@ -396,7 +397,8 @@ const PismoCard = ({ pismo }) => (
               textDecoration: 'none',
               fontWeight: '600',
               fontSize: '14px',
-              transition: 'transform 0.2s'
+              transition: 'transform 0.2s',
+              boxSizing: 'border-box'
             }}
             onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
             onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -528,7 +530,8 @@ const PismoCardSmall = ({ pismo }) => (
               textDecoration: 'none',
               fontWeight: '600',
               fontSize: '14px',
-              width: '100%'
+              width: '100%',
+              boxSizing: 'border-box'
             }}
           >
             <Download size={16} />
@@ -563,7 +566,8 @@ const PismoCardSmall = ({ pismo }) => (
             fontWeight: '600',
             fontSize: '14px',
             border: '2px solid #2c5aa0',
-            width: '100%'
+            width: '100%',
+            boxSizing: 'border-box'
           }}
         >
           <ExternalLink size={16} />

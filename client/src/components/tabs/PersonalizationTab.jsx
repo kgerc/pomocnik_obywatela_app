@@ -119,6 +119,8 @@ const PersonalizationTab = ({
               width: '100%',
               padding: '12px',
               border: '2px solid #e1e8ed',
+              background: 'white',
+              color: 'black',
               borderRadius: '8px',
               fontSize: '16px',
               boxSizing: 'border-box'

@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Crown, Lock, Check, Sparkles } from 'lucide-react';
 import { useSubscription } from '../../hooks/useSubscription';
+import PromoCodeInput from './PromoCodeInput';
 
 const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
-  const { isPremium, loading, createCheckoutSession } = useSubscription();
+  const { isPremium, loading, createCheckoutSession, fetchSubscriptionStatus } = useSubscription();
+  const [useBlik, setUseBlik] = useState(false);
+  const [validatedPromoCode, setValidatedPromoCode] = useState(null);
 
   if (loading) {
     return (
@@ -151,9 +154,77 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
         </div>
       </div>
 
+      {/* Promo Code Input */}
+      <div style={{
+        maxWidth: '500px',
+        margin: '0 auto 30px'
+      }}>
+        <PromoCodeInput onCodeValidated={setValidatedPromoCode} useBlik={useBlik} />
+      </div>
+
+      {/* Divider */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '15px',
+        margin: '30px 0',
+        maxWidth: '400px',
+        marginLeft: 'auto',
+        marginRight: 'auto'
+      }}>
+        <div style={{ flex: 1, height: '1px', background: '#e1e8ed' }} />
+        <span style={{ fontSize: '13px', color: '#5a6c7d', fontWeight: '600' }}>LUB</span>
+        <div style={{ flex: 1, height: '1px', background: '#e1e8ed' }} />
+      </div>
+
+      {/* BLIK Option */}
+      <div style={{
+        maxWidth: '400px',
+        margin: '0 auto 20px',
+        padding: '16px',
+        background: '#f8f9fb',
+        borderRadius: '12px',
+        border: '2px solid #e1e8ed'
+      }}>
+        <label style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          cursor: 'pointer',
+          fontSize: '15px',
+          fontWeight: '500',
+          color: '#2c3e50'
+        }}>
+          <input
+            type="checkbox"
+            checked={useBlik}
+            onChange={(e) => setUseBlik(e.target.checked)}
+            style={{
+              width: '20px',
+              height: '20px',
+              cursor: 'pointer'
+            }}
+          />
+          <span>
+            Płacę BLIK (jednorazowo 479,88 zł za rok)
+          </span>
+        </label>
+        <p style={{
+          margin: '8px 0 0 32px',
+          fontSize: '13px',
+          color: '#5a6c7d',
+          lineHeight: '1.5'
+        }}>
+          {useBlik
+            ? '💳 Płatność jednorazowa BLIK lub kartą - pełny dostęp przez 12 miesięcy'
+            : '💳 Subskrypcja miesięczna kartą - 39,99 zł/miesiąc, anuluj w każdej chwili'
+          }
+        </p>
+      </div>
+
       {/* CTA Button */}
       <button
-        onClick={createCheckoutSession}
+        onClick={() => createCheckoutSession(useBlik, validatedPromoCode)}
         style={{
           width: '100%',
           maxWidth: '400px',
@@ -183,7 +254,7 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
         }}
       >
         <Crown size={22} />
-        Przejdź na Premium
+        {useBlik ? 'Zapłać 479,88 zł' : 'Subskrybuj za 39,99 zł/mies'}
       </button>
 
       {/* Security Note */}
@@ -197,7 +268,7 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
         gap: '8px'
       }}>
         <Lock size={14} />
-        Bezpieczne płatności przez Stripe
+        Bezpieczne płatności przez Stripe {useBlik && '• BLIK dostępny'}
       </p>
     </div>
   );

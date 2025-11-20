@@ -13,6 +13,7 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
   try {
     const userId = req.user.id;
     const userEmail = req.user.email;
+    const { useBlik } = req.body; // Czy użytkownik chce płacić BLIK
 
     // Sprawdź czy użytkownik już ma subskrypcję
     const existingSub = await Subscription.findByUserId(userId);
@@ -25,7 +26,7 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
     // Utwórz lub pobierz Stripe Customer
     let customerId = existingSub?.stripeCustomerId;
 
-    if (!customerId) {
+    if (!customerId || customerId.startsWith('promo_')) {
       const customer = await stripe.customers.create({
         email: userEmail,
         metadata: {
@@ -35,23 +36,58 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
       customerId = customer.id;
     }
 
-    // Utwórz Checkout Session
-    const session = await stripe.checkout.sessions.create({
-      customer: customerId,
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price: process.env.STRIPE_PRICE_ID, // ID ceny z Stripe Dashboard
-          quantity: 1,
-        },
-      ],
-      mode: 'subscription',
-      success_url: `${process.env.FRONTEND_URL}/app?success=true`,
-      cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true`,
-      metadata: {
-        userId: userId
-      }
-    });
+    let session;
+
+    if (useBlik) {
+      // BLIK - płatność jednorazowa za rok (mode: payment)
+      // Cena: 39.99 zł/mies * 12 = 479.88 zł
+      session = await stripe.checkout.sessions.create({
+        customer: customerId,
+        payment_method_types: ['blik', 'card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'pln',
+              product_data: {
+                name: 'Premium - Roczny dostęp',
+                description: 'Pełen dostęp do funkcji Premium przez 12 miesięcy'
+              },
+              unit_amount: 47988 // 479.88 zł w groszach
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: `${process.env.FRONTEND_URL}/app?success=true&payment=blik`,
+        cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true`,
+        metadata: {
+          userId: userId,
+          paymentType: 'blik_yearly'
+        }
+      });
+
+      console.log(`BLIK yearly payment session created for user ${userId}`);
+    } else {
+      // Karta - subskrypcja miesięczna (mode: subscription)
+      session = await stripe.checkout.sessions.create({
+        customer: customerId,
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price: process.env.STRIPE_PRICE_ID,
+            quantity: 1,
+          },
+        ],
+        mode: 'subscription',
+        success_url: `${process.env.FRONTEND_URL}/app?success=true`,
+        cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true`,
+        metadata: {
+          userId: userId
+        }
+      });
+
+      console.log(`Card subscription session created for user ${userId}`);
+    }
 
     res.json({ sessionId: session.id, url: session.url });
   } catch (error) {
@@ -362,6 +398,62 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
               status: 'past_due'
             });
             console.log('Payment failed for subscription:', subscriptionId);
+          }
+        }
+        break;
+      }
+
+      case 'payment_intent.succeeded': {
+        const paymentIntent = event.data.object;
+
+        // Znajdź checkout session po payment_intent
+        const sessions = await stripe.checkout.sessions.list({
+          payment_intent: paymentIntent.id,
+          limit: 1
+        });
+
+        if (sessions.data.length > 0) {
+          const session = sessions.data[0];
+
+          // Sprawdź czy to płatność BLIK yearly
+          if (session.metadata.paymentType === 'blik_yearly') {
+            const userId = session.metadata.userId;
+            const customerId = session.customer;
+
+            console.log('Processing BLIK yearly payment for user:', userId);
+
+            // Utwórz subskrypcję na rok
+            const now = new Date();
+            const oneYearLater = new Date();
+            oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+
+            const existingSub = await Subscription.findByUserId(userId);
+
+            const subscriptionData = {
+              userId: userId,
+              stripeCustomerId: customerId,
+              stripeSubscriptionId: `blik_${paymentIntent.id}`,
+              stripePriceId: 'blik_yearly',
+              status: 'active',
+              currentPeriodStart: now,
+              currentPeriodEnd: oneYearLater,
+              cancelAtPeriodEnd: false
+            };
+
+            if (existingSub) {
+              await Subscription.update(userId, {
+                status: subscriptionData.status,
+                currentPeriodStart: subscriptionData.currentPeriodStart,
+                currentPeriodEnd: subscriptionData.currentPeriodEnd,
+                cancelAtPeriodEnd: subscriptionData.cancelAtPeriodEnd,
+                stripeSubscriptionId: subscriptionData.stripeSubscriptionId,
+                stripeCustomerId: subscriptionData.stripeCustomerId
+              });
+            } else {
+              await Subscription.create(subscriptionData);
+            }
+
+            console.log('BLIK yearly subscription created for user:', userId);
           }
         }
         break;

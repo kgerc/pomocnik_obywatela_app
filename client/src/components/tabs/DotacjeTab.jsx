@@ -184,6 +184,7 @@ const DotacjeTab = () => {
             minHeight: '80px',
             padding: '15px',
             fontSize: '16px',
+            background: 'white',
             border: '2px solid #2c5aa0',
             borderRadius: '8px',
             resize: 'vertical',

@@ -67,7 +67,7 @@ const SubscriptionButton = () => {
         }}
         title="Szczegóły subskrypcji Premium"
       >
-        <Crown size={24} color="#2c5aa0" strokeWidth={2.5} />
+        <Crown size={18} color="#2c5aa0" strokeWidth={2.5} />
       </button>
 
       {/* Modal Overlay */}

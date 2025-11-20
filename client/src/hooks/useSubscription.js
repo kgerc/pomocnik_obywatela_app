@@ -42,7 +42,7 @@ export const useSubscription = () => {
     }
   };
 
-  const createCheckoutSession = async () => {
+  const createCheckoutSession = async (useBlik = false, promoCode = null) => {
     if (!session) {
       throw new Error('Brak sesji użytkownika');
     }
@@ -51,12 +51,47 @@ export const useSubscription = () => {
       setLoading(true);
       const token = session.access_token;
 
+      // If promo code is provided, redeem it first
+      if (promoCode && promoCode.code) {
+        const redeemResponse = await fetch(`${API_URL}/api/promo-codes/redeem`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            code: promoCode.code,
+            useBlik
+          })
+        });
+
+        if (!redeemResponse.ok) {
+          const errorData = await redeemResponse.json();
+          throw new Error(errorData.error || 'Nie udało się aktywować kodu');
+        }
+
+        const redeemData = await redeemResponse.json();
+
+        // If it's a free code or requires payment, handle accordingly
+        if (redeemData.requiresPayment && redeemData.checkoutUrl) {
+          // Redirect to Stripe Checkout with discount
+          window.location.href = redeemData.checkoutUrl;
+          return redeemData;
+        } else if (redeemData.success && !redeemData.requiresPayment) {
+          // Free code - refresh subscription status and return
+          await fetchSubscriptionStatus();
+          return redeemData;
+        }
+      }
+
+      // No promo code - regular checkout
       const response = await fetch(`${API_URL}/api/stripe/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({ useBlik })
       });
 
       if (!response.ok) {
@@ -130,6 +165,7 @@ export const useSubscription = () => {
     error,
     isPremium,
     refetch: fetchSubscriptionStatus,
+    fetchSubscriptionStatus,
     createCheckoutSession,
     createPortalSession
   };
