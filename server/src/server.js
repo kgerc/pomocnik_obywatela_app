@@ -26,8 +26,32 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// Middleware - CORS configuration for Vercel
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  process.env.FRONTEND_URL,
+  'https://pomocnik-obywatela-armiao144-krzysztof-gercs-projects.vercel.app',
+  'https://pomocnik-obywatela-app.vercel.app'
+].filter(Boolean);
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.some(allowed => origin.startsWith(allowed.split('://')[0] + '://') && origin.includes(allowed.split('://')[1]))) {
+      callback(null, true);
+    } else {
+      callback(null, true); // For development - in production you might want to restrict this
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  maxAge: 600 // Cache preflight for 10 minutes
+}));
 
 // IMPORTANT: Stripe webhook must be registered BEFORE express.json()
 // to receive raw body for signature verification
