@@ -16,8 +16,10 @@ import {
 } from 'lucide-react';
 import { useUserDocuments } from '../../hooks/useUserDocuments';
 import { historyAPI } from '../../services/api';
+import { useToast } from '../../contexts/ToastContext';
 
 const HistoriaTab = () => {
+  const { showSuccess, showError, confirm } = useToast();
   const [activeView, setActiveView] = useState('documents'); // 'documents' lub 'history'
   const [chatHistory, setChatHistory] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
@@ -66,12 +68,20 @@ const HistoriaTab = () => {
   };
 
   const clearHistory = async () => {
-    if (window.confirm('Czy na pewno chcesz wyczyścić całą historię rozmów?')) {
+    const confirmed = await confirm(
+      'Czy na pewno chcesz wyczyścić całą historię rozmów? Tej operacji nie można cofnąć.',
+      'Wyczyść historię',
+      'Anuluj'
+    );
+
+    if (confirmed) {
       try {
         await historyAPI.clear();
         setChatHistory([]);
+        showSuccess('Historia rozmów została wyczyszczona');
       } catch (err) {
         console.error('Error clearing history:', err);
+        showError('Błąd podczas czyszczenia historii');
       }
     }
   };
@@ -85,11 +95,18 @@ const HistoriaTab = () => {
   };
 
   const handleDeleteDocument = async (id) => {
-    if (window.confirm('Czy na pewno chcesz usunąć ten dokument?')) {
+    const confirmed = await confirm(
+      'Czy na pewno chcesz usunąć ten dokument? Tej operacji nie można cofnąć.',
+      'Usuń dokument',
+      'Anuluj'
+    );
+
+    if (confirmed) {
       try {
         await deleteDocument(id);
+        showSuccess('Dokument został usunięty');
       } catch (err) {
-        alert('Błąd podczas usuwania dokumentu: ' + err.message);
+        showError('Błąd podczas usuwania dokumentu: ' + err.message);
       }
     }
   };
@@ -679,6 +696,7 @@ const ChatMessage = ({ message }) => (
 
 // Modal uploadu
 const UploadModal = ({ onClose, onUpload }) => {
+  const { showSuccess, showError } = useToast();
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -698,7 +716,7 @@ const UploadModal = ({ onClose, onUpload }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file || !title.trim()) {
-      alert('Wybierz plik i podaj tytuł');
+      showError('Wybierz plik i podaj tytuł');
       return;
     }
 
@@ -708,9 +726,10 @@ const UploadModal = ({ onClose, onUpload }) => {
         title: title.trim(),
         description: description.trim()
       });
+      showSuccess('Dokument został przesłany');
       onClose();
     } catch (err) {
-      alert('Błąd podczas uploadu: ' + err.message);
+      showError('Błąd podczas uploadu: ' + err.message);
     } finally {
       setUploading(false);
     }

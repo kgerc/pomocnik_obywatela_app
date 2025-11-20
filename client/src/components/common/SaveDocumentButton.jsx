@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { Save, Loader, CheckCircle } from 'lucide-react';
 import { useUserDocuments } from '../../hooks/useUserDocuments';
+import { useToast } from '../../contexts/ToastContext';
 
 const SaveDocumentButton = ({ documentData, onSaveSuccess }) => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const { saveFromApp } = useUserDocuments();
+  const { showSuccess, showError } = useToast();
 
   const handleSave = async () => {
     setSaving(true);
     try {
       await saveFromApp(documentData);
       setSaved(true);
+      showSuccess('Dokument został zapisany');
 
       // Pokaż komunikat sukcesu przez 2 sekundy
       setTimeout(() => {
@@ -21,7 +24,7 @@ const SaveDocumentButton = ({ documentData, onSaveSuccess }) => {
         }
       }, 2000);
     } catch (err) {
-      alert('Błąd podczas zapisywania dokumentu: ' + err.message);
+      showError('Błąd podczas zapisywania dokumentu: ' + err.message);
       setSaving(false);
     }
   };

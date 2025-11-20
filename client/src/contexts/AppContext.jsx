@@ -80,10 +80,8 @@ export const AppProvider = ({ children }) => {
   };
 
   const clearChatHistory = () => {
-    if (window.confirm('Czy na pewno chcesz wyczyścić całą historię?')) {
-      setChatHistory([]);
-      localStorage.removeItem('chatHistory');
-    }
+    setChatHistory([]);
+    localStorage.removeItem('chatHistory');
   };
 
   const updatePersonalization = (updates) => {
