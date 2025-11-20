@@ -8,8 +8,8 @@ import NotificationsTab from '../components/tabs/NotificationsTab';
 import DotacjeTab from '../components/tabs/DotacjeTab';
 import PismaTab from '../components/tabs/PismaTab';
 import HistoriaTab from '../components/tabs/HistoriaTab';
+import SettingsTab from '../components/tabs/SettingsTab';
 import PremiumGate from '../components/premium/PremiumGate';
-import SubscriptionCard from '../components/premium/SubscriptionCard';
 import { useFavorites } from '../hooks/useFavorites';
 import { useSwiadczenia } from '../hooks/useSwiadczenia';
 import { useSubscription } from '../hooks/useSubscription';
@@ -78,12 +78,7 @@ const MainApp = () => {
         maxWidth: '1000px',
         margin: '0 auto'
       }}>
-        <Header />
-
-        {/* Subscription Card */}
-        <div style={{ marginBottom: '20px' }}>
-          <SubscriptionCard />
-        </div>
+        <Header setActiveTab={setActiveTab} />
 
         <div style={{
           background: 'white',
@@ -156,6 +151,11 @@ const MainApp = () => {
         {/* Historia Tab - FREE */}
         {activeTab === 'historia' && (
           <HistoriaTab />
+        )}
+
+        {/* Settings Tab - FREE */}
+        {activeTab === 'settings' && (
+          <SettingsTab />
         )}
       </div>
     </div>

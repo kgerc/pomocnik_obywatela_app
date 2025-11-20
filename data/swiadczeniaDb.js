@@ -592,6 +592,93 @@
     pdf: 'https://www.zus.pl/documents/renta-rodzinna.pdf',
     slowa_kluczowe: ['renta', 'rodzinna', 'śmierć', 'małżonek', 'dziecko', 'ZUS'],
     ostatnia_aktualizacja: '2024-01-20'
+  },
+    {
+    id: 'swiadczenie-wspierajace-2025',
+    nazwa: 'Świadczenie wspierające dla osób niepełnosprawnych',
+    kategoria: 'Świadczenia opiekuńcze',
+    krotki_opis: 'Miesięczne wsparcie finansowe do 4134 zł dla osób z dużymi trudnościami w funkcjonowaniu.',
+    kwalifikacja: [
+      'Orzeczenie o znacznym stopniu niepełnosprawności',
+      'Potwierdzenie potrzeby wsparcia na podstawie oceny',
+      'Status osoby dorosłej wymagającej stałej opieki'
+    ],
+    dokumenty: [
+      'Wniosek o świadczenie wspierające',
+      'Orzeczenie o niepełnosprawności',
+      'Decyzja o poziomie potrzeb wsparcia',
+      'Dokumenty potwierdzające sytuację rodzinną'
+    ],
+    link: 'https://www.gov.pl/web/rodzina/swiadczenie-wspierajace',
+    pdf: 'https://www.gov.pl/attachment/swiadczenie-wspierajace.pdf',
+    slowa_kluczowe: ['wspierające', 'niepełnosprawność', 'opieka', 'świadczenie', 'pomoc'],
+    ostatnia_aktualizacja: '2025-01-01'
+  },
+
+  // Aktualizacja świadczenia pielęgnacyjnego
+  {
+    id: 'zasilek-pielegnacyjny-2025',
+    nazwa: 'Zasiłek pielęgnacyjny',
+    kategoria: 'Świadczenia opiekuńcze',
+    krotki_opis: 'Miesięczne świadczenie pielęgnacyjne w wysokości 3287 zł dla osób niepełnosprawnych i seniorów wymagających opieki.',
+    kwalifikacja: [
+      'Znaczny stopień niepełnosprawności lub wiek emerytalny',
+      'Potrzeba całodobowej opieki lub pomocy',
+      'Niepodejmowanie zatrudnienia przez opiekuna dokonującego zgłoszenia'
+    ],
+    dokumenty: [
+      'Wniosek o zasiłek pielęgnacyjny',
+      'Orzeczenie o niepełnosprawności',
+      'Dokumenty tożsamości',
+      'Potwierdzenie sytuacji opiekuńczej'
+    ],
+    link: 'https://www.gov.pl/web/rodzina/zasilek-pielegnacyjny',
+    pdf: 'https://www.gov.pl/attachment/zasilek-pielegnacyjny.pdf',
+    slowa_kluczowe: ['zasiłek', 'pielęgnacyjny', 'opieka', 'niepełnosprawność', 'senior'],
+    ostatnia_aktualizacja: '2025-01-15'
+  },
+
+  // Nowy dodatek dopełniający dla renty socjalnej
+  {
+    id: 'dodatek-dopelniajacy-renta-socjalna-2025',
+    nazwa: 'Dodatek dopełniający do renty socjalnej',
+    kategoria: 'Świadczenia rodzinne',
+    krotki_opis: 'Jednorazowy dodatek 2520 zł dla osób mających prawo do renty socjalnej i orzeczenie o niezdolności do samodzielnej egzystencji.',
+    kwalifikacja: [
+      'Prawo do renty socjalnej',
+      'Orzeczenie o niezdolności do samodzielnej egzystencji',
+      'Spełnienie warunków ustawy o dodatku dopełniającym'
+    ],
+    dokumenty: [
+      'Wniosek o dodatek dopełniający',
+      'Decyzja o przyznaniu renty socjalnej',
+      'Orzeczenie o niezdolności do samodzielnej egzystencji'
+    ],
+    link: 'https://www.gov.pl/web/rodzina/dodatek-dopelniajacy',
+    pdf: null,
+    slowa_kluczowe: ['dodatek', 'renta socjalna', 'niezdolność', 'dopełniający'],
+    ostatnia_aktualizacja: '2025-01-01'
+  },
+
+  // Zasiłek stały i okresowy z MOPS wg nowych progów dochodowych
+  {
+    id: 'zasilek-staly-mops-2025',
+    nazwa: 'Zasiłek stały z MOPS',
+    kategoria: 'Pomoc społeczna',
+    krotki_opis: 'Comiesięczne wsparcie dla osób niezdolnych do pracy lub w podeszłym wieku, kwota do 1229 zł na miesiąc.',
+    kwalifikacja: [
+      'Całkowita niezdolność do pracy lub wiek emerytalny',
+      'Dochód poniżej 1010 zł (osoba samotna) lub 823 zł na osobę w rodzinie'
+    ],
+    dokumenty: [
+      'Wniosek do MOPS o zasiłek stały',
+      'Zaświadczenia o dochodach',
+      'Dokumenty potwierdzające niezdolność lub wiek'
+    ],
+    link: 'https://www.infor.pl/twoje-pieniadze/swiadczenia/7042252,swiadczenia-z-mops-w-2025-r-pelna-lista-dodatkow-i-aktualne-kwoty.html',
+    pdf: null,
+    slowa_kluczowe: ['zasiłek', 'stały', 'MOPS', 'pomoc społeczna'],
+    ostatnia_aktualizacja: '2025-01-01'
   }
 ];
 

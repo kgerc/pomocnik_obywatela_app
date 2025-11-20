@@ -1,7 +1,7 @@
 import express from 'express';
 import Stripe from 'stripe';
 import Subscription from '../models/Subscription.js';
-import { optionalAuth } from '../middleware/auth.js';
+import { authenticateUser } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Endpoint do tworzenia Checkout Session
-router.post('/create-checkout-session', optionalAuth, async (req, res) => {
+router.post('/create-checkout-session', authenticateUser, async (req, res) => {
   try {
     const userId = req.user.id;
     const userEmail = req.user.email;
@@ -46,8 +46,8 @@ router.post('/create-checkout-session', optionalAuth, async (req, res) => {
         },
       ],
       mode: 'subscription',
-      success_url: `${process.env.CLIENT_URL}/app?success=true`,
-      cancel_url: `${process.env.CLIENT_URL}/app?canceled=true`,
+      success_url: `${process.env.FRONTEND_URL}/app?success=true`,
+      cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true`,
       metadata: {
         userId: userId
       }
@@ -61,7 +61,7 @@ router.post('/create-checkout-session', optionalAuth, async (req, res) => {
 });
 
 // Endpoint do tworzenia Customer Portal Session (zarządzanie subskrypcją)
-router.post('/create-portal-session', optionalAuth, async (req, res) => {
+router.post('/create-portal-session', authenticateUser, async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -72,7 +72,7 @@ router.post('/create-portal-session', optionalAuth, async (req, res) => {
 
     const session = await stripe.billingPortal.sessions.create({
       customer: subscription.stripeCustomerId,
-      return_url: `${process.env.CLIENT_URL}/app`,
+      return_url: `${process.env.FRONTEND_URL}/app`,
     });
 
     res.json({ url: session.url });
@@ -83,7 +83,7 @@ router.post('/create-portal-session', optionalAuth, async (req, res) => {
 });
 
 // Pobierz status subskrypcji użytkownika
-router.get('/subscription-status', optionalAuth, async (req, res) => {
+router.get('/subscription-status', authenticateUser, async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -133,35 +133,153 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         const userId = session.metadata.userId;
         const customerId = session.customer;
 
-        // Pobierz subskrypcję z Stripe
-        const stripeSubscription = await stripe.subscriptions.retrieve(session.subscription);
+        console.log('Processing checkout.session.completed for user:', userId);
+        console.log('Session subscription ID:', session.subscription);
+
+        // Pobierz subskrypcję z Stripe z dodatkowymi parametrami
+        const stripeSubscription = await stripe.subscriptions.retrieve(
+          session.subscription,
+          { expand: ['latest_invoice', 'customer'] }
+        );
+
+        // Oblicz daty okresu na podstawie dostępnych pól
+        // Stripe API w wersji subscription zwraca current_period_start/end bezpośrednio
+        // Ale czasami mogą być w items lub trzeba je wyliczyć
+        let currentPeriodStart = stripeSubscription.current_period_start;
+        let currentPeriodEnd = stripeSubscription.current_period_end;
+
+        // Jeśli brak bezpośrednich pól, użyj start_date i oblicz end
+        if (!currentPeriodStart || !currentPeriodEnd) {
+          currentPeriodStart = stripeSubscription.start_date || stripeSubscription.created;
+
+          // Oblicz end date na podstawie intervallu (month = +30 dni)
+          const interval = stripeSubscription.plan?.interval || 'month';
+          const intervalCount = stripeSubscription.plan?.interval_count || 1;
+
+          if (interval === 'month') {
+            // Dodaj miesiące
+            const startDate = new Date(currentPeriodStart * 1000);
+            startDate.setMonth(startDate.getMonth() + intervalCount);
+            currentPeriodEnd = Math.floor(startDate.getTime() / 1000);
+          } else if (interval === 'year') {
+            // Dodaj lata
+            const startDate = new Date(currentPeriodStart * 1000);
+            startDate.setFullYear(startDate.getFullYear() + intervalCount);
+            currentPeriodEnd = Math.floor(startDate.getTime() / 1000);
+          } else {
+            // Domyślnie +30 dni
+            currentPeriodEnd = currentPeriodStart + (30 * 24 * 60 * 60);
+          }
+        }
+
+        console.log('Retrieved subscription:', {
+          id: stripeSubscription.id,
+          status: stripeSubscription.status,
+          current_period_start: currentPeriodStart,
+          current_period_end: currentPeriodEnd,
+          plan_interval: stripeSubscription.plan?.interval
+        });
+
+        // Walidacja danych
+        if (!currentPeriodStart || !currentPeriodEnd) {
+          console.error('Missing period dates in subscription:', stripeSubscription);
+          throw new Error('Subscription missing required period dates');
+        }
 
         // Sprawdź czy subskrypcja już istnieje
         const existingSub = await Subscription.findByUserId(userId);
 
+        const subscriptionData = {
+          userId: userId,
+          stripeCustomerId: customerId,
+          stripeSubscriptionId: stripeSubscription.id,
+          stripePriceId: stripeSubscription.items.data[0].price.id,
+          status: stripeSubscription.status,
+          currentPeriodStart: new Date(currentPeriodStart * 1000),
+          currentPeriodEnd: new Date(currentPeriodEnd * 1000),
+          cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end || false
+        };
+
         if (existingSub) {
           // Zaktualizuj istniejącą
           await Subscription.update(userId, {
-            status: stripeSubscription.status,
-            currentPeriodStart: new Date(stripeSubscription.current_period_start * 1000),
-            currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
-            cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end
+            status: subscriptionData.status,
+            currentPeriodStart: subscriptionData.currentPeriodStart,
+            currentPeriodEnd: subscriptionData.currentPeriodEnd,
+            cancelAtPeriodEnd: subscriptionData.cancelAtPeriodEnd
           });
+          console.log('Subscription updated for user:', userId);
         } else {
           // Utwórz nową
-          await Subscription.create({
-            userId: userId,
-            stripeCustomerId: customerId,
-            stripeSubscriptionId: stripeSubscription.id,
-            stripePriceId: stripeSubscription.items.data[0].price.id,
-            status: stripeSubscription.status,
-            currentPeriodStart: new Date(stripeSubscription.current_period_start * 1000),
-            currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
-            cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end
-          });
+          await Subscription.create(subscriptionData);
+          console.log('Subscription created for user:', userId);
         }
 
-        console.log('Subscription created/updated for user:', userId);
+        break;
+      }
+
+      case 'customer.subscription.created': {
+        const subscription = event.data.object;
+        const customerId = subscription.customer;
+
+        console.log('Processing customer.subscription.created:', subscription.id);
+
+        // Pobierz userId z customer metadata
+        const customer = await stripe.customers.retrieve(customerId);
+        const userId = customer.metadata.userId;
+
+        if (!userId) {
+          console.error('No userId in customer metadata');
+          break;
+        }
+
+        // Oblicz daty okresu
+        let currentPeriodStart = subscription.current_period_start;
+        let currentPeriodEnd = subscription.current_period_end;
+
+        if (!currentPeriodStart || !currentPeriodEnd) {
+          currentPeriodStart = subscription.start_date || subscription.created;
+
+          const interval = subscription.plan?.interval || 'month';
+          const intervalCount = subscription.plan?.interval_count || 1;
+
+          if (interval === 'month') {
+            const startDate = new Date(currentPeriodStart * 1000);
+            startDate.setMonth(startDate.getMonth() + intervalCount);
+            currentPeriodEnd = Math.floor(startDate.getTime() / 1000);
+          } else if (interval === 'year') {
+            const startDate = new Date(currentPeriodStart * 1000);
+            startDate.setFullYear(startDate.getFullYear() + intervalCount);
+            currentPeriodEnd = Math.floor(startDate.getTime() / 1000);
+          } else {
+            currentPeriodEnd = currentPeriodStart + (30 * 24 * 60 * 60);
+          }
+        }
+
+        console.log('Calculated period:', {
+          start: currentPeriodStart,
+          end: currentPeriodEnd,
+          interval: subscription.plan?.interval
+        });
+
+        // Sprawdź czy subskrypcja już istnieje
+        const existingSub = await Subscription.findByUserId(userId);
+
+        const subscriptionData = {
+          userId: userId,
+          stripeCustomerId: customerId,
+          stripeSubscriptionId: subscription.id,
+          stripePriceId: subscription.items.data[0].price.id,
+          status: subscription.status,
+          currentPeriodStart: new Date(currentPeriodStart * 1000),
+          currentPeriodEnd: new Date(currentPeriodEnd * 1000),
+          cancelAtPeriodEnd: subscription.cancel_at_period_end || false
+        };
+
+        if (!existingSub) {
+          await Subscription.create(subscriptionData);
+          console.log('Subscription created via customer.subscription.created for user:', userId);
+        }
         break;
       }
 
@@ -170,10 +288,32 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
         const existingSub = await Subscription.findByStripeSubscriptionId(subscription.id);
         if (existingSub) {
+          // Oblicz daty okresu jeśli brak
+          let currentPeriodStart = subscription.current_period_start;
+          let currentPeriodEnd = subscription.current_period_end;
+
+          if (!currentPeriodStart || !currentPeriodEnd) {
+            currentPeriodStart = subscription.start_date || subscription.created;
+            const interval = subscription.plan?.interval || 'month';
+            const intervalCount = subscription.plan?.interval_count || 1;
+
+            if (interval === 'month') {
+              const startDate = new Date(currentPeriodStart * 1000);
+              startDate.setMonth(startDate.getMonth() + intervalCount);
+              currentPeriodEnd = Math.floor(startDate.getTime() / 1000);
+            } else if (interval === 'year') {
+              const startDate = new Date(currentPeriodStart * 1000);
+              startDate.setFullYear(startDate.getFullYear() + intervalCount);
+              currentPeriodEnd = Math.floor(startDate.getTime() / 1000);
+            } else {
+              currentPeriodEnd = currentPeriodStart + (30 * 24 * 60 * 60);
+            }
+          }
+
           await Subscription.update(existingSub.userId, {
             status: subscription.status,
-            currentPeriodStart: new Date(subscription.current_period_start * 1000),
-            currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+            currentPeriodStart: new Date(currentPeriodStart * 1000),
+            currentPeriodEnd: new Date(currentPeriodEnd * 1000),
             cancelAtPeriodEnd: subscription.cancel_at_period_end,
             stripePriceId: subscription.items.data[0].price.id
           });

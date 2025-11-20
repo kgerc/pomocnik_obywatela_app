@@ -1,9 +1,10 @@
 import React from 'react';
-import { LogOut } from 'lucide-react';
+import { LogOut, Settings } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import SubscriptionButton from '../premium/SubscriptionButton';
 
-const Header = () => {
+const Header = ({ setActiveTab }) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -65,33 +66,65 @@ const Header = () => {
             </p>
           </div>
         </div>
-        
-        <button
-          onClick={handleLogout}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            background: '#fee',
-            color: '#c33',
-            border: '2px solid #c33',
-            padding: '10px 16px',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontWeight: '600',
-            fontSize: '14px',
-            transition: 'all 0.2s'
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.background = '#fdd';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.background = '#fee';
-          }}
-        >
-          <LogOut size={18} />
-          Wyloguj
-        </button>
+
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          {/* Crown Button for Premium Users */}
+          <SubscriptionButton />
+
+          <button
+            onClick={() => setActiveTab && setActiveTab('settings')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: '#e8f4f8',
+              color: '#2c5aa0',
+              border: '2px solid #2c5aa0',
+              padding: '5px 5px',
+              width: '44px',
+              height: '44px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#d0e8f2';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = '#e8f4f8';
+            }}
+            title="Ustawienia"
+          >
+            <Settings size={24} />
+          </button>
+
+          <button
+            onClick={handleLogout}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: '#fee',
+              color: '#c33',
+              border: '2px solid #c33',
+              padding: '10px 16px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '14px',
+              transition: 'all 0.2s'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#fdd';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = '#fee';
+            }}
+          >
+            <LogOut size={18} />
+            Wyloguj
+          </button>
+        </div>
       </div>
     </div>
   );

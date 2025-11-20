@@ -4,21 +4,21 @@ import { useAuth } from '../contexts/AuthContext';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export const useSubscription = () => {
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPremium, setIsPremium] = useState(false);
 
   const fetchSubscriptionStatus = async () => {
-    if (!user) {
+    if (!user || !session) {
       setLoading(false);
       return;
     }
 
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = session.access_token;
 
       const response = await fetch(`${API_URL}/api/stripe/subscription-status`, {
         headers: {
@@ -43,9 +43,13 @@ export const useSubscription = () => {
   };
 
   const createCheckoutSession = async () => {
+    if (!session) {
+      throw new Error('Brak sesji użytkownika');
+    }
+
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = session.access_token;
 
       const response = await fetch(`${API_URL}/api/stripe/create-checkout-session`, {
         method: 'POST',
@@ -78,9 +82,13 @@ export const useSubscription = () => {
   };
 
   const createPortalSession = async () => {
+    if (!session) {
+      throw new Error('Brak sesji użytkownika');
+    }
+
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = session.access_token;
 
       const response = await fetch(`${API_URL}/api/stripe/create-portal-session`, {
         method: 'POST',
