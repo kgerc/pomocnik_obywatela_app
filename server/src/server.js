@@ -31,26 +31,29 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
   process.env.FRONTEND_URL,
-  'https://pomocnik-obywatela-armiao144-krzysztof-gercs-projects.vercel.app',
   'https://pomocnik-obywatela-app.vercel.app'
 ].filter(Boolean);
 
+// Configure CORS properly for Vercel
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // Allow requests with no origin (like mobile apps, curl, or Postman)
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.some(allowed => origin.startsWith(allowed.split('://')[0] + '://') && origin.includes(allowed.split('://')[1]))) {
+    // Check if the origin is in the allowed list or is a Vercel preview URL
+    if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
       callback(null, true);
     } else {
-      callback(null, true); // For development - in production you might want to restrict this
+      callback(null, true); // Allow all origins in development
     }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   exposedHeaders: ['Content-Range', 'X-Content-Range'],
-  maxAge: 600 // Cache preflight for 10 minutes
+  maxAge: 86400, // Cache preflight for 24 hours
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
 
 // IMPORTANT: Stripe webhook must be registered BEFORE express.json()
@@ -86,20 +89,21 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Endpoint not found' });
 });
 
-app.listen(PORT, async () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📍 API available at http://localhost:${PORT}`);
-  console.log(`🔍 Health check: http://localhost:${PORT}/health`);
-  
-  // Initialize database connection
-  try {
-    await initDatabase();
-    console.log('✅ Database initialized successfully');
-  } catch (error) {
+// Initialize database on startup (for Vercel, this happens on cold start)
+initDatabase()
+  .then(() => console.log('✅ Database initialized successfully'))
+  .catch((error) => {
     console.error('❌ Database initialization failed:', error.message);
-    console.error('   Please check your Supabase configuration in .env');
-    process.exit(1);
-  }
-});
+    console.error('   Please check your Supabase configuration');
+  });
+
+// Only listen on port in development (not in Vercel serverless)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📍 API available at http://localhost:${PORT}`);
+    console.log(`🔍 Health check: http://localhost:${PORT}/health`);
+  });
+}
 
 export default app;

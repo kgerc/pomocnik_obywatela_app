@@ -23,7 +23,8 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
 
     try {
       const token = session.access_token;
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/promo-codes/validate`, {
+      const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+      const response = await fetch(`${API_URL}/api/promo-codes/validate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
