@@ -50,13 +50,40 @@ export const useSwiadczenia = () => {
     }
   };
 
+  const getByCategory = async (category) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await swiadczeniaAPI.getByCategory(category);
+      return response.data || [];
+    } catch (err) {
+      setError(err.message);
+      console.error('Error fetching swiadczenia by category:', err);
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getCategories = async () => {
+    try {
+      const response = await swiadczeniaAPI.getCategories();
+      return response.data || [];
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+      return [];
+    }
+  };
+
   return {
     swiadczenia,
     loading,
     error,
     fetchAll,
     search,
-    getById
+    getById,
+    getByCategory,
+    getCategories
   };
 };
 

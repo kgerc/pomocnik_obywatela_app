@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/layout/Header';
 import TabNavigation from '../components/layout/TabNavigation';
-import ChatTab from '../components/tabs/ChatTab';
 import PersonalizationTab from '../components/tabs/PersonalizationTab';
 import FavoritesTab from '../components/tabs/FavoritesTab';
 import NotificationsTab from '../components/tabs/NotificationsTab';
 import DotacjeTab from '../components/tabs/DotacjeTab';
 import PismaTab from '../components/tabs/PismaTab';
+import SwiadczeniaTab from '../components/tabs/SwiadczeniaTab';
 import HistoriaTab from '../components/tabs/HistoriaTab';
+import TwojeDokumentyTab from '../components/tabs/TwojeDokumentyTab';
 import SettingsTab from '../components/tabs/SettingsTab';
 import PremiumGate from '../components/premium/PremiumGate';
 import { useFavorites } from '../hooks/useFavorites';
@@ -16,7 +17,7 @@ import { useSubscription } from '../hooks/useSubscription';
 import { personalizationAPI } from '../services/api';
 
 const MainApp = () => {
-  const [activeTab, setActiveTab] = useState('chat');
+  const [activeTab, setActiveTab] = useState('swiadczenia');
   const [query, setQuery] = useState('');
   const { favorites, toggleFavorite: toggleFavAPI, isFavorite } = useFavorites();
   const { swiadczenia, fetchAll } = useSwiadczenia();
@@ -94,16 +95,6 @@ const MainApp = () => {
           />
         </div>
 
-        {/* Chat Tab - PREMIUM */}
-        {activeTab === 'chat' && (
-          <PremiumGate feature="asystenta AI">
-            <ChatTab
-              onToggleFavorite={handleToggleFavorite}
-              isFavorite={isFavorite}
-            />
-          </PremiumGate>
-        )}
-
         {/* Personalization Tab - PREMIUM */}
         {activeTab === 'personalization' && (
           <PremiumGate feature="personalizacji świadczeń">
@@ -118,12 +109,14 @@ const MainApp = () => {
           </PremiumGate>
         )}
 
-        {/* Favorites Tab - FREE */}
+        {/* Favorites Tab - PREMIUM */}
         {activeTab === 'favorites' && (
-          <FavoritesTab
-            favoriteSwiadczenia={favoriteSwiadczenia}
-            onToggleFavorite={handleToggleFavorite}
-          />
+          <PremiumGate feature="ulubionych">
+            <FavoritesTab
+              favoriteSwiadczenia={favoriteSwiadczenia}
+              onToggleFavorite={handleToggleFavorite}
+            />
+          </PremiumGate>
         )}
 
         {/* Notifications Tab - PREMIUM */}
@@ -136,21 +129,33 @@ const MainApp = () => {
           </PremiumGate>
         )}
 
-        {/* Dotacje Tab - PREMIUM */}
-        {activeTab === 'dotacje' && (
-          <PremiumGate feature="przeglądu dotacji">
-            <DotacjeTab />
-          </PremiumGate>
+        {/* Swiadczenia Tab - FREE (but AI search inside is premium) */}
+        {activeTab === 'swiadczenia' && (
+          <SwiadczeniaTab />
         )}
 
-        {/* Pisma Tab - FREE */}
+        {/* Pisma Tab - FREE (but AI search inside is premium) */}
         {activeTab === 'pisma' && (
           <PismaTab />
         )}
 
-        {/* Historia Tab - FREE */}
+        {/* Dotacje Tab - PREMIUM */}
+        {activeTab === 'dotacje' && (
+          <PremiumGate feature="dotacji i grantów">
+            <DotacjeTab />
+          </PremiumGate>
+        )}
+
+        {/* Twoje Dokumenty Tab - FREE (but upload is premium) */}
+        {activeTab === 'dokumenty' && (
+          <TwojeDokumentyTab />
+        )}
+
+        {/* Historia Tab - PREMIUM */}
         {activeTab === 'historia' && (
-          <HistoriaTab />
+          <PremiumGate feature="historii rozmów z AI">
+            <HistoriaTab />
+          </PremiumGate>
         )}
 
         {/* Settings Tab - FREE */}

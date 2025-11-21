@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { TrendingUp, Sparkles, Search, Loader, Building2, AlertCircle, ExternalLink } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useDotacje } from '../../hooks/useDotacje';
+import Pagination from '../common/Pagination';
+
+const ITEMS_PER_PAGE = 10;
 
 const DotacjeTab = () => {
   const [dotacjeQuery, setDotacjeQuery] = useState('');
@@ -10,7 +13,8 @@ const DotacjeTab = () => {
   const [selectedSektor, setSelectedSektor] = useState('wszystkie');
   const [sektory, setSektory] = useState(['wszystkie']);
   const [filteredDotacje, setFilteredDotacje] = useState([]);
-  
+  const [currentPage, setCurrentPage] = useState(1);
+
   const { dotacje, loading, error, fetchAll, search, getBySektor, getSektory } = useDotacje();
 
   // Pobierz dotacje i sektory przy montowaniu komponentu
@@ -32,9 +36,16 @@ const DotacjeTab = () => {
         const filtered = await getBySektor(selectedSektor);
         setFilteredDotacje(filtered);
       }
+      setCurrentPage(1); // Reset do pierwszej strony przy zmianie sektora
     };
     filterDotacje();
   }, [selectedSektor, dotacje]);
+
+  // Oblicz paginację
+  const totalPages = Math.ceil(filteredDotacje.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentDotacje = filteredDotacje.slice(startIndex, endIndex);
 
   const handleDotacjeSearch = async () => {
     if (!dotacjeQuery.trim()) return;
@@ -284,14 +295,39 @@ const DotacjeTab = () => {
       </div>
 
       {/* Dotacje Grid */}
-      <div style={{
-        display: 'grid',
-        gap: '20px'
-      }}>
-        {filteredDotacje.map(dotacja => (
-          <DotacjaCard key={dotacja.id} dotacja={dotacja} />
-        ))}
-      </div>
+      {currentDotacje.length > 0 ? (
+        <>
+          <div style={{
+            display: 'grid',
+            gap: '20px',
+            marginBottom: '20px'
+          }}>
+            {currentDotacje.map(dotacja => (
+              <DotacjaCard key={dotacja.id} dotacja={dotacja} />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            itemsPerPage={ITEMS_PER_PAGE}
+            totalItems={filteredDotacje.length}
+          />
+        </>
+      ) : (
+        <div style={{
+          textAlign: 'center',
+          padding: '40px',
+          color: '#5a6c7d'
+        }}>
+          <Building2 size={48} style={{ marginBottom: '20px', opacity: 0.5 }} />
+          <p style={{ fontSize: '16px', fontWeight: '600' }}>
+            Brak dotacji w tym sektorze
+          </p>
+        </div>
+      )}
 
       <style>{`
         @keyframes spin {

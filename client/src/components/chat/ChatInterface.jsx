@@ -149,6 +149,7 @@ const ChatInterface = ({ onToggleFavorite, isFavorite }) => {
             fontSize: '16px',
             border: '2px solid #e1e8ed',
             background: 'white',
+            color: 'black',
             borderRadius: '12px',
             resize: 'vertical',
             fontFamily: 'inherit',

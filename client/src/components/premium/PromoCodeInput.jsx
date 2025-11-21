@@ -94,7 +94,7 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
             value={code}
             onChange={(e) => setCode(e.target.value.toUpperCase())}
             placeholder="WPROWADŹ KOD"
-            disabled={loading || !!success}
+            disabled={loading || !!validatedCode}
             style={{
               flex: 1,
               padding: '12px 16px',
@@ -116,7 +116,7 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
           />
           <button
             type="submit"
-            disabled={loading || !!success || !code.trim()}
+            disabled={loading || !!validatedCode || !code.trim()}
             style={{
               padding: '12px 24px',
               background: loading || !code.trim() ? '#cbd5e0' : '#2c5aa0',
@@ -130,12 +130,12 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
               whiteSpace: 'nowrap'
             }}
             onMouseOver={(e) => {
-              if (!loading && code.trim() && !success) {
+              if (!loading && code.trim() && !validatedCode) {
                 e.currentTarget.style.background = '#234a85';
               }
             }}
             onMouseOut={(e) => {
-              if (!loading && code.trim() && !success) {
+              if (!loading && code.trim() && !validatedCode) {
                 e.currentTarget.style.background = '#2c5aa0';
               }
             }}

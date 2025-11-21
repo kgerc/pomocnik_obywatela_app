@@ -3,6 +3,10 @@ import { Edit, Sparkles, Search, Loader, FileText, AlertCircle, ExternalLink, Do
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { usePisma } from '../../hooks/usePisma';
 import SaveDocumentButton from '../common/SaveDocumentButton';
+import Pagination from '../common/Pagination';
+import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
+
+const ITEMS_PER_PAGE = 12;
 
 const PismaTab = () => {
   const [pismaQuery, setPismaQuery] = useState('');
@@ -11,7 +15,8 @@ const PismaTab = () => {
   const [selectedCategory, setSelectedCategory] = useState('wszystkie');
   const [categories, setCategories] = useState(['wszystkie']);
   const [filteredPisma, setFilteredPisma] = useState([]);
-  
+  const [currentPage, setCurrentPage] = useState(1);
+
   const { pisma, loading, error, fetchAll, search, getByCategory, getCategories } = usePisma();
 
   // Pobierz pisma i kategorie przy montowaniu komponentu
@@ -33,9 +38,16 @@ const PismaTab = () => {
         const filtered = await getByCategory(selectedCategory);
         setFilteredPisma(filtered);
       }
+      setCurrentPage(1); // Reset do pierwszej strony przy zmianie kategorii
     };
     filterPisma();
   }, [selectedCategory, pisma]);
+
+  // Oblicz paginację
+  const totalPages = Math.ceil(filteredPisma.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentPisma = filteredPisma.slice(startIndex, endIndex);
 
   const handlePismaSearch = async () => {
     if (!pismaQuery.trim()) return;
@@ -161,14 +173,18 @@ const PismaTab = () => {
         Znajdź potrzebny dokument - przeglądaj bazę lub zapytaj AI o konkretne pismo.
       </p>
 
-      {/* AI Search */}
-      <div style={{
-        background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
-        padding: '25px',
-        borderRadius: '12px',
-        marginBottom: '30px',
-        border: '2px solid #2c5aa0'
-      }}>
+      {/* AI Search - PREMIUM */}
+      <PremiumFeatureTeaser
+        feature="asystenta AI dla pism"
+        title="Zapytaj AI o pismo"
+      >
+        <div style={{
+          background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
+          padding: '25px',
+          borderRadius: '12px',
+          marginBottom: '30px',
+          border: '2px solid #2c5aa0'
+        }}>
         <h3 style={{
           fontSize: '18px',
           fontWeight: '700',
@@ -194,6 +210,7 @@ const PismaTab = () => {
             fontSize: '16px',
             border: '2px solid #2c5aa0',
             background: 'white',
+            color: 'black',
             borderRadius: '8px',
             resize: 'vertical',
             fontFamily: 'inherit',
@@ -261,7 +278,8 @@ const PismaTab = () => {
             )}
           </div>
         )}
-      </div>
+        </div>
+      </PremiumFeatureTeaser>
 
       {/* Category Filter */}
       <div style={{
@@ -306,15 +324,40 @@ const PismaTab = () => {
       </div>
 
       {/* Documents Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-        gap: '20px'
-      }}>
-        {filteredPisma.map(pismo => (
-          <PismoCardSmall key={pismo.id} pismo={pismo} />
-        ))}
-      </div>
+      {currentPisma.length > 0 ? (
+        <>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '20px',
+            marginBottom: '20px'
+          }}>
+            {currentPisma.map(pismo => (
+              <PismoCardSmall key={pismo.id} pismo={pismo} />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            itemsPerPage={ITEMS_PER_PAGE}
+            totalItems={filteredPisma.length}
+          />
+        </>
+      ) : (
+        <div style={{
+          textAlign: 'center',
+          padding: '40px',
+          color: '#5a6c7d'
+        }}>
+          <FileText size={48} style={{ marginBottom: '20px', opacity: 0.5 }} />
+          <p style={{ fontSize: '16px', fontWeight: '600' }}>
+            Brak pism w tej kategorii
+          </p>
+        </div>
+      )}
 
       <style>{`
         @keyframes spin {

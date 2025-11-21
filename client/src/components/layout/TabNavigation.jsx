@@ -1,15 +1,16 @@
 import React from 'react';
-import { MessageSquare, Heart, User, Bell, TrendingUp, Edit, History, Crown } from 'lucide-react';
+import { Heart, User, Bell, TrendingUp, Edit, History, Crown, Shield, FolderOpen } from 'lucide-react';
 
 const TabNavigation = ({ activeTab, setActiveTab, favoritesCount }) => {
   const tabs = [
+    { id: 'swiadczenia', icon: Shield, label: 'Świadczenia', premium: false },
     { id: 'pisma', icon: Edit, label: 'Pisma', premium: false },
-    { id: 'historia', icon: History, label: 'Historia', premium: false },
-    { id: 'chat', icon: MessageSquare, label: 'Chat', premium: true },
+    { id: 'dotacje', icon: TrendingUp, label: 'Dotacje', premium: true },
+    { id: 'dokumenty', icon: FolderOpen, label: 'Twoje Dokumenty', premium: false },
+    { id: 'historia', icon: History, label: 'Historia AI', premium: true },
     { id: 'favorites', icon: Heart, label: `Ulubione ${favoritesCount > 0 ? `(${favoritesCount})` : ''}`, premium: true },
     { id: 'personalization', icon: User, label: 'Personalizacja', premium: true },
-    { id: 'notifications', icon: Bell, label: 'Powiadomienia', premium: true },
-    { id: 'dotacje', icon: TrendingUp, label: 'Dotacje', premium: true }
+    { id: 'notifications', icon: Bell, label: 'Powiadomienia', premium: true }
   ];
 
   return (
