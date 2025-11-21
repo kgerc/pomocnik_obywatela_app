@@ -1,4 +1,5 @@
 import { supabase } from '../config/supabase.js';
+import { translateSupabaseError } from '../utils/supabaseErrorTranslations.js';
 
 export const register = async (req, res) => {
   try {
@@ -17,7 +18,7 @@ export const register = async (req, res) => {
     if (error) {
       return res.status(400).json({
         success: false,
-        message: error.message
+        message: translateSupabaseError(error.message)
       });
     }
 
@@ -169,7 +170,7 @@ export const updateProfile = async (req, res) => {
     if (error) {
       return res.status(400).json({
         success: false,
-        message: error.message
+        message: translateSupabaseError(error.message)
       });
     }
 
@@ -198,7 +199,7 @@ export const resetPassword = async (req, res) => {
     if (error) {
       return res.status(400).json({
         success: false,
-        message: error.message
+        message: translateSupabaseError(error.message)
       });
     }
 

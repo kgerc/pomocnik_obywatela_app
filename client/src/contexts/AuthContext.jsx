@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { supabase } from '../services/supabaseClient.js';
+import { translateSupabaseError } from '../utils/supabaseErrorTranslations';
 
 const AuthContext = createContext({});
 
@@ -52,7 +53,7 @@ export const AuthProvider = ({ children }) => {
 
       return { data, error: null };
     } catch (error) {
-      return { data: null, error: error.message };
+      return { data: null, error: translateSupabaseError(error.message) };
     }
   };
 
@@ -67,7 +68,7 @@ export const AuthProvider = ({ children }) => {
 
       return { data, error: null };
     } catch (error) {
-      return { data: null, error: error.message };
+      return { data: null, error: translateSupabaseError(error.message) };
     }
   };
 
@@ -77,7 +78,7 @@ export const AuthProvider = ({ children }) => {
       if (error) throw error;
       return { error: null };
     } catch (error) {
-      return { error: error.message };
+      return { error: translateSupabaseError(error.message) };
     }
   };
 
@@ -87,7 +88,7 @@ export const AuthProvider = ({ children }) => {
       if (error) throw error;
       return { error: null };
     } catch (error) {
-      return { error: error.message };
+      return { error: translateSupabaseError(error.message) };
     }
   };
 
@@ -100,7 +101,7 @@ export const AuthProvider = ({ children }) => {
       if (error) throw error;
       return { data, error: null };
     } catch (error) {
-      return { data: null, error: error.message };
+      return { data: null, error: translateSupabaseError(error.message) };
     }
   };
 
