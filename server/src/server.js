@@ -26,12 +26,13 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware - CORS configuration for Vercel
+// Middleware - CORS configuration for Vercel and custom domain
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
   process.env.FRONTEND_URL,
-  'https://pomocnik-obywatela-app.vercel.app'
+  'https://pomocnik-obywatela-app.vercel.app',
+  'https://app.pomocnikobywatela.pl'
 ].filter(Boolean);
 
 // Configure CORS properly for Vercel
