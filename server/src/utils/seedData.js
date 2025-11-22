@@ -37,20 +37,39 @@ async function loadDataFile(filename) {
 
 async function seedSwiadczenia() {
   console.log('🌱 Seeding świadczenia...');
-  
+
   try {
     const swiadczeniaData = await loadDataFile('swiadczeniaDb.js');
-    
+
+    // Mapuj nazwy pól z camelCase (JS) na snake_case (PostgreSQL)
+    const mappedData = swiadczeniaData.map(item => ({
+      id: item.id,
+      nazwa: item.nazwa,
+      kategoria: item.kategoria,
+      krotki_opis: item.krotki_opis,
+      kogo_dotyczy: item.kogoDotyczy || [],
+      kwalifikacja: item.kwalifikacja || [],
+      dokumenty: item.dokumenty || [],
+      kiedy_zlozyc: item.kiedyZlozyc || '',
+      gdzie_zlozyc: item.gdzieZlozyc || [],
+      uwagi: item.uwagi || '',
+      link: item.link,
+      pdf: item.pdf,
+      slowa_kluczowe: item.slowa_kluczowe || [],
+      ostatnia_aktualizacja: item.ostatnia_aktualizacja
+    }));
+
     const { data, error } = await supabase
       .from('swiadczenia')
-      .upsert(swiadczeniaData, { onConflict: 'id' });
+      .upsert(mappedData, { onConflict: 'id' });
 
     if (error) {
       console.error('❌ Error seeding świadczenia:', error);
+      console.error('Error details:', error.message);
       return false;
     }
 
-    console.log(`✅ Successfully seeded ${swiadczeniaData.length} świadczenia`);
+    console.log(`✅ Successfully seeded ${mappedData.length} świadczenia`);
     return true;
   } catch (error) {
     console.error('❌ Error in seedSwiadczenia:', error);

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Sparkles, Search, Loader, Shield, AlertCircle, ExternalLink, Download, CheckCircle } from 'lucide-react';
+import { Heart, Sparkles, Search, Loader, Shield, AlertCircle, Info, CheckCircle } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useSwiadczenia } from '../../hooks/useSwiadczenia';
 import Pagination from '../common/Pagination';
 import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
+import SwiadczenieDetailsModal from '../swiadczenia/SwiadczenieDetailsModal';
 
 const ITEMS_PER_PAGE = 9;
 
@@ -15,6 +16,7 @@ const SwiadczeniaTab = () => {
   const [categories, setCategories] = useState(['wszystkie']);
   const [filteredSwiadczenia, setFilteredSwiadczenia] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedSwiadczenie, setSelectedSwiadczenie] = useState(null);
 
   const { swiadczenia, loading, error, fetchAll, search, getByCategory, getCategories } = useSwiadczenia();
 
@@ -275,7 +277,11 @@ const SwiadczeniaTab = () => {
                 gap: '20px'
               }}>
                 {swiadczeniaResult.matches.map((swiadczenie, idx) => (
-                  <SwiadczenieCard key={idx} swiadczenie={swiadczenie} />
+                  <SwiadczenieCard
+                    key={idx}
+                    swiadczenie={swiadczenie}
+                    onClick={() => setSelectedSwiadczenie(swiadczenie)}
+                  />
                 ))}
               </div>
             )}
@@ -336,7 +342,11 @@ const SwiadczeniaTab = () => {
             marginBottom: '20px'
           }}>
             {currentSwiadczenia.map(swiadczenie => (
-              <SwiadczenieCard key={swiadczenie.id} swiadczenie={swiadczenie} />
+              <SwiadczenieCard
+                key={swiadczenie.id}
+                swiadczenie={swiadczenie}
+                onClick={() => setSelectedSwiadczenie(swiadczenie)}
+              />
             ))}
           </div>
 
@@ -370,12 +380,20 @@ const SwiadczeniaTab = () => {
           animation: spin 1s linear infinite;
         }
       `}</style>
+
+      {/* Modal szczegółów */}
+      {selectedSwiadczenie && (
+        <SwiadczenieDetailsModal
+          swiadczenie={selectedSwiadczenie}
+          onClose={() => setSelectedSwiadczenie(null)}
+        />
+      )}
     </div>
   );
 };
 
 // Karta świadczenia
-const SwiadczenieCard = ({ swiadczenie }) => (
+const SwiadczenieCard = ({ swiadczenie, onClick }) => (
   <div style={{
     background: '#f8f9fb',
     padding: '20px',
@@ -477,10 +495,8 @@ const SwiadczenieCard = ({ swiadczenie }) => (
       gap: '10px',
       marginTop: 'auto'
     }}>
-      <a
-        href={swiadczenie.link}
-        target="_blank"
-        rel="noopener noreferrer"
+      <button
+        onClick={onClick}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -490,51 +506,18 @@ const SwiadczenieCard = ({ swiadczenie }) => (
           color: 'white',
           padding: '12px 15px',
           borderRadius: '8px',
-          textDecoration: 'none',
+          border: 'none',
           fontWeight: '600',
           fontSize: '14px',
+          cursor: 'pointer',
           transition: 'transform 0.2s'
         }}
         onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
         onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
       >
-        <ExternalLink size={16} />
+        <Info size={16} />
         Sprawdź szczegóły
-      </a>
-
-      {swiadczenie.pdf && (
-        <a
-          href={swiadczenie.pdf}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            background: 'white',
-            color: '#2c5aa0',
-            padding: '10px 15px',
-            borderRadius: '8px',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '14px',
-            border: '2px solid #2c5aa0',
-            transition: 'all 0.2s'
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.background = '#2c5aa0';
-            e.currentTarget.style.color = 'white';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.background = 'white';
-            e.currentTarget.style.color = '#2c5aa0';
-          }}
-        >
-          <Download size={16} />
-          Pobierz PDF
-        </a>
-      )}
+      </button>
     </div>
   </div>
 );

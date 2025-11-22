@@ -6,8 +6,12 @@ class Swiadczenie {
     this.nazwa = data.nazwa;
     this.kategoria = data.kategoria;
     this.krotki_opis = data.krotki_opis;
+    this.kogo_dotyczy = data.kogo_dotyczy;
     this.kwalifikacja = data.kwalifikacja;
     this.dokumenty = data.dokumenty;
+    this.kiedy_zlozyc = data.kiedy_zlozyc;
+    this.gdzie_zlozyc = data.gdzie_zlozyc;
+    this.uwagi = data.uwagi;
     this.link = data.link;
     this.pdf = data.pdf;
     this.slowa_kluczowe = data.slowa_kluczowe;
@@ -217,8 +221,12 @@ class Swiadczenie {
       nazwa: this.nazwa,
       kategoria: this.kategoria,
       krotki_opis: this.krotki_opis,
+      kogo_dotyczy: this.kogo_dotyczy,
       kwalifikacja: this.kwalifikacja,
       dokumenty: this.dokumenty,
+      kiedy_zlozyc: this.kiedy_zlozyc,
+      gdzie_zlozyc: this.gdzie_zlozyc,
+      uwagi: this.uwagi,
       link: this.link,
       pdf: this.pdf,
       slowa_kluczowe: this.slowa_kluczowe,
