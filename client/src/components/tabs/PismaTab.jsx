@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Edit, Sparkles, Search, Loader, FileText, AlertCircle, ExternalLink, Download } from 'lucide-react';
+import { Edit, Sparkles, Search, Loader, FileText, AlertCircle, Download, ExternalLink } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { usePisma } from '../../hooks/usePisma';
 import SaveDocumentButton from '../common/SaveDocumentButton';
@@ -8,7 +8,7 @@ import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
 
 const ITEMS_PER_PAGE = 12;
 
-const PismaTab = () => {
+const PismaTab = ({ preloadedIsPremium = null }) => {
   const [pismaQuery, setPismaQuery] = useState('');
   const [pismaLoading, setPismaLoading] = useState(false);
   const [pismaResult, setPismaResult] = useState(null);
@@ -177,6 +177,7 @@ const PismaTab = () => {
       <PremiumFeatureTeaser
         feature="asystenta AI dla pism"
         title="Zapytaj AI o pismo"
+        preloadedIsPremium={preloadedIsPremium}
       >
         <div style={{
           background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
@@ -371,6 +372,96 @@ const PismaTab = () => {
   );
 };
 
+// Komponent przycisku do pobierania PDF
+const PdfDownloadButton = ({ pismo, fullWidth = false }) => {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const [downloading, setDownloading] = useState(false);
+
+  // Jeśli jest PDF, generuj URL do bucketa
+  const pdfUrl = pismo.pdf
+    ? `${supabaseUrl}/storage/v1/object/public/documents/${pismo.pdf}`
+    : pismo.link;
+
+  // Jeśli nie ma ani PDF ani linku
+  if (!pismo.pdf && !pismo.link) {
+    return null;
+  }
+
+  // Funkcja do pobierania PDF
+  const handleDownload = async (e) => {
+    if (!pismo.pdf) {
+      // Jeśli to tylko link (fallback), otwórz w nowej karcie
+      window.open(pismo.link, '_blank');
+      return;
+    }
+
+    e.preventDefault();
+    setDownloading(true);
+
+    try {
+      const response = await fetch(pdfUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = pismo.pdf || `${pismo.nazwa}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Błąd pobierania PDF:', error);
+      // Fallback - otwórz w nowej karcie
+      window.open(pdfUrl, '_blank');
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleDownload}
+      disabled={downloading}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
+        background: downloading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+        color: 'white',
+        padding: '10px 20px',
+        borderRadius: '8px',
+        border: 'none',
+        fontWeight: '600',
+        fontSize: '14px',
+        cursor: downloading ? 'not-allowed' : 'pointer',
+        transition: 'transform 0.2s',
+        width: fullWidth ? '100%' : 'auto',
+        boxSizing: 'border-box'
+      }}
+      onMouseOver={(e) => !downloading && (e.currentTarget.style.transform = 'translateY(-2px)')}
+      onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+    >
+      {downloading ? (
+        <>
+          <Loader size={16} className="spin" />
+          Pobieranie...
+        </>
+      ) : pismo.pdf ? (
+        <>
+          <Download size={16} />
+          Pobierz PDF
+        </>
+      ) : (
+        <>
+          <ExternalLink size={16} />
+          Otwórz źródło
+        </>
+      )}
+    </button>
+  );
+};
+
 // Duża karta pisma (w wynikach AI)
 const PismoCard = ({ pismo }) => (
   <div style={{
@@ -423,68 +514,17 @@ const PismoCard = ({ pismo }) => (
       gap: '10px',
       flexWrap: 'wrap'
     }}>
-      {pismo.pdf ? (
-        <>
-          <a
-            href={pismo.pdf}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-              color: 'white',
-              padding: '10px 20px',
-              borderRadius: '8px',
-              textDecoration: 'none',
-              fontWeight: '600',
-              fontSize: '14px',
-              transition: 'transform 0.2s',
-              boxSizing: 'border-box'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-          >
-            <Download size={16} />
-            Pobierz PDF
-          </a>
-          <SaveDocumentButton
-            documentData={{
-              title: pismo.nazwa,
-              description: pismo.opis,
-              fileUrl: pismo.pdf,
-              fileName: `${pismo.nazwa}.pdf`,
-              sourceType: 'pismo',
-              sourceId: pismo.id
-            }}
-          />
-        </>
-      ) : (
-        <a
-          href={pismo.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-            color: 'white',
-            padding: '10px 20px',
-            borderRadius: '8px',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '14px',
-            transition: 'transform 0.2s'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-        >
-          <ExternalLink size={16} />
-          {pismo.szablon ? 'Zobacz szablon' : 'Więcej informacji'}
-        </a>
-      )}
+      <PdfDownloadButton pismo={pismo} />
+      <SaveDocumentButton
+        documentData={{
+          title: pismo.nazwa,
+          description: pismo.opis,
+          fileUrl: pismo.pdf ? `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/documents/${pismo.pdf}` : pismo.link,
+          fileName: `${pismo.nazwa}.pdf`,
+          sourceType: 'pismo',
+          sourceId: pismo.id
+        }}
+      />
     </div>
   </div>
 );
@@ -562,68 +602,17 @@ const PismoCardSmall = ({ pismo }) => (
       gap: '10px',
       marginTop: 'auto'
     }}>
-      {pismo.pdf ? (
-        <>
-          <a
-            href={pismo.pdf}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-              color: 'white',
-              padding: '10px 15px',
-              borderRadius: '8px',
-              textDecoration: 'none',
-              fontWeight: '600',
-              fontSize: '14px',
-              width: '100%',
-              boxSizing: 'border-box'
-            }}
-          >
-            <Download size={16} />
-            Pobierz PDF
-          </a>
-          <SaveDocumentButton
-            documentData={{
-              title: pismo.nazwa,
-              description: pismo.opis,
-              fileUrl: pismo.pdf,
-              fileName: `${pismo.nazwa}.pdf`,
-              sourceType: 'pismo',
-              sourceId: pismo.id
-            }}
-          />
-        </>
-      ) : (
-        <a
-          href={pismo.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            background: '#f8f9fb',
-            color: '#2c5aa0',
-            padding: '10px 15px',
-            borderRadius: '8px',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '14px',
-            border: '2px solid #2c5aa0',
-            width: '100%',
-            boxSizing: 'border-box'
-          }}
-        >
-          <ExternalLink size={16} />
-          Zobacz więcej
-        </a>
-      )}
+      <PdfDownloadButton pismo={pismo} fullWidth />
+      <SaveDocumentButton
+        documentData={{
+          title: pismo.nazwa,
+          description: pismo.opis,
+          fileUrl: pismo.pdf ? `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/documents/${pismo.pdf}` : pismo.link,
+          fileName: `${pismo.nazwa}.pdf`,
+          sourceType: 'pismo',
+          sourceId: pismo.id
+        }}
+      />
     </div>
   </div>
 );

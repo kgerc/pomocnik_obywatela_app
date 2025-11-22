@@ -3,13 +3,16 @@ import { Crown, Lock, Check, Sparkles, ChevronDown, ChevronUp } from 'lucide-rea
 import { useSubscription } from '../../hooks/useSubscription';
 import PromoCodeInput from './PromoCodeInput';
 
-const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funkcja Premium' }) => {
-  const { isPremium, loading, createCheckoutSession } = useSubscription();
+const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funkcja Premium', preloadedIsPremium = null }) => {
+  const { isPremium: hookIsPremium, loading, createCheckoutSession } = useSubscription();
   const [isExpanded, setIsExpanded] = useState(false);
   const [useBlik, setUseBlik] = useState(false);
   const [validatedPromoCode, setValidatedPromoCode] = useState(null);
 
-  if (loading) {
+  // Use preloaded value if available, otherwise fall back to hook
+  const isPremium = preloadedIsPremium !== null ? preloadedIsPremium : hookIsPremium;
+
+  if (loading && preloadedIsPremium === null) {
     return (
       <div style={{
         padding: '20px',

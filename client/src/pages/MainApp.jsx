@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Loader } from 'lucide-react';
 import Header from '../components/layout/Header';
 import TabNavigation from '../components/layout/TabNavigation';
 import PersonalizationTab from '../components/tabs/PersonalizationTab';
@@ -21,6 +22,7 @@ const MainApp = () => {
   const [query, setQuery] = useState('');
   const { favorites, toggleFavorite: toggleFavAPI, isFavorite } = useFavorites();
   const { swiadczenia, fetchAll } = useSwiadczenia();
+  const { isPremium, loading: subscriptionLoading } = useSubscription();
   const [personalizationData, setPersonalizationData] = useState({
     liczba_dzieci: 0,
     wiek_dzieci: [],
@@ -65,9 +67,42 @@ const MainApp = () => {
   };
 
   // Get favorite swiadczenia
-  const favoriteSwiadczenia = swiadczenia.filter(sw => 
+  const favoriteSwiadczenia = swiadczenia.filter(sw =>
     favorites.some(fav => fav.item_id === sw.id)
   );
+
+  // Show loader while subscription status is loading
+  if (subscriptionLoading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%)',
+        padding: '20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{
+          background: 'white',
+          borderRadius: '16px',
+          padding: '60px',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          textAlign: 'center'
+        }}>
+          <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
+          <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie...</p>
+          <style>{`
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+            .spin {
+              animation: spin 1s linear infinite;
+            }
+          `}</style>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{
@@ -131,12 +166,12 @@ const MainApp = () => {
 
         {/* Swiadczenia Tab - FREE (but AI search inside is premium) */}
         {activeTab === 'swiadczenia' && (
-          <SwiadczeniaTab />
+          <SwiadczeniaTab preloadedIsPremium={isPremium} />
         )}
 
         {/* Pisma Tab - FREE (but AI search inside is premium) */}
         {activeTab === 'pisma' && (
-          <PismaTab />
+          <PismaTab preloadedIsPremium={isPremium} />
         )}
 
         {/* Dotacje Tab - PREMIUM */}

@@ -8,7 +8,7 @@ import SwiadczenieDetailsModal from '../swiadczenia/SwiadczenieDetailsModal';
 
 const ITEMS_PER_PAGE = 9;
 
-const SwiadczeniaTab = () => {
+const SwiadczeniaTab = ({ preloadedIsPremium = null }) => {
   const [swiadczeniaQuery, setSwiadczeniaQuery] = useState('');
   const [swiadczeniaLoading, setSwiadczeniaLoading] = useState(false);
   const [swiadczeniaResult, setSwiadczeniaResult] = useState(null);
@@ -178,6 +178,7 @@ const SwiadczeniaTab = () => {
       <PremiumFeatureTeaser
         feature="asystenta AI dla świadczeń"
         title="Zapytaj AI o świadczenie"
+        preloadedIsPremium={preloadedIsPremium}
       >
         <div style={{
           background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',

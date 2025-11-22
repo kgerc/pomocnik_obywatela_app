@@ -4,7 +4,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import SwiadczenieCard from '../swiadczenia/SwiadczenieCard';
 import { useSwiadczenia } from '../../hooks/useSwiadczenia';
 
-const ChatInterface = ({ onToggleFavorite, isFavorite }) => {
+const ChatInterface = ({ onToggleFavorite, isFavorite, preloadedSwiadczenia = null }) => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -51,11 +51,11 @@ const ChatInterface = ({ onToggleFavorite, isFavorite }) => {
     if (!query.trim()) return;
 
     setLoading(true);
-    
+
     try {
-      // Wyszukaj świadczenia przez API
-      const allSwiadczenia = await search(query);
-      
+      // Użyj preloadowanych danych lub wyszukaj przez API
+      const allSwiadczenia = preloadedSwiadczenia || await search(query);
+
       if (allSwiadczenia.length === 0) {
         setResult({
           content: `Nie znalazłem dokładnego dopasowania do Twojego pytania. Sprawdź oficjalne źródła:\n\n• [Portal Gov.pl](https://www.gov.pl)\n• [ZUS](https://www.zus.pl)\n• [Biznes.gov.pl](https://www.biznes.gov.pl)\n\nMożesz też spróbować doprecyzować pytanie lub zapytać o konkretne świadczenie.`,

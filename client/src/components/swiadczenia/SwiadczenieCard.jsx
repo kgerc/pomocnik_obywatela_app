@@ -161,6 +161,9 @@ const SwiadczenieCard = ({ swiadczenie, onToggleFavorite, isFavorite, showFavori
         <SwiadczenieDetailsModal
           swiadczenie={swiadczenie}
           onClose={() => setShowModal(false)}
+          onToggleFavorite={onToggleFavorite}
+          isFavorite={isFavorite}
+          showFavoriteButton={showFavoriteButton}
         />
       )}
     </>

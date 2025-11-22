@@ -1,8 +1,50 @@
-import React from 'react';
-import { X, CheckCircle, FileText, ExternalLink, Download, Clock, MapPin, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, CheckCircle, FileText, ExternalLink, Download, Clock, MapPin, AlertCircle, Loader } from 'lucide-react';
 
-const SwiadczenieDetailsModal = ({ swiadczenie, onClose }) => {
+const SwiadczenieDetailsModal = ({ swiadczenie, onClose, onToggleFavorite, isFavorite, showFavoriteButton = true }) => {
+  const [downloading, setDownloading] = useState(false);
+
   if (!swiadczenie) return null;
+
+  // Funkcja do pobierania wielu PDFów
+  const handleDownloadDocuments = async () => {
+    if (!swiadczenie.pdf) return;
+
+    setDownloading(true);
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+
+    // Podziel string na tablicę nazw plików (usuwając białe znaki)
+    const pdfFiles = swiadczenie.pdf.split(',').map(file => file.trim()).filter(Boolean);
+
+    try {
+      // Pobierz wszystkie pliki
+      for (const filename of pdfFiles) {
+        const pdfUrl = `${supabaseUrl}/storage/v1/object/public/documents/${filename}`;
+
+        try {
+          const response = await fetch(pdfUrl);
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+
+          // Małe opóźnienie między pobieraniami, żeby przeglądarka nie blokowała
+          if (pdfFiles.length > 1) {
+            await new Promise(resolve => setTimeout(resolve, 300));
+          }
+        } catch (error) {
+          console.error(`Błąd pobierania ${filename}:`, error);
+        }
+      }
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <div
@@ -28,26 +70,26 @@ const SwiadczenieDetailsModal = ({ swiadczenie, onClose }) => {
           maxWidth: '800px',
           width: '100%',
           maxHeight: '90vh',
-          overflow: 'auto',
           position: 'relative',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
+          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden'
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div style={{
-          position: 'sticky',
-          top: 0,
           background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
           color: 'white',
           padding: '25px 30px',
-          borderRadius: '16px 16px 0 0',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-start',
-          zIndex: 10
+          position: 'relative',
+          flexShrink: 0
         }}>
-          <div style={{ flex: 1, paddingRight: '20px' }}>
+          <div style={{ flex: 1, paddingRight: showFavoriteButton ? '60px' : '20px' }}>
             <h2 style={{
               fontSize: '24px',
               fontWeight: '700',
@@ -67,6 +109,39 @@ const SwiadczenieDetailsModal = ({ swiadczenie, onClose }) => {
               {swiadczenie.kategoria}
             </div>
           </div>
+
+          {/* Favorite button */}
+          {showFavoriteButton && onToggleFavorite && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleFavorite(swiadczenie.id);
+              }}
+              style={{
+                position: 'absolute',
+                top: '25px',
+                right: '70px',
+                background: 'rgba(255, 255, 255, 0.2)',
+                border: 'none',
+                color: 'white',
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '20px',
+                transition: 'all 0.2s',
+                flexShrink: 0,
+                zIndex: 20
+              }}
+              onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
+              onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+            >
+              {isFavorite ? '❤️' : '🤍'}
+            </button>
+          )}
           <button
             onClick={onClose}
             style={{
@@ -81,7 +156,8 @@ const SwiadczenieDetailsModal = ({ swiadczenie, onClose }) => {
               alignItems: 'center',
               justifyContent: 'center',
               transition: 'background 0.2s',
-              flexShrink: 0
+              flexShrink: 0,
+              padding: '5px 5px'
             }}
             onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
             onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
@@ -91,7 +167,13 @@ const SwiadczenieDetailsModal = ({ swiadczenie, onClose }) => {
         </div>
 
         {/* Content */}
-        <div style={{ padding: '30px' }}>
+        <div style={{
+          padding: '30px',
+          overflow: 'auto',
+          flex: 1
+        }}
+        className="modal-content"
+        >
           {/* Opis */}
           <p style={{
             color: '#5a6c7d',
@@ -319,10 +401,9 @@ const SwiadczenieDetailsModal = ({ swiadczenie, onClose }) => {
             </a>
 
             {swiadczenie.pdf && (
-              <a
-                href={swiadczenie.pdf}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={handleDownloadDocuments}
+                disabled={downloading}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -331,30 +412,67 @@ const SwiadczenieDetailsModal = ({ swiadczenie, onClose }) => {
                   color: '#2c5aa0',
                   padding: '14px 24px',
                   borderRadius: '8px',
-                  textDecoration: 'none',
+                  border: '2px solid #2c5aa0',
                   fontWeight: '600',
                   fontSize: '15px',
-                  border: '2px solid #2c5aa0',
+                  cursor: downloading ? 'not-allowed' : 'pointer',
                   transition: 'all 0.2s',
                   flex: '1',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  opacity: downloading ? 0.7 : 1
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.background = '#2c5aa0';
-                  e.currentTarget.style.color = 'white';
+                  if (!downloading) {
+                    e.currentTarget.style.background = '#2c5aa0';
+                    e.currentTarget.style.color = 'white';
+                  }
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.background = 'white';
                   e.currentTarget.style.color = '#2c5aa0';
                 }}
               >
-                <Download size={18} />
-                Pobierz PDF
-              </a>
+                {downloading ? (
+                  <>
+                    <Loader size={18} className="spin" />
+                    Pobieranie...
+                  </>
+                ) : (
+                  <>
+                    <Download size={18} />
+                    Pobierz dokumenty
+                  </>
+                )}
+              </button>
             )}
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+
+        /* Custom scrollbar for modal */
+        .modal-content::-webkit-scrollbar {
+          width: 8px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+          background: #2c5aa0;
+          border-radius: 10px;
+        }
+        .modal-content::-webkit-scrollbar-thumb:hover {
+          background: #1e4080;
+        }
+      `}</style>
     </div>
   );
 };
