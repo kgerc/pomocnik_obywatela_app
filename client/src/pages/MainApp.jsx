@@ -71,37 +71,37 @@ const MainApp = () => {
   );
 
   // Show loader while subscription status is loading
-  if (subscriptionLoading) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%)',
-        padding: '20px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <div style={{
-          background: 'white',
-          borderRadius: '16px',
-          padding: '60px',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-          textAlign: 'center'
-        }}>
-          <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
-          <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie...</p>
-          <style>{`
-            @keyframes spin {
-              to { transform: rotate(360deg); }
-            }
-            .spin {
-              animation: spin 1s linear infinite;
-            }
-          `}</style>
-        </div>
-      </div>
-    );
-  }
+  // if (subscriptionLoading) {
+  //   return (
+  //     <div style={{
+  //       minHeight: '100vh',
+  //       background: 'linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%)',
+  //       padding: '20px',
+  //       display: 'flex',
+  //       alignItems: 'center',
+  //       justifyContent: 'center'
+  //     }}>
+  //       <div style={{
+  //         background: 'white',
+  //         borderRadius: '16px',
+  //         padding: '60px',
+  //         boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+  //         textAlign: 'center'
+  //       }}>
+  //         <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
+  //         <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie...</p>
+  //         <style>{`
+  //           @keyframes spin {
+  //             to { transform: rotate(360deg); }
+  //           }
+  //           .spin {
+  //             animation: spin 1s linear infinite;
+  //           }
+  //         `}</style>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div style={{
