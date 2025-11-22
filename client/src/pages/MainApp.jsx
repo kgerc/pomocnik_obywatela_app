@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Loader } from 'lucide-react';
 import Header from '../components/layout/Header';
 import TabNavigation from '../components/layout/TabNavigation';
@@ -19,7 +19,6 @@ import { personalizationAPI } from '../services/api';
 
 const MainApp = () => {
   const [activeTab, setActiveTab] = useState('swiadczenia');
-  const [query, setQuery] = useState('');
   const { favorites, toggleFavorite: toggleFavAPI, isFavorite } = useFavorites();
   const { swiadczenia, fetchAll } = useSwiadczenia();
   const { isPremium, loading: subscriptionLoading } = useSubscription();
@@ -159,14 +158,18 @@ const MainApp = () => {
           <PremiumGate feature="powiadomień">
             <NotificationsTab
               setActiveTab={setActiveTab}
-              setQuery={setQuery}
+              setQuery={() => {}}
             />
           </PremiumGate>
         )}
 
         {/* Swiadczenia Tab - FREE (but AI search inside is premium) */}
         {activeTab === 'swiadczenia' && (
-          <SwiadczeniaTab preloadedIsPremium={isPremium} />
+          <SwiadczeniaTab
+            preloadedIsPremium={isPremium}
+            onToggleFavorite={handleToggleFavorite}
+            isFavorite={isFavorite}
+          />
         )}
 
         {/* Pisma Tab - FREE (but AI search inside is premium) */}

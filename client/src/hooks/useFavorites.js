@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { favoritesAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
 
 export const useFavorites = () => {
   const { user } = useAuth();
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { showSuccess } = useToast();
 
   // Fetch favorites on mount
   useEffect(() => {
@@ -36,6 +38,7 @@ export const useFavorites = () => {
     
     try {
       await favoritesAPI.add(itemType, itemId);
+      showSuccess('Dokument pomyślnie dodany do listy ulubionych');
       await fetchFavorites(); // Refresh list
       return true;
     } catch (err) {
@@ -50,6 +53,7 @@ export const useFavorites = () => {
     
     try {
       await favoritesAPI.remove(itemType, itemId);
+      showSuccess('Dokument pomyślnie usunięty z listy ulubionych');
       await fetchFavorites(); // Refresh list
       return true;
     } catch (err) {

@@ -8,7 +8,7 @@ import SwiadczenieDetailsModal from '../swiadczenia/SwiadczenieDetailsModal';
 
 const ITEMS_PER_PAGE = 9;
 
-const SwiadczeniaTab = ({ preloadedIsPremium = null }) => {
+const SwiadczeniaTab = ({ preloadedIsPremium = null, onToggleFavorite, isFavorite }) => {
   const [swiadczeniaQuery, setSwiadczeniaQuery] = useState('');
   const [swiadczeniaLoading, setSwiadczeniaLoading] = useState(false);
   const [swiadczeniaResult, setSwiadczeniaResult] = useState(null);
@@ -163,7 +163,7 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null }) => {
         alignItems: 'center',
         gap: '10px'
       }}>
-        <Heart size={24} color="#2c5aa0" />
+        <Shield size={24} color="#2c5aa0" />
         Przeglądaj świadczenia
       </h2>
       <p style={{
@@ -387,6 +387,8 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null }) => {
         <SwiadczenieDetailsModal
           swiadczenie={selectedSwiadczenie}
           onClose={() => setSelectedSwiadczenie(null)}
+          onToggleFavorite={onToggleFavorite}
+          isFavorite={isFavorite ? isFavorite(selectedSwiadczenie.id) : false}
         />
       )}
     </div>
@@ -419,7 +421,7 @@ const SwiadczenieCard = ({ swiadczenie, onClick }) => (
       gap: '10px',
       marginBottom: '10px'
     }}>
-      <Heart size={24} color="#2c5aa0" />
+      <Shield size={24} color="#2c5aa0" />
       <h4 style={{
         fontSize: '18px',
         fontWeight: '700',

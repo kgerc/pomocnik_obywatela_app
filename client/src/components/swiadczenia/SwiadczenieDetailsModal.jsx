@@ -134,6 +134,7 @@ const SwiadczenieDetailsModal = ({ swiadczenie, onClose, onToggleFavorite, isFav
                 fontSize: '20px',
                 transition: 'all 0.2s',
                 flexShrink: 0,
+                marginRight: 5,
                 zIndex: 20
               }}
               onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
