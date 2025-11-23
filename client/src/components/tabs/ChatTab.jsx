@@ -31,14 +31,6 @@ const ChatTab = ({ onToggleFavorite, isFavorite }) => {
       }}>
         <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
         <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie...</p>
-        <style>{`
-          @keyframes spin {
-            to { transform: rotate(360deg); }
-          }
-          .spin {
-            animation: spin 1s linear infinite;
-          }
-        `}</style>
       </div>
     );
   }

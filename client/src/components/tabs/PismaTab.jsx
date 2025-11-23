@@ -359,15 +359,6 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
           </p>
         </div>
       )}
-
-      <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-        .spin {
-          animation: spin 1s linear infinite;
-        }
-      `}</style>
     </div>
   );
 };

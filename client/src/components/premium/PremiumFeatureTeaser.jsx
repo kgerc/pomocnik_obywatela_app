@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Crown, Lock, Check, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { Crown, Lock, Check, Sparkles, ChevronDown, ChevronUp, Loader } from 'lucide-react';
 import { useSubscription } from '../../hooks/useSubscription';
 import PromoCodeInput from './PromoCodeInput';
 
@@ -8,6 +8,23 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
   const [isExpanded, setIsExpanded] = useState(false);
   const [useBlik, setUseBlik] = useState(false);
   const [validatedPromoCode, setValidatedPromoCode] = useState(null);
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
+
+  // Base prices
+  const MONTHLY_PRICE = 39.99;
+  const YEARLY_PRICE = 479.88;
+
+  // Calculated discounted prices
+  let discountedMonthly = MONTHLY_PRICE;
+  let discountedYearly = YEARLY_PRICE;
+
+  // If promo code validated
+  if (validatedPromoCode?.discountPercent) {
+    const discount = validatedPromoCode.discountPercent;
+
+    discountedMonthly = (MONTHLY_PRICE * (1 - discount / 100)).toFixed(2);
+    discountedYearly = (YEARLY_PRICE * (1 - discount / 100)).toFixed(2);
+  }
 
   // Use preloaded value if available, otherwise fall back to hook
   const isPremium = preloadedIsPremium !== null ? preloadedIsPremium : hookIsPremium;
@@ -28,6 +45,25 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
     return <>{children}</>;
   }
 
+  const handleClick = async () => {
+    setLoadingCheckout(true);
+    try {
+      await createCheckoutSession(useBlik, validatedPromoCode);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingCheckout(false);
+    }
+  };
+
+  const getLabel = () => {
+    if (useBlik) {
+      return validatedPromoCode ? `Zapłać ${discountedYearly} zł` : `Zapłać ${YEARLY_PRICE.toFixed(2)} zł`;
+    } else {
+      return validatedPromoCode ? `Subskrybuj za ${discountedMonthly} zł/mies` : `Subskrybuj za ${MONTHLY_PRICE.toFixed(2)} zł/mies`;
+    }
+  };
+
   return (
     <div style={{
       background: 'linear-gradient(135deg, #fff7e6 0%, #ffe8cc 100%)',
@@ -36,6 +72,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
       padding: '20px',
       marginBottom: '20px'
     }}>
+
       {/* Compact Header */}
       <div style={{
         display: 'flex',
@@ -93,16 +130,6 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
             transition: 'all 0.2s',
             whiteSpace: 'nowrap'
           }}
-          onMouseOver={(e) => {
-            if (!isExpanded) {
-              e.currentTarget.style.background = '#e8f4f8';
-            }
-          }}
-          onMouseOut={(e) => {
-            if (!isExpanded) {
-              e.currentTarget.style.background = 'white';
-            }
-          }}
         >
           {isExpanded ? 'Zwiń' : 'Szczegóły'}
           {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
@@ -118,6 +145,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
           maxWidth: '600px',
           margin: '20px auto 0'
         }}>
+
           {/* Features List */}
           <div style={{
             background: 'white',
@@ -176,27 +204,59 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
             ))}
           </div>
 
-          {/* Price */}
-          <div style={{
-            textAlign: 'center',
-            marginBottom: '20px'
-          }}>
-            <div style={{
-              fontSize: '36px',
-              fontWeight: '800',
-              color: '#2c5aa0',
-              lineHeight: '1'
-            }}>
-              39,99 zł
+          {/* Price Display */}
+          <div
+            style={{
+              textAlign: 'center',
+              marginBottom: '20px'
+            }}
+          >
+            <div
+              style={{
+                fontSize: '36px',
+                fontWeight: '800',
+                color: '#2c5aa0',
+                lineHeight: '1'
+              }}
+            >
+              {validatedPromoCode ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
+                  }}
+                >
+                  <span
+                    style={{
+                      textDecoration: 'line-through',
+                      color: '#a1a1a1',
+                      fontSize: '20px'
+                    }}
+                  >
+                    {(useBlik ? YEARLY_PRICE : MONTHLY_PRICE).toFixed(2)} zł
+                  </span>
+
+                  <span style={{ color: '#2c5aa0' }}>
+                    {useBlik ? discountedYearly : discountedMonthly} zł
+                  </span>
+                </div>
+              ) : (
+                `${(useBlik ? YEARLY_PRICE : MONTHLY_PRICE).toFixed(2)} zł`
+              )}
             </div>
-            <div style={{
-              fontSize: '14px',
-              color: '#5a6c7d',
-              marginTop: '5px'
-            }}>
-              miesięcznie
+
+            <div
+              style={{
+                fontSize: '14px',
+                color: '#5a6c7d',
+                marginTop: '5px'
+              }}
+            >
+              {useBlik ? 'rocznie' : 'miesięcznie'}
             </div>
           </div>
+
 
           {/* Promo Code Input */}
           <PromoCodeInput onCodeValidated={setValidatedPromoCode} useBlik={useBlik} />
@@ -241,7 +301,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
                 }}
               />
               <span>
-                Płacę BLIK (jednorazowo 479,88 zł za rok)
+                Płacę BLIK
               </span>
             </label>
             <p style={{
@@ -250,16 +310,14 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
               color: '#5a6c7d',
               lineHeight: '1.5'
             }}>
-              {useBlik
-                ? '💳 Płatność jednorazowa BLIK lub kartą - pełny dostęp przez 12 miesięcy'
-                : '💳 Subskrypcja miesięczna kartą - 39,99 zł/miesiąc, anuluj w każdej chwili'
-              }
+              {'💳 Płatność jednorazowa BLIK- pełny dostęp przez 12 miesięcy' }
             </p>
           </div>
 
           {/* CTA Button */}
           <button
-            onClick={() => createCheckoutSession(useBlik, validatedPromoCode)}
+            onClick={handleClick}
+            disabled={loadingCheckout}
             style={{
               width: '100%',
               background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
@@ -269,7 +327,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
               borderRadius: '12px',
               fontSize: '16px',
               fontWeight: '700',
-              cursor: 'pointer',
+              cursor: loadingCheckout ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -277,17 +335,18 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
               boxShadow: '0 6px 20px rgba(44, 90, 160, 0.4)',
               transition: 'transform 0.2s, box-shadow 0.2s'
             }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 8px 28px rgba(44, 90, 160, 0.5)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 6px 20px rgba(44, 90, 160, 0.4)';
-            }}
           >
-            <Crown size={20} />
-            {useBlik ? 'Zapłać 479,88 zł' : 'Subskrybuj za 39,99 zł/mies'}
+            {loadingCheckout ? (
+              <>
+                <Loader size={20} className="spin" />
+                Przechodzimy do płatności...
+              </>
+            ) : (
+              <>
+                <Crown size={20} />
+                {getLabel()}
+              </>
+            )}
           </button>
 
           {/* Security Note */}
@@ -304,6 +363,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
             <Lock size={12} />
             Bezpieczne płatności przez Stripe {useBlik && '• BLIK dostępny'}
           </p>
+
         </div>
       )}
     </div>

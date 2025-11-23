@@ -417,43 +417,38 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
           // Sprawdź czy to płatność BLIK yearly
           if (session.metadata.paymentType === 'blik_yearly') {
-            const userId = session.metadata.userId;
-            const customerId = session.customer;
+              const userId = session.metadata.userId;
+              const customerId = session.customer;
 
-            console.log('Processing BLIK yearly payment for user:', userId);
+              const now = new Date();
+              const oneYearLater = new Date();
+              oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
 
-            // Utwórz subskrypcję na rok
-            const now = new Date();
-            const oneYearLater = new Date();
-            oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+              const existingSub = await Subscription.findByUserId(userId);
 
-            const existingSub = await Subscription.findByUserId(userId);
+              const subscriptionData = {
+                userId: userId,
+                stripeCustomerId: customerId,
+                stripeSubscriptionId: `blik_${paymentIntent.id}`,
+                stripePriceId: 'blik_yearly',
+                status: 'active',
+                currentPeriodStart: now,
+                currentPeriodEnd: oneYearLater,
+                cancelAtPeriodEnd: false
+              };
 
-            const subscriptionData = {
-              userId: userId,
-              stripeCustomerId: customerId,
-              stripeSubscriptionId: `blik_${paymentIntent.id}`,
-              stripePriceId: 'blik_yearly',
-              status: 'active',
-              currentPeriodStart: now,
-              currentPeriodEnd: oneYearLater,
-              cancelAtPeriodEnd: false
-            };
-
-            if (existingSub) {
-              await Subscription.update(userId, {
-                status: subscriptionData.status,
-                currentPeriodStart: subscriptionData.currentPeriodStart,
-                currentPeriodEnd: subscriptionData.currentPeriodEnd,
-                cancelAtPeriodEnd: subscriptionData.cancelAtPeriodEnd,
-                stripeSubscriptionId: subscriptionData.stripeSubscriptionId,
-                stripeCustomerId: subscriptionData.stripeCustomerId
-              });
-            } else {
-              await Subscription.create(subscriptionData);
-            }
-
-            console.log('BLIK yearly subscription created for user:', userId);
+              if (existingSub) {
+                await Subscription.update(userId, {
+                  status: subscriptionData.status,
+                  currentPeriodStart: subscriptionData.currentPeriodStart,
+                  currentPeriodEnd: subscriptionData.currentPeriodEnd,
+                  cancelAtPeriodEnd: subscriptionData.cancelAtPeriodEnd,
+                  stripeSubscriptionId: subscriptionData.stripeSubscriptionId,
+                  stripeCustomerId: subscriptionData.stripeCustomerId
+                });
+              } else {
+                await Subscription.create(subscriptionData);
+              }
           }
         }
         break;

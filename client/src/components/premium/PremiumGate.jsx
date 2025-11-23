@@ -1,27 +1,29 @@
 import React, { useState } from 'react';
-import { Crown, Lock, Check, Sparkles } from 'lucide-react';
+import { Crown, Lock, Check, Sparkles, Loader } from 'lucide-react';
 import { useSubscription } from '../../hooks/useSubscription';
 import PromoCodeInput from './PromoCodeInput';
 
+const MONTHLY_PRICE = 39.99;
+const YEARLY_PRICE = 479.88;
+
 const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
-  const { isPremium, loading, createCheckoutSession, fetchSubscriptionStatus } = useSubscription();
+  const { isPremium, loading, createCheckoutSession } = useSubscription();
   const [useBlik, setUseBlik] = useState(false);
   const [validatedPromoCode, setValidatedPromoCode] = useState(null);
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
 
   if (loading) {
     return (
       <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '400px'
+        background: 'white',
+        borderRadius: '16px',
+        padding: '60px',
+        marginBottom: '20px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+        textAlign: 'center'
       }}>
-        <div style={{
-          fontSize: '16px',
-          color: '#5a6c7d'
-        }}>
-          Ładowanie...
-        </div>
+        <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
+        <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie...</p>
       </div>
     );
   }
@@ -29,6 +31,26 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
   if (isPremium) {
     return <>{children}</>;
   }
+
+  const getDiscountedPrice = (price) => {
+    if (!validatedPromoCode || !validatedPromoCode.discountPercent) return price.toFixed(2);
+    const discount = validatedPromoCode.discountPercent;
+    return (price * (1 - discount / 100)).toFixed(2);
+  };
+
+  const discountedMonthly = getDiscountedPrice(MONTHLY_PRICE);
+  const discountedYearly = getDiscountedPrice(YEARLY_PRICE);
+
+  const handleCheckout = async () => {
+    setLoadingCheckout(true);
+    try {
+      await createCheckoutSession(useBlik, validatedPromoCode);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingCheckout(false);
+    }
+  };
 
   return (
     <div style={{
@@ -56,21 +78,11 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
       </div>
 
       {/* Title */}
-      <h2 style={{
-        fontSize: '32px',
-        fontWeight: '800',
-        color: '#2c3e50',
-        marginBottom: '15px'
-      }}>
+      <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#2c3e50', marginBottom: '15px' }}>
         Funkcja Premium
       </h2>
 
-      <p style={{
-        fontSize: '18px',
-        color: '#5a6c7d',
-        marginBottom: '40px',
-        lineHeight: '1.6'
-      }}>
+      <p style={{ fontSize: '18px', color: '#5a6c7d', marginBottom: '40px', lineHeight: '1.6' }}>
         Aby korzystać z {feature}, potrzebujesz aktywnej subskrypcji Premium.
       </p>
 
@@ -82,15 +94,7 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
         marginBottom: '35px',
         textAlign: 'left'
       }}>
-        <h3 style={{
-          fontSize: '20px',
-          fontWeight: '700',
-          color: '#2c3e50',
-          marginBottom: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
-        }}>
+        <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#2c3e50', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Sparkles size={24} color="#ffd700" />
           Co zyskujesz z Premium?
         </h3>
@@ -122,109 +126,59 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
             }}>
               <Check size={14} color="white" strokeWidth={3} />
             </div>
-            <span style={{
-              fontSize: '16px',
-              color: '#2c3e50',
-              fontWeight: '500'
-            }}>
-              {feature}
-            </span>
+            <span style={{ fontSize: '16px', color: '#2c3e50', fontWeight: '500' }}>{feature}</span>
           </div>
         ))}
       </div>
 
-      {/* Price */}
-      <div style={{
-        marginBottom: '30px'
-      }}>
-        <div style={{
-          fontSize: '48px',
-          fontWeight: '800',
-          color: '#2c5aa0',
-          lineHeight: '1'
-        }}>
-          39,99 zł
+      {/* Price Display */}
+      <div style={{ marginBottom: '30px' }}>
+        <div style={{ fontSize: '48px', fontWeight: '800', color: '#2c5aa0', lineHeight: '1' }}>
+          {validatedPromoCode ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <span style={{ textDecoration: 'line-through', color: '#a1a1a1', fontSize: '24px' }}>
+                {useBlik ? YEARLY_PRICE.toFixed(2) : MONTHLY_PRICE.toFixed(2)} zł
+              </span>
+              <span style={{ color: '#2c5aa0' }}>
+                {useBlik ? discountedYearly : discountedMonthly} zł
+              </span>
+            </div>
+          ) : (
+            `${useBlik ? YEARLY_PRICE.toFixed(2) : MONTHLY_PRICE.toFixed(2)} zł`
+          )}
         </div>
-        <div style={{
-          fontSize: '16px',
-          color: '#5a6c7d',
-          marginTop: '8px'
-        }}>
-          miesięcznie
+        <div style={{ fontSize: '16px', color: '#5a6c7d', marginTop: '8px' }}>
+          {useBlik ? 'rocznie' : 'miesięcznie'}
         </div>
       </div>
 
       {/* Promo Code Input */}
-      <div style={{
-        maxWidth: '500px',
-        margin: '0 auto 30px'
-      }}>
+      <div style={{ maxWidth: '500px', margin: '0 auto 30px' }}>
         <PromoCodeInput onCodeValidated={setValidatedPromoCode} useBlik={useBlik} />
       </div>
 
       {/* Divider */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '15px',
-        margin: '30px 0',
-        maxWidth: '400px',
-        marginLeft: 'auto',
-        marginRight: 'auto'
-      }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '15px', margin: '30px 0', maxWidth: '400px', marginLeft: 'auto', marginRight: 'auto' }}>
         <div style={{ flex: 1, height: '1px', background: '#e1e8ed' }} />
         <span style={{ fontSize: '13px', color: '#5a6c7d', fontWeight: '600' }}>LUB</span>
         <div style={{ flex: 1, height: '1px', background: '#e1e8ed' }} />
       </div>
 
       {/* BLIK Option */}
-      <div style={{
-        maxWidth: '400px',
-        margin: '0 auto 20px',
-        padding: '16px',
-        background: '#f8f9fb',
-        borderRadius: '12px',
-        border: '2px solid #e1e8ed'
-      }}>
-        <label style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          cursor: 'pointer',
-          fontSize: '15px',
-          fontWeight: '500',
-          color: '#2c3e50'
-        }}>
-          <input
-            type="checkbox"
-            checked={useBlik}
-            onChange={(e) => setUseBlik(e.target.checked)}
-            style={{
-              width: '20px',
-              height: '20px',
-              cursor: 'pointer'
-            }}
-          />
-          <span>
-            Płacę BLIK (jednorazowo 479,88 zł za rok)
-          </span>
+      <div style={{ maxWidth: '400px', margin: '0 auto 20px', padding: '16px', background: '#f8f9fb', borderRadius: '12px', border: '2px solid #e1e8ed' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer', fontSize: '15px', fontWeight: '500', color: '#2c3e50' }}>
+          <input type="checkbox" checked={useBlik} onChange={(e) => setUseBlik(e.target.checked)} style={{ width: '20px', height: '20px', cursor: 'pointer' }} />
+          <span>Płacę BLIK</span>
         </label>
-        <p style={{
-          margin: '8px 0 0 32px',
-          fontSize: '13px',
-          color: '#5a6c7d',
-          lineHeight: '1.5'
-        }}>
-          {useBlik
-            ? '💳 Płatność jednorazowa BLIK lub kartą - pełny dostęp przez 12 miesięcy'
-            : '💳 Subskrypcja miesięczna kartą - 39,99 zł/miesiąc, anuluj w każdej chwili'
-          }
+        <p style={{ margin: '8px 0 0 32px', fontSize: '13px', color: '#5a6c7d', lineHeight: '1.5' }}>
+          💳 Płatność jednorazowa BLIK - pełny dostęp przez 12 miesięcy
         </p>
       </div>
 
       {/* CTA Button */}
       <button
-        onClick={() => createCheckoutSession(useBlik, validatedPromoCode)}
+        onClick={handleCheckout}
+        disabled={loadingCheckout}
         style={{
           width: '100%',
           maxWidth: '400px',
@@ -235,7 +189,7 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
           borderRadius: '12px',
           fontSize: '18px',
           fontWeight: '700',
-          cursor: 'pointer',
+          cursor: loadingCheckout ? 'not-allowed' : 'pointer',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -244,29 +198,25 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
           boxShadow: '0 6px 20px rgba(44, 90, 160, 0.4)',
           transition: 'transform 0.2s, box-shadow 0.2s'
         }}
-        onMouseOver={(e) => {
-          e.currentTarget.style.transform = 'translateY(-2px)';
-          e.currentTarget.style.boxShadow = '0 8px 28px rgba(44, 90, 160, 0.5)';
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = '0 6px 20px rgba(44, 90, 160, 0.4)';
-        }}
       >
-        <Crown size={22} />
-        {useBlik ? 'Zapłać 479,88 zł' : 'Subskrybuj za 39,99 zł/mies'}
+        {loadingCheckout ? (
+          <>
+            <Loader size={20} className="spin" />
+            Przechodzimy do płatności...
+          </>
+        ) : (
+          <>
+            <Crown size={22} />
+            {useBlik
+              ? validatedPromoCode ? `Zapłać ${discountedYearly} zł` : `Zapłać ${YEARLY_PRICE.toFixed(2)} zł`
+              : validatedPromoCode ? `Subskrybuj za ${discountedMonthly} zł/mies` : `Subskrybuj za ${MONTHLY_PRICE.toFixed(2)} zł/mies`
+            }
+          </>
+        )}
       </button>
 
       {/* Security Note */}
-      <p style={{
-        fontSize: '13px',
-        color: '#5a6c7d',
-        marginTop: '25px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px'
-      }}>
+      <p style={{ fontSize: '13px', color: '#5a6c7d', marginTop: '25px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
         <Lock size={14} />
         Bezpieczne płatności przez Stripe {useBlik && '• BLIK dostępny'}
       </p>

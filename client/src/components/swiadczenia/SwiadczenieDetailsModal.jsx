@@ -451,13 +451,6 @@ const SwiadczenieDetailsModal = ({ swiadczenie, onClose, onToggleFavorite, isFav
       </div>
 
       <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-        .spin {
-          animation: spin 1s linear infinite;
-        }
-
         /* Custom scrollbar for modal */
         .modal-content::-webkit-scrollbar {
           width: 8px;

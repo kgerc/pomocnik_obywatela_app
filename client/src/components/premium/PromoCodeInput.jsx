@@ -30,9 +30,7 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          code: code.trim().toUpperCase()
-        })
+        body: JSON.stringify({ code: code.trim().toUpperCase() })
       });
 
       const data = await response.json();
@@ -41,21 +39,21 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
         throw new Error(data.error || 'Nie udało się zwalidować kodu');
       }
 
-      // Store validated code info
       setValidatedCode(data);
-
-      // Pass validated code to parent
-      if (onCodeValidated) {
-        onCodeValidated(data);
-      }
+      if (onCodeValidated) onCodeValidated(data);
     } catch (err) {
       setError(err.message);
-      if (onCodeValidated) {
-        onCodeValidated(null);
-      }
+      if (onCodeValidated) onCodeValidated(null);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRemoveCode = () => {
+    setValidatedCode(null);
+    setCode('');
+    setError('');
+    if (onCodeValidated) onCodeValidated(null);
   };
 
   return (
@@ -66,35 +64,29 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
       boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
       marginBottom: '20px'
     }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        marginBottom: '15px'
-      }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
         <Tag size={20} color="#2c5aa0" />
-        <h3 style={{
-          margin: 0,
-          fontSize: '18px',
-          fontWeight: '600',
-          color: '#2c3e50'
-        }}>
+        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600', color: '#2c3e50' }}>
           Masz kod promocyjny?
         </h3>
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div style={{
-          display: 'flex',
-          gap: '10px',
-          marginBottom: '12px'
-        }}>
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}>
           <input
             type="text"
             value={code}
-            onChange={(e) => setCode(e.target.value.toUpperCase())}
+            onChange={(e) => {
+              const newValue = e.target.value.toUpperCase();
+              setCode(newValue);
+
+              // Jeśli input wyczyszczony, anuluj kod
+              if (validatedCode && newValue.trim() === '') {
+                handleRemoveCode();
+              }
+            }}
             placeholder="WPROWADŹ KOD"
-            disabled={loading || !!validatedCode}
+            disabled={loading} // tylko blokada przy ładowaniu
             style={{
               flex: 1,
               padding: '12px 16px',
@@ -107,16 +99,13 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
               transition: 'border-color 0.2s',
               textTransform: 'uppercase'
             }}
-            onFocus={(e) => {
-              e.target.style.borderColor = '#2c5aa0';
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = '#e1e8ed';
-            }}
+            onFocus={(e) => { e.target.style.borderColor = '#2c5aa0'; }}
+            onBlur={(e) => { e.target.style.borderColor = '#e1e8ed'; }}
           />
+
           <button
             type="submit"
-            disabled={loading || !!validatedCode || !code.trim()}
+            disabled={loading || !code.trim()}
             style={{
               padding: '12px 24px',
               background: loading || !code.trim() ? '#cbd5e0' : '#2c5aa0',
@@ -129,16 +118,8 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
               transition: 'all 0.2s',
               whiteSpace: 'nowrap'
             }}
-            onMouseOver={(e) => {
-              if (!loading && code.trim() && !validatedCode) {
-                e.currentTarget.style.background = '#234a85';
-              }
-            }}
-            onMouseOut={(e) => {
-              if (!loading && code.trim() && !validatedCode) {
-                e.currentTarget.style.background = '#2c5aa0';
-              }
-            }}
+            onMouseOver={(e) => { if (!loading && code.trim()) e.currentTarget.style.background = '#234a85'; }}
+            onMouseOut={(e) => { if (!loading && code.trim()) e.currentTarget.style.background = '#2c5aa0'; }}
           >
             {loading ? 'Sprawdzam...' : 'Aktywuj'}
           </button>
@@ -164,6 +145,7 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
           <div style={{
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'space-between',
             gap: '8px',
             padding: '12px',
             background: '#d1fae5',
@@ -172,26 +154,34 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
             fontSize: '13px',
             fontWeight: '600'
           }}>
-            <CheckCircle size={16} />
-            {validatedCode.isFree
-              ? `Kod ${validatedCode.code} aktywowany! Kliknij przycisk poniżej aby otrzymać Premium.`
-              : `Kod ${validatedCode.code} zastosowany! Zniżka ${validatedCode.discountPercent}% zostanie naliczona przy płatności.`
-            }
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <CheckCircle size={16} />
+              {validatedCode.isFree
+                ? `Kod ${validatedCode.code} aktywowany! Kliknij przycisk poniżej aby otrzymać Premium.`
+                : `Kod ${validatedCode.code} zastosowany! Zniżka ${validatedCode.discountPercent}% zostanie naliczona przy płatności.`
+              }
+            </div>
+
+            <button
+              type="button"
+              onClick={handleRemoveCode}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#c33',
+                cursor: 'pointer',
+                fontWeight: '700',
+                fontSize: '14px'
+              }}
+            >
+              Usuń
+            </button>
           </div>
         )}
       </form>
 
-      <p style={{
-        margin: 0,
-        marginTop: '12px',
-        fontSize: '12px',
-        color: '#5a6c7d',
-        lineHeight: '1.5'
-      }}>
-        {useBlik
-          ? 'Kod promocyjny zastosuje zniżkę do płatności rocznej BLIK.'
-          : 'Aktywacja kodu promocyjnego daje dostęp do Premium na 12 miesięcy bez płatności lub z rabatem.'
-        }
+      <p style={{ margin: '12px 0 0 0', fontSize: '12px', color: '#5a6c7d', lineHeight: '1.5' }}>
+        {'Aktywacja kodu promocyjnego daje dostęp do Premium na 12 miesięcy z rabatem.' }
       </p>
     </div>
   );
