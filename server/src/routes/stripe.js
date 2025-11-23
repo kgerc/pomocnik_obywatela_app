@@ -8,91 +8,62 @@ const router = express.Router();
 // Inicjalizuj Stripe z kluczem sekretnym
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Endpoint do tworzenia Checkout Session
-router.post('/create-checkout-session', authenticateUser, async (req, res) => {
+// --- CREATE CHECKOUT SESSION ---
+router.post('/create-checkout-session', async (req, res) => {
   try {
-    const userId = req.user.id;
-    const userEmail = req.user.email;
-    const { useBlik } = req.body; // Czy użytkownik chce płacić BLIK
+    const { userId, userEmail, useBlik } = req.body;
 
-    // Sprawdź czy użytkownik już ma subskrypcję
+    // Sprawdzenie aktywnej subskrypcji
     const existingSub = await Subscription.findByUserId(userId);
     if (existingSub && existingSub.isActive()) {
-      return res.status(400).json({
-        error: 'Masz już aktywną subskrypcję'
-      });
+      return res.status(400).json({ error: 'Masz już aktywną subskrypcję' });
     }
 
-    // Utwórz lub pobierz Stripe Customer
     let customerId = existingSub?.stripeCustomerId;
-
     if (!customerId || customerId.startsWith('promo_')) {
       const customer = await stripe.customers.create({
         email: userEmail,
-        metadata: {
-          userId: userId
-        }
+        metadata: { userId }
       });
       customerId = customer.id;
     }
 
     let session;
-
     if (useBlik) {
-      // BLIK - płatność jednorazowa za rok (mode: payment)
-      // Cena: 39.99 zł/mies * 12 = 479.88 zł
+      // BLIK roczna płatność jednorazowa
       session = await stripe.checkout.sessions.create({
         customer: customerId,
         payment_method_types: ['blik', 'card'],
-        line_items: [
-          {
-            price_data: {
-              currency: 'pln',
-              product_data: {
-                name: 'Premium - Roczny dostęp',
-                description: 'Pełen dostęp do funkcji Premium przez 12 miesięcy'
-              },
-              unit_amount: 47988 // 479.88 zł w groszach
-            },
-            quantity: 1,
+        line_items: [{
+          price_data: {
+            currency: 'pln',
+            product_data: { name: 'Premium - Roczny dostęp' },
+            unit_amount: 47988
           },
-        ],
+          quantity: 1
+        }],
         mode: 'payment',
         success_url: `${process.env.FRONTEND_URL}/app?success=true&payment=blik`,
         cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true`,
-        metadata: {
-          userId: userId,
-          paymentType: 'blik_yearly'
-        }
+        metadata: { userId, paymentType: 'blik_yearly' }
       });
-
-      console.log(`BLIK yearly payment session created for user ${userId}`);
     } else {
-      // Karta - subskrypcja miesięczna (mode: subscription)
+      // Subskrypcja miesięczna
       session = await stripe.checkout.sessions.create({
         customer: customerId,
         payment_method_types: ['card'],
-        line_items: [
-          {
-            price: process.env.STRIPE_PRICE_ID,
-            quantity: 1,
-          },
-        ],
+        line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
         mode: 'subscription',
         success_url: `${process.env.FRONTEND_URL}/app?success=true`,
         cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true`,
-        metadata: {
-          userId: userId
-        }
+        metadata: { userId }
       });
-
-      console.log(`Card subscription session created for user ${userId}`);
     }
 
     res.json({ sessionId: session.id, url: session.url });
-  } catch (error) {
-    console.error('Error creating checkout session:', error);
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -148,7 +119,7 @@ router.get('/subscription-status', authenticateUser, async (req, res) => {
 });
 
 // Webhook endpoint dla Stripe (bez autoryzacji)
-router.post('/webhook', async (req, res) => {
+router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 

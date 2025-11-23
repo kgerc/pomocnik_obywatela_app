@@ -32,8 +32,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   process.env.FRONTEND_URL,
   'https://pomocnik-obywatela-app.vercel.app',
-  'https://app.pomocnikobywatela.pl',
-  'https://pomocnik-obywatela-app-server-etoqodgi9.vercel.app'
+  'https://app.pomocnikobywatela.pl'
 ].filter(Boolean);
 
 // Configure CORS properly for Vercel
@@ -60,7 +59,7 @@ app.use(cors({
 
 // IMPORTANT: Stripe webhook must be registered BEFORE express.json()
 // to receive raw body for signature verification
-app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }), stripeRouter);
+app.use('/api/stripe/webhook', stripeRouter); 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
