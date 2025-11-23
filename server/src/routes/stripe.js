@@ -459,6 +459,59 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         break;
       }
 
+      case 'charge.succeeded': {
+        const charge = event.data.object;
+
+        // Jeśli to BLIK
+        if (charge.payment_method_details?.blik) {
+
+          // pobierz PaymentIntent
+          const paymentIntentId = charge.payment_intent;
+
+          const sessions = await stripe.checkout.sessions.list({
+            payment_intent: paymentIntentId,
+            limit: 1
+          });
+
+          if (sessions.data.length > 0) {
+            const session = sessions.data[0];
+
+            if (session.metadata.paymentType === 'blik_yearly') {
+              const userId = session.metadata.userId;
+              const customerId = session.customer;
+
+              console.log('Processing BLIK yearly payment (charge.succeeded) for user:', userId);
+
+              const now = new Date();
+              const oneYearLater = new Date();
+              oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+
+              const existingSub = await Subscription.findByUserId(userId);
+
+              const subscriptionData = {
+                userId: userId,
+                stripeCustomerId: customerId,
+                stripeSubscriptionId: `blik_${paymentIntentId}`,
+                stripePriceId: 'blik_yearly',
+                status: 'active',
+                currentPeriodStart: now,
+                currentPeriodEnd: oneYearLater,
+                cancelAtPeriodEnd: false
+              };
+
+              if (existingSub) {
+                await Subscription.update(userId, subscriptionData);
+              } else {
+                await Subscription.create(subscriptionData);
+              }
+
+              console.log('✔ BLIK yearly subscription saved for user:', userId);
+            }
+          }
+        }
+        break;
+      }
+
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
