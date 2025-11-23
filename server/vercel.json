@@ -8,14 +8,6 @@
   ],
   "routes": [
     {
-      "src": "/api/stripe/webhook",
-      "methods": ["POST"],
-      "dest": "/src/server.js",
-      "headers": {
-        "x-vercel-protected": "0"
-      }
-    },
-    {
       "src": "/api/(.*)",
       "dest": "/src/server.js"
     },
