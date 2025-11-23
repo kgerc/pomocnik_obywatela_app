@@ -148,7 +148,7 @@ router.get('/subscription-status', authenticateUser, async (req, res) => {
 });
 
 // Webhook endpoint dla Stripe (bez autoryzacji)
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+router.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
