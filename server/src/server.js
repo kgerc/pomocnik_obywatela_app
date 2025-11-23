@@ -32,7 +32,8 @@ const allowedOrigins = [
   'http://localhost:3000',
   process.env.FRONTEND_URL,
   'https://pomocnik-obywatela-app.vercel.app',
-  'https://app.pomocnikobywatela.pl'
+  'https://app.pomocnikobywatela.pl',
+  'https://pomocnik-obywatela-app-server-etoqodgi9.vercel.app'
 ].filter(Boolean);
 
 // Configure CORS properly for Vercel
