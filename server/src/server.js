@@ -59,7 +59,7 @@ app.use(cors({
 
 // IMPORTANT: Stripe webhook must be registered BEFORE express.json()
 // to receive raw body for signature verification
-app.use('/api/stripe/webhook', stripeRouter); 
+app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }), stripeRouter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
