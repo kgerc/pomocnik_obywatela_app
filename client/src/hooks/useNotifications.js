@@ -15,7 +15,22 @@ export const useNotifications = ({ pollInterval = 600000 } = {}) => {
     try {
       const resp = await notificationsAPI.getAll(opts);
       if (!mounted.current) return;
-      setNotifications(resp.data || []);
+      const flattened = (resp.data || []).map(item => ({
+        id: item.id,
+        delivered_at: item.delivered_at,
+        seen: item.seen,
+        user_id: item.user_id,
+        // propski z notification "wyciągnięte na zewnątrz"
+        category: item.notification.category,
+        created_at: item.notification.created_at,
+        notification_id: item.notification.id, // żeby nie zgubić oryginalnego id notification
+        is_urgent: item.notification.is_urgent,
+        link: item.notification.link,
+        message: item.notification.message,
+        meta: item.notification.meta,
+        title: item.notification.title
+      }));
+      setNotifications(flattened || []);
     } catch (err) {
       console.error('fetchAll notifications error', err);
     } finally {
@@ -27,7 +42,7 @@ export const useNotifications = ({ pollInterval = 600000 } = {}) => {
     try {
       const resp = await notificationsAPI.getUnreadCount();
       if (!mounted.current) return;
-      setUnreadCount(resp.data.unread || 0);
+      setUnreadCount(resp.unread || 0);
     } catch (err) {
       console.error('fetchUnreadCount error', err);
     }
@@ -75,9 +90,10 @@ export const useNotifications = ({ pollInterval = 600000 } = {}) => {
 
   const markAsRead = async (deliveredIds = []) => {
     try {
+      debugger;
       await notificationsAPI.markRead(deliveredIds);
       // optimistic update
-      setNotifications(prev => prev.map(it => deliveredIds.includes(it.delivered_id) ? { ...it, seen: true } : it));
+      setNotifications(prev => prev.map(it => deliveredIds.includes(it.id) ? { ...it, seen: true } : it));
       setUnreadCount(c => Math.max(0, c - deliveredIds.length));
     } catch (err) {
       console.error('markAsRead error', err);

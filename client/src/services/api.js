@@ -156,19 +156,19 @@ export const notificationsAPI = {
   markRead: (deliveredIds) =>
     apiCall(`${notificationsBase}/mark-read`, {
       method: 'POST',
-      body: { deliveredIds }
+      body: JSON.stringify({ deliveredIds })
     }),
 
   subscribe: (category) =>
     apiCall(`${notificationsBase}/subscribe`, {
       method: 'POST',
-      body: { category }
+      body: JSON.stringify({ category })
     }),
 
   unsubscribe: (category) =>
     apiCall(`${notificationsBase}/unsubscribe`, {
       method: 'POST',
-      body: { category }
+      body: JSON.stringify({ category })
     }),
 
   create: (payload) =>
