@@ -2,7 +2,7 @@ import { supabase } from './supabaseClient.js';
 
 // Remove trailing slash to prevent double slashes in URLs
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '');
-
+const notificationsBase = '/api/notifications';
 // Uniwersalna funkcja do wywołań API
 const apiCall = async (endpoint, options = {}) => {
   try {
@@ -146,6 +146,38 @@ export const userDocumentsAPI = {
     apiCall(`/api/documents/${id}`, {
       method: 'DELETE',
     }),
+};
+
+export const notificationsAPI = {
+  getAll: (params) => apiCall(notificationsBase, { params }),
+
+  getUnreadCount: () => apiCall(`${notificationsBase}/unread-count`),
+
+  markRead: (deliveredIds) =>
+    apiCall(`${notificationsBase}/mark-read`, {
+      method: 'POST',
+      body: { deliveredIds }
+    }),
+
+  subscribe: (category) =>
+    apiCall(`${notificationsBase}/subscribe`, {
+      method: 'POST',
+      body: { category }
+    }),
+
+  unsubscribe: (category) =>
+    apiCall(`${notificationsBase}/unsubscribe`, {
+      method: 'POST',
+      body: { category }
+    }),
+
+  create: (payload) =>
+    apiCall(`${notificationsBase}/create`, {
+      method: 'POST',
+      body: payload
+    }),
+
+  getSubscriptions: () => apiCall(`${notificationsBase}/subscriptions`)
 };
 
 export default {

@@ -17,6 +17,7 @@ import userDocumentsRouter from './routes/userDocuments.js';
 import stripeRouter from './routes/stripe.js';
 import userSettingsRouter from './routes/userSettings.js';
 import promoCodesRouter from './routes/promoCodes.js';
+import notificationsRoutes from './routes/notifications.js';
 
 // Middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -81,6 +82,7 @@ app.use('/api/documents', userDocumentsRouter);
 app.use('/api/stripe', stripeRouter);
 app.use('/api/settings', userSettingsRouter);
 app.use('/api/promo-codes', promoCodesRouter);
+app.use('/api/notifications', notificationsRoutes);
 
 // Error handling
 app.use(errorHandler);
