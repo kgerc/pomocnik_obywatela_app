@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, Sparkles, Search, Loader, Building2, AlertCircle, ExternalLink } from 'lucide-react';
+import { TrendingUp, Sparkles, Search, Loader, Building2, AlertCircle, ExternalLink, Eraser } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useDotacje } from '../../hooks/useDotacje';
 import Pagination from '../common/Pagination';
@@ -16,7 +16,13 @@ const DotacjeTab = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { dotacje, loading, error, fetchAll, search, getBySektor, getSektory } = useDotacje();
+  const [isVisible, setIsVisible] = useState(false);
 
+  useEffect(() => {
+    // małe opóźnienie żeby animacja była bardziej naturalna
+    const timer = setTimeout(() => setIsVisible(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
   // Pobierz dotacje i sektory przy montowaniu komponentu
   useEffect(() => {
     const loadData = async () => {
@@ -51,40 +57,74 @@ const DotacjeTab = () => {
     if (!dotacjeQuery.trim()) return;
 
     setDotacjeLoading(true);
-    
+
     try {
-      const matches = await search(dotacjeQuery);
-      
-      if (matches.length === 0) {
+      const all = dotacje; // cała baza dotacji
+
+      if (!all || all.length === 0) {
         setDotacjeResult({
-          content: `Nie znalazłem dokładnego dopasowania. Sprawdź inne źródła:\n\n• [PARP](https://www.parp.gov.pl)\n• [NFOŚiGW](https://www.gov.pl/web/nfosigw)\n• [NCBiR](https://www.ncbr.gov.pl)`,
+          content: "Baza dotacji jest pusta. Spróbuj ponownie później.",
           matches: []
         });
         setDotacjeLoading(false);
         return;
       }
 
-      const contextForAI = matches.map(d => 
-        `${d.nazwa} (${d.sektor}): ${d.opis}`
-      ).join('\n');
+      // 1. Budujemy pełny kontekst RAG
+      const contextForAI = all
+        .map(d =>
+          `• Nazwa: ${d.nazwa}
+            Sektor: ${d.sektor}
+            Beneficjenci: ${d.beneficjenci?.join(', ') || 'brak'}
+            Kwota: ${d.kwota || 'brak'}
+            Opis: ${d.opis}`
+        )
+        .join('\n\n');
 
+      // 2. Konfiguracja Gemini
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-      
-      const prompt = `Jesteś doradcą ds. dotacji w Polsce. Użytkownik szuka: "${dotacjeQuery}"\n\nDostępne programy:\n${contextForAI}\n\nOdpowiedz krótko (2-3 zdania):
-      1. Które programy pasują do potrzeb użytkownika
-      2. Kluczowe informacje o beneficjentach i terminach
-      Nie dodawaj linków, nie wymyślaj programów spoza podanej bazy.`;
+
+      // 3. RAG – model wybiera tylko z listy
+      const prompt = `
+        Jesteś doradcą ds. dotacji w Polsce. Odpowiadasz TYLKO po polsku.
+
+        ## Zadanie
+        Użytkownik wpisuje zapytanie: "${dotacjeQuery}"
+
+        Twoim zadaniem jest:
+        1. Dokładnie przeanalizować CAŁĄ poniższą listę dotacji.
+        2. Wybrać wyłącznie te elementy, które **semantycznie pasują** do zapytania użytkownika.
+          - Uwzględnij odmiany wyrazów, synonimy, powiązania tematyczne.
+          - Nie wymyślaj dotacji spoza listy.
+        3. Zwróć wynik w formie krótkiej odpowiedzi (2–4 zdania):
+          - nazwy najlepiej pasujących dotacji,
+          - kluczowe informacje o beneficjentach i terminach,
+          - co użytkownik powinien zrobić dalej (sprawdzenie szczegółów w bazie).
+
+        ## LISTA DOTACJI (baza danych)
+        ${contextForAI}
+
+        ## WAŻNE
+        - Możesz korzystać z własnej wiedzy WYŁĄCZNIE do doprecyzowania lub wyjaśnień,
+          ale NIE możesz dodawać dotacji spoza listy.
+        - Odpowiadaj krótko, konkretnie i rzeczowo.
+      `;
 
       const result = await model.generateContent(prompt);
       const aiResponse = result.response.text();
 
+      // 4. Wyciągamy faktyczne wyniki z listy (matchowanie nazw z odpowiedzi LLM)
+      const matched = all.filter(d =>
+        aiResponse.toLowerCase().includes(d.nazwa.toLowerCase())
+      );
+
       setDotacjeResult({
         content: aiResponse,
-        matches: matches
+        matches: matched
       });
-      
+
     } catch (error) {
       console.error('Błąd:', error);
       setDotacjeResult({
@@ -92,7 +132,7 @@ const DotacjeTab = () => {
         matches: []
       });
     }
-    
+
     setDotacjeLoading(false);
     setDotacjeQuery('');
   };
@@ -143,7 +183,7 @@ const DotacjeTab = () => {
       padding: '30px',
       marginBottom: '20px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
-    }}>
+    }} className={`fade-in ${isVisible ? "visible" : ""}`}>
       <h2 style={{
         fontSize: '24px',
         fontWeight: '700',
@@ -165,78 +205,112 @@ const DotacjeTab = () => {
       </p>
 
       {/* AI Search */}
-      <div style={{
-        background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
-        padding: '25px',
-        borderRadius: '12px',
-        marginBottom: '30px',
-        border: '2px solid #2c5aa0'
-      }}>
-        <h3 style={{
-          fontSize: '18px',
-          fontWeight: '700',
-          color: '#2c3e50',
-          marginBottom: '15px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
+        <div style={{
+          background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
+          padding: '25px',
+          borderRadius: '12px',
+          marginBottom: '30px',
+          border: '2px solid #2c5aa0'
         }}>
-          <Sparkles size={20} color="#2c5aa0" />
-          Zapytaj AI o dotację
-        </h3>
-        
-        <textarea
-          value={dotacjeQuery}
-          onChange={(e) => setDotacjeQuery(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Np. 'Szukam dotacji na fotowoltaikę dla firmy' lub 'Granty na badania medyczne'"
-          style={{
-            width: '100%',
-            minHeight: '80px',
-            padding: '15px',
-            fontSize: '16px',
-            background: 'white',
-            border: '2px solid #2c5aa0',
-            borderRadius: '8px',
-            resize: 'vertical',
-            fontFamily: 'inherit',
-            marginBottom: '15px',
-            boxSizing: 'border-box'
-          }}
-        />
-        
-        <button
-          onClick={handleDotacjeSearch}
-          disabled={dotacjeLoading || !dotacjeQuery.trim()}
-          style={{
-            background: dotacjeLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-            color: 'white',
-            border: 'none',
-            padding: '12px 25px',
-            borderRadius: '8px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: dotacjeLoading ? 'not-allowed' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            transition: 'transform 0.2s'
-          }}
-          onMouseOver={(e) => !dotacjeLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-        >
-          {dotacjeLoading ? (
-            <>
-              <Loader size={18} className="spin" />
-              Szukam...
-            </>
-          ) : (
-            <>
-              <Search size={18} />
-              Znajdź dotację
-            </>
-          )}
-        </button>
+              <h3 style={{
+              fontSize: '18px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              marginBottom: '15px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}>
+              <Sparkles size={20} color="#2c5aa0" />
+              Zapytaj AI o dotację
+            </h3>
+
+            <textarea
+              value={dotacjeQuery}
+              onChange={(e) => setDotacjeQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Np. 'Szukam dotacji na fotowoltaikę dla firmy' lub 'Granty na badania medyczne'"
+              style={{
+                width: '100%',
+                minHeight: '80px',
+                padding: '15px',
+                fontSize: '16px',
+                border: '2px solid #2c5aa0',
+                background: 'white',
+                color: 'black',
+                borderRadius: '8px',
+                resize: 'vertical',
+                fontFamily: 'inherit',
+                marginBottom: '15px',
+                boxSizing: 'border-box'
+              }}
+            />
+
+            {/* Kontener przycisków */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between', // Znajdź po lewej, Wyczyść po prawej
+              gap: '10px'
+            }}>
+              <button
+                onClick={handleDotacjeSearch}
+                disabled={dotacjeLoading || !dotacjeQuery.trim()}
+                style={{
+                  background: dotacjeLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px 25px',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  cursor: dotacjeLoading ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  transition: 'transform 0.2s'
+                }}
+                onMouseOver={(e) => !dotacjeLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              >
+                {dotacjeLoading ? (
+                  <>
+                    <Loader size={18} className="spin" />
+                    Szukam...
+                  </>
+                ) : (
+                  <>
+                    <Search size={18} />
+                    Znajdź dotację
+                  </>
+                )}
+              </button>
+
+              {dotacjeResult && (
+                <button
+                  onClick={() => setDotacjeResult('')}
+                  style={{
+                    background: '#d9534f',
+                    color: 'white',
+                    border: 'none',
+                    padding: '12px 25px',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
+                  onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                >
+                  <Eraser size={18} />
+                  Wyczyść
+                </button>
+              )}
+            </div>
+          </div>
 
         {/* AI Result */}
         {dotacjeResult && (
@@ -264,7 +338,6 @@ const DotacjeTab = () => {
             )}
           </div>
         )}
-      </div>
 
       {/* Filter by Sektor */}
       <div style={{

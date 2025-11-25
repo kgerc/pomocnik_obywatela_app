@@ -21,6 +21,13 @@ const TwojeDokumentyTab = () => {
   const [filterSource, setFilterSource] = useState('wszystkie'); // 'wszystkie', 'upload', 'app'
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // małe opóźnienie żeby animacja była bardziej naturalna
+    const timer = setTimeout(() => setIsVisible(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   const {
     documents,
@@ -92,6 +99,22 @@ const TwojeDokumentyTab = () => {
     return <FileText size={24} color="#2c5aa0" />;
   };
 
+  if (loading) {
+    return (
+      <div style={{
+        background: 'white',
+        borderRadius: '16px',
+        padding: '60px',
+        marginBottom: '20px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+        textAlign: 'center'
+      }}>
+        <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
+        <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie dokumentów...</p>
+      </div>
+    );
+  }
+
   return (
     <div style={{
       background: 'white',
@@ -99,23 +122,49 @@ const TwojeDokumentyTab = () => {
       padding: '30px',
       marginBottom: '20px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
-    }}>
+    }} className={`fade-in ${isVisible ? "visible" : ""}`}>
       {/* Header */}
       <div style={{
-        marginBottom: '25px'
+        marginBottom: '25px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px'
       }}>
-        <h2 style={{
-          fontSize: '24px',
-          fontWeight: '700',
-          color: '#2c3e50',
-          margin: '0 0 10px 0',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
-        }}>
-          <FolderOpen size={24} color="#2c5aa0" />
-          Twoje Dokumenty
-        </h2>
+        {/* Nagłówek z tytułem i przyciskiem */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <FolderOpen size={24} color="#2c5aa0" />
+            <h2 style={{
+              fontSize: '24px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              margin: 0
+            }}>
+              Twoje Dokumenty
+            </h2>
+          </div>
+
+          <button
+            onClick={() => setShowUploadModal(true)}
+            style={{
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '12px 20px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            <Upload size={18} />
+            Prześlij dokument
+          </button>
+        </div>
+
         <p style={{
           color: '#5a6c7d',
           margin: 0,
@@ -174,33 +223,6 @@ const TwojeDokumentyTab = () => {
           </div>
         </div>
       )}
-
-      {/* Upload Button - PREMIUM */}
-      <PremiumFeatureTeaser
-        feature="przesyłania własnych dokumentów"
-        title="Prześlij własny dokument"
-      >
-        <button
-          onClick={() => setShowUploadModal(true)}
-          style={{
-            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-            color: 'white',
-            border: 'none',
-            padding: '12px 20px',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontWeight: '600',
-            fontSize: '14px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            margin: '0 auto'
-          }}
-        >
-          <Upload size={18} />
-          Prześlij dokument
-        </button>
-      </PremiumFeatureTeaser>
 
       {/* Search */}
       <div style={{

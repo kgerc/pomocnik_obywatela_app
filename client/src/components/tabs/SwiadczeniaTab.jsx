@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Sparkles, Search, Loader, Shield, AlertCircle, Info, CheckCircle } from 'lucide-react';
+import { Heart, Sparkles, Search, Loader, Shield, AlertCircle, Info, CheckCircle, Eraser } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useSwiadczenia } from '../../hooks/useSwiadczenia';
 import Pagination from '../common/Pagination';
@@ -19,6 +19,13 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null, subscriptionLoading = true,
   const [selectedSwiadczenie, setSelectedSwiadczenie] = useState(null);
 
   const { swiadczenia, loading, error, fetchAll, search, getByCategory, getCategories } = useSwiadczenia();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // małe opóźnienie żeby animacja była bardziej naturalna
+    const timer = setTimeout(() => setIsVisible(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Pobierz świadczenia i kategorie przy montowaniu komponentu
   useEffect(() => {
@@ -56,43 +63,71 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null, subscriptionLoading = true,
     setSwiadczeniaLoading(true);
 
     try {
-      const matches = await search(swiadczeniaQuery);
+      const all = swiadczenia;
 
-      if (matches.length === 0) {
+      if (!all || all.length === 0) {
         setSwiadczeniaResult({
-          content: `Nie znalazłem dokładnego dopasowania w bazie świadczeń. Spróbuj bardziej ogólnego opisu, np:\n- "wsparcie dla rodzin z dziećmi"\n- "pomoc dla osób niepełnosprawnych"\n- "dodatki mieszkaniowe"\n\nLub sprawdź oficjalne źródła:\n• [Portal Gov.pl](https://www.gov.pl)\n• [ZUS](https://www.zus.pl)`,
+          content: "Baza świadczeń jest pusta. Spróbuj ponownie później.",
           matches: []
         });
         setSwiadczeniaLoading(false);
         return;
       }
 
-      const contextForAI = matches.map(m => `${m.nazwa}: ${m.krotki_opis}`).join('\n');
+      // 2. Budujemy pełny kontekst RAG
+      const contextForAI = all
+        .map(m => 
+          `• Nazwa: ${m.nazwa}
+              Krótki opis: ${m.krotki_opis}
+              Słowa kluczowe: ${m.slowa_kluczowe?.join(', ')}
+              Kategoria: ${m.kategoria}`
+        )
+        .join('\n\n');
 
+      // 3. Konfiguracja Gemini
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-      const prompt = `Jesteś asystentem obywatela w Polsce. Odpowiadaj TYLKO po polsku.
+      // 4. RAG – model wybiera TYLKO z listy
+      const prompt = `
+        Jesteś bardzo precyzyjnym asystentem obywatela w Polsce. Odpowiadasz TYLKO po polsku.
 
-      Użytkownik szuka świadczenia: "${swiadczeniaQuery}"
+        ## Zadanie
+        Użytkownik wpisuje zapytanie: "${swiadczeniaQuery}"
 
-      Dostępne świadczenia w bazie danych:
-      ${contextForAI}
+        Twoim zadaniem jest:
+        1. Dokładnie przeanalizować CAŁĄ poniższą listę świadczeń.
+        2. Wybrać wyłącznie te elementy, które **semantycznie pasują** do zapytania użytkownika.
+          - Uwzględnij odmiany wyrazów, synonimy, powiązania tematyczne.
+          - Nie wymyślaj świadczeń spoza listy.
+        3. Zwróć wynik w formie krótkiej odpowiedzi (2–4 zdania):
+          - nazwy najlepiej pasujących świadczeń,
+          - dlaczego akurat te,
+          - co użytkownik powinien zrobić dalej (tutaj daj znać użytkownikowi że szczegółowe informacje
+            są w świadczeniach które już są w aplikacji ale jeśli nie ma żadnych pasujących świadczeń to
+          poleć użytkownikowi odwiedzenie oficjalnych stron takich jak gov.pl i zus.pl).
 
-      Odpowiedz krótko (2-3 zdania):
-      1. Które świadczenie/a pasują do potrzeby użytkownika
-      2. Podstawowe informacje o kwalifikacji
-      3. Zachęć do sprawdzenia szczegółów poniżej
+        ## LISTA ŚWIADCZEŃ (baza danych)
+        ${contextForAI}
 
-      NIE podawaj linków ani nie wymyślaj świadczeń spoza bazy.`;
+        ## WAŻNE
+        - Możesz korzystać z własnej wiedzy WYŁĄCZNIE do doprecyzowania lub wyjaśnień,
+          ale NIE możesz dodawać świadczeń spoza listy.
+        - Odpowiadasz krótko, konkretnie i rzeczowo.
+        `;
 
       const result = await model.generateContent(prompt);
       const aiResponse = result.response.text();
 
+      // 5. Wyciągamy faktyczne wyniki z listy (matchowanie nazw z odpowiedzi LLM)
+      const matched = all.filter(sw =>
+        aiResponse.toLowerCase().includes(sw.nazwa.toLowerCase())
+      );
+
       setSwiadczeniaResult({
         content: aiResponse,
-        matches: matches
+        matches: matched
       });
 
     } catch (error) {
@@ -153,7 +188,7 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null, subscriptionLoading = true,
       padding: '30px',
       marginBottom: '20px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
-    }}>
+    }} className={`fade-in ${isVisible ? "visible" : ""}`}>
       <h2 style={{
         fontSize: '24px',
         fontWeight: '700',
@@ -189,72 +224,105 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null, subscriptionLoading = true,
             marginBottom: '30px',
             border: '2px solid #2c5aa0'
           }}>
-          <h3 style={{
-            fontSize: '18px',
-            fontWeight: '700',
-            color: '#2c3e50',
-            marginBottom: '15px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px'
-          }}>
-            <Sparkles size={20} color="#2c5aa0" />
-            Zapytaj AI o świadczenie
-          </h3>
-
-          <textarea
-            value={swiadczeniaQuery}
-            onChange={(e) => setSwiadczeniaQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Np. 'Mam dwójkę dzieci i nie stać mnie na rachunki' lub 'Pomoc dla osób niepełnosprawnych'"
-            style={{
-              width: '100%',
-              minHeight: '80px',
-              padding: '15px',
-              fontSize: '16px',
-              border: '2px solid #2c5aa0',
-              background: 'white',
-              color: 'black',
-              borderRadius: '8px',
-              resize: 'vertical',
-              fontFamily: 'inherit',
+            <h3 style={{
+              fontSize: '18px',
+              fontWeight: '700',
+              color: '#2c3e50',
               marginBottom: '15px',
-              boxSizing: 'border-box'
-            }}
-          />
-
-          <button
-            onClick={handleSwiadczeniaSearch}
-            disabled={swiadczeniaLoading || !swiadczeniaQuery.trim()}
-            style={{
-              background: swiadczeniaLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-              color: 'white',
-              border: 'none',
-              padding: '12px 25px',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: '600',
-              cursor: swiadczeniaLoading ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
-              transition: 'transform 0.2s'
-            }}
-            onMouseOver={(e) => !swiadczeniaLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-          >
-            {swiadczeniaLoading ? (
-              <>
-                <Loader size={18} className="spin" />
-                Szukam...
-              </>
-            ) : (
-              <>
-                <Search size={18} />
-                Znajdź świadczenie
-              </>
-            )}
-          </button>
+              gap: '10px'
+            }}>
+              <Sparkles size={20} color="#2c5aa0" />
+              Zapytaj AI o świadczenie
+            </h3>
+
+            <textarea
+              value={swiadczeniaQuery}
+              onChange={(e) => setSwiadczeniaQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Np. 'Mam dwójkę dzieci i nie stać mnie na rachunki' lub 'Pomoc dla osób niepełnosprawnych'"
+              style={{
+                width: '100%',
+                minHeight: '80px',
+                padding: '15px',
+                fontSize: '16px',
+                border: '2px solid #2c5aa0',
+                background: 'white',
+                color: 'black',
+                borderRadius: '8px',
+                resize: 'vertical',
+                fontFamily: 'inherit',
+                marginBottom: '15px',
+                boxSizing: 'border-box'
+              }}
+            />
+
+            {/* Kontener przycisków */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between', // Znajdź po lewej, Wyczyść po prawej
+              gap: '10px'
+            }}>
+              <button
+                onClick={handleSwiadczeniaSearch}
+                disabled={swiadczeniaLoading || !swiadczeniaQuery.trim()}
+                style={{
+                  background: swiadczeniaLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px 25px',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  cursor: swiadczeniaLoading ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  transition: 'transform 0.2s'
+                }}
+                onMouseOver={(e) => !swiadczeniaLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              >
+                {swiadczeniaLoading ? (
+                  <>
+                    <Loader size={18} className="spin" />
+                    Szukam...
+                  </>
+                ) : (
+                  <>
+                    <Search size={18} />
+                    Znajdź świadczenie
+                  </>
+                )}
+              </button>
+
+              {swiadczeniaResult && (
+                <button
+                  onClick={() => setSwiadczeniaResult('')}
+                  style={{
+                    background: '#d9534f',
+                    color: 'white',
+                    border: 'none',
+                    padding: '12px 25px',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
+                  onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                >
+                  <Eraser size={18} />
+                  Wyczyść
+                </button>
+              )}
+            </div>
+          </div>
 
           {/* AI Result */}
           {swiadczeniaResult && (
@@ -290,7 +358,6 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null, subscriptionLoading = true,
               )}
             </div>
           )}
-          </div>
         </PremiumFeatureTeaser>
       )}
 

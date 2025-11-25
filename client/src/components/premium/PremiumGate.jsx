@@ -14,17 +14,18 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
 
   if (loading) {
     return (
-      <div style={{
-        background: 'white',
-        borderRadius: '16px',
-        padding: '60px',
-        marginBottom: '20px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-        textAlign: 'center'
-      }}>
-        <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
-        <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie...</p>
-      </div>
+      // <div style={{
+      //   background: 'white',
+      //   borderRadius: '16px',
+      //   padding: '60px',
+      //   marginBottom: '20px',
+      //   boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+      //   textAlign: 'center'
+      // }}>
+      //   <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
+      //   <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie...</p>
+      // </div>
+      <></>
     );
   }
 

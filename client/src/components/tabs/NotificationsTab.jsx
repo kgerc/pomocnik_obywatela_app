@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Bell, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Bell, AlertCircle, CheckCircle, Loader } from 'lucide-react';
 import { useNotifications } from '../../hooks/useNotifications';
 import Pagination from '../common/Pagination';
 
@@ -25,7 +25,13 @@ const NotificationsTab = ({ setActiveTab, setQuery }) => {
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVisible, setIsVisible] = useState(false);
 
+  useEffect(() => {
+    // małe opóźnienie żeby animacja była bardziej naturalna
+    const timer = setTimeout(() => setIsVisible(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
   const handleMarkAsRead = (deliveredId) => {
     markAsRead([deliveredId]);
   };
@@ -47,6 +53,22 @@ const NotificationsTab = ({ setActiveTab, setQuery }) => {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentNotifications = allNotifications.slice(startIndex, endIndex);
+  
+  if (loading) {
+    return (
+      <div style={{
+        background: 'white',
+        borderRadius: '16px',
+        padding: '60px',
+        marginBottom: '20px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+        textAlign: 'center'
+      }}>
+        <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
+        <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie powiadomień...</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{
@@ -55,7 +77,7 @@ const NotificationsTab = ({ setActiveTab, setQuery }) => {
       padding: '30px',
       marginBottom: '20px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
-    }}>
+    }}  className={`fade-in ${isVisible ? "visible" : ""}`}>
       <h2 style={{
         fontSize: '24px',
         fontWeight: '700',

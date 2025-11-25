@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Edit, Sparkles, Search, Loader, FileText, AlertCircle, Download, ExternalLink } from 'lucide-react';
+import { Edit, Sparkles, Search, Loader, FileText, AlertCircle, Download, ExternalLink, Eraser } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { usePisma } from '../../hooks/usePisma';
 import SaveDocumentButton from '../common/SaveDocumentButton';
@@ -18,6 +18,13 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { pisma, loading, error, fetchAll, search, getByCategory, getCategories } = usePisma();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // małe opóźnienie żeby animacja była bardziej naturalna
+    const timer = setTimeout(() => setIsVisible(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Pobierz pisma i kategorie przy montowaniu komponentu
   useEffect(() => {
@@ -53,47 +60,73 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
     if (!pismaQuery.trim()) return;
 
     setPismaLoading(true);
-    
+
     try {
-      const matches = await search(pismaQuery);
-      
-      if (matches.length === 0) {
+      const all = pisma; // cała baza pism
+
+      if (!all || all.length === 0) {
         setPismaResult({
-          content: `Nie znalazłem dokładnego dopasowania w bazie pism. Spróbuj bardziej ogólnego opisu, np:\n- "reklamacja produktu"\n- "wniosek o świadczenie"\n- "odwołanie od decyzji"\n\nLub sprawdź oficjalne źródła:\n• [Portal Gov.pl](https://www.gov.pl)\n• [Wzory pism](https://www.gov.pl/web/gov/wzory-pism)`,
+          content: "Baza pism jest pusta. Spróbuj ponownie później.",
           matches: []
         });
         setPismaLoading(false);
         return;
       }
 
-      const contextForAI = matches.map(m => `${m.nazwa}: ${m.opis}`).join('\n');
+      // 1. Budujemy pełny kontekst RAG
+      const contextForAI = all
+        .map(m =>
+          `• Nazwa: ${m.nazwa}
+            Opis: ${m.opis}
+            Słowa kluczowe: ${m.slowa_kluczowe?.join(', ') || 'brak'}
+            Kategoria: ${m.kategoria}`
+        )
+        .join('\n\n');
 
+      // 2. Konfiguracja Gemini
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-      
-      const prompt = `Jesteś asystentem prawnym w Polsce. Odpowiadaj TYLKO po polsku.
 
-      Użytkownik szuka pisma/wniosku: "${pismaQuery}"
+      // 3. RAG – model wybiera tylko z listy
+      const prompt = `
+        Jesteś precyzyjnym asystentem prawnym w Polsce. Odpowiadasz TYLKO po polsku.
 
-      Dostępne pisma w bazie danych:
-      ${contextForAI}
+        ## Zadanie
+        Użytkownik wpisuje zapytanie: "${pismaQuery}"
 
-      Odpowiedz krótko (2-3 zdania):
-      1. Które pismo/pisma pasują do potrzeby użytkownika
-      2. Co użytkownik znajdzie w tych dokumentach
-      3. Zachęć do pobrania/sprawdzenia szczegółów poniżej
+        Twoim zadaniem jest:
+        1. Dokładnie przeanalizować CAŁĄ poniższą listę pism.
+        2. Wybrać wyłącznie te elementy, które **semantycznie pasują** do zapytania użytkownika.
+          - Uwzględnij odmiany wyrazów, synonimy, powiązania tematyczne.
+          - Nie wymyślaj pism spoza listy.
+        3. Zwróć wynik w formie krótkiej odpowiedzi (2–4 zdania):
+          - nazwy najlepiej pasujących pism,
+          - co użytkownik znajdzie w tych dokumentach,
+          - co użytkownik powinien zrobić dalej (sprawdzenie szczegółów w bazie).
 
-      NIE podawaj linków ani nie wymyślaj pism spoza bazy.`;
+        ## LISTA PISM (baza danych)
+        ${contextForAI}
+
+        ## WAŻNE
+        - Możesz korzystać z własnej wiedzy WYŁĄCZNIE do doprecyzowania lub wyjaśnień,
+          ale NIE możesz dodawać pism spoza listy.
+        - Odpowiadaj krótko, konkretnie i rzeczowo.
+      `;
 
       const result = await model.generateContent(prompt);
       const aiResponse = result.response.text();
 
+      // 4. Wyciągamy faktyczne wyniki z listy (matchowanie nazw z odpowiedzi LLM)
+      const matched = all.filter(p =>
+        aiResponse.toLowerCase().includes(p.nazwa.toLowerCase())
+      );
+
       setPismaResult({
         content: aiResponse,
-        matches: matches
+        matches: matched
       });
-      
+
     } catch (error) {
       console.error('Błąd:', error);
       setPismaResult({
@@ -101,7 +134,7 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
         matches: []
       });
     }
-    
+
     setPismaLoading(false);
     setPismaQuery('');
   };
@@ -152,7 +185,7 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
       padding: '30px',
       marginBottom: '20px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
-    }}>
+    }} className={`fade-in ${isVisible ? "visible" : ""}`}>
       <h2 style={{
         fontSize: '24px',
         fontWeight: '700',
@@ -186,72 +219,105 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
           marginBottom: '30px',
           border: '2px solid #2c5aa0'
         }}>
-        <h3 style={{
-          fontSize: '18px',
-          fontWeight: '700',
-          color: '#2c3e50',
-          marginBottom: '15px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
-        }}>
-          <Sparkles size={20} color="#2c5aa0" />
-          Zapytaj AI o pismo
-        </h3>
-        
-        <textarea
-          value={pismaQuery}
-          onChange={(e) => setPismaQuery(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Np. 'Potrzebuję pisma reklamacyjnego do spółdzielni' lub 'Jak złożyć wniosek o emeryturę?'"
-          style={{
-            width: '100%',
-            minHeight: '80px',
-            padding: '15px',
-            fontSize: '16px',
-            border: '2px solid #2c5aa0',
-            background: 'white',
-            color: 'black',
-            borderRadius: '8px',
-            resize: 'vertical',
-            fontFamily: 'inherit',
-            marginBottom: '15px',
-            boxSizing: 'border-box'
-          }}
-        />
-        
-        <button
-          onClick={handlePismaSearch}
-          disabled={pismaLoading || !pismaQuery.trim()}
-          style={{
-            background: pismaLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-            color: 'white',
-            border: 'none',
-            padding: '12px 25px',
-            borderRadius: '8px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: pismaLoading ? 'not-allowed' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            transition: 'transform 0.2s'
-          }}
-          onMouseOver={(e) => !pismaLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-        >
-          {pismaLoading ? (
-            <>
-              <Loader size={18} className="spin" />
-              Szukam...
-            </>
-          ) : (
-            <>
-              <Search size={18} />
-              Znajdź pismo
-            </>
-          )}
-        </button>
+              <h3 style={{
+              fontSize: '18px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              marginBottom: '15px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}>
+              <Sparkles size={20} color="#2c5aa0" />
+              Zapytaj AI o pismo
+            </h3>
+
+            <textarea
+              value={pismaQuery}
+              onChange={(e) => setPismaQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Np. 'Mam dwójkę dzieci i nie stać mnie na rachunki' lub 'Pomoc dla osób niepełnosprawnych'"
+              style={{
+                width: '100%',
+                minHeight: '80px',
+                padding: '15px',
+                fontSize: '16px',
+                border: '2px solid #2c5aa0',
+                background: 'white',
+                color: 'black',
+                borderRadius: '8px',
+                resize: 'vertical',
+                fontFamily: 'inherit',
+                marginBottom: '15px',
+                boxSizing: 'border-box'
+              }}
+            />
+
+            {/* Kontener przycisków */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between', // Znajdź po lewej, Wyczyść po prawej
+              gap: '10px'
+            }}>
+              <button
+                onClick={handlePismaSearch}
+                disabled={pismaLoading || !pismaQuery.trim()}
+                style={{
+                  background: pismaLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px 25px',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  cursor: pismaLoading ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  transition: 'transform 0.2s'
+                }}
+                onMouseOver={(e) => !pismaLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              >
+                {pismaLoading ? (
+                  <>
+                    <Loader size={18} className="spin" />
+                    Szukam...
+                  </>
+                ) : (
+                  <>
+                    <Search size={18} />
+                    Znajdź pismo
+                  </>
+                )}
+              </button>
+
+              {pismaResult && (
+                <button
+                  onClick={() => setPismaResult('')}
+                  style={{
+                    background: '#d9534f',
+                    color: 'white',
+                    border: 'none',
+                    padding: '12px 25px',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
+                  onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                >
+                  <Eraser size={18} />
+                  Wyczyść
+                </button>
+              )}
+            </div>
+          </div>
 
         {/* AI Result */}
         {pismaResult && (
@@ -279,7 +345,6 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
             )}
           </div>
         )}
-        </div>
       </PremiumFeatureTeaser>
 
       {/* Category Filter */}
