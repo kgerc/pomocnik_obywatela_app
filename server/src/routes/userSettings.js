@@ -163,9 +163,9 @@ router.get('/export-data', authenticateUser, async (req, res) => {
 router.delete('/delete-account', authenticateUser, async (req, res) => {
   try {
     const userId = req.user.id;
-    const { confirmation } = req.body;
+    const { confirmed } = req.body;
 
-    if (confirmation !== 'DELETE_MY_ACCOUNT') {
+    if (!confirmed) {
       return res.status(400).json({ error: 'Nieprawidłowe potwierdzenie' });
     }
 

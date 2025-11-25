@@ -13,7 +13,7 @@ const SettingsTab = () => {
   const { user } = useAuth();
   const { settings, loading, updateSettings, updateProfile, changePassword, toggle2FA, exportData, deleteAccount } = useSettings();
   const { subscription, isPremium, createPortalSession } = useSubscription();
-  const { showSuccess, showError } = useToast();
+  const { showSuccess, showError, confirm } = useToast();
 
   const [activeSection, setActiveSection] = useState('personal');
   const [editMode, setEditMode] = useState(false);
@@ -120,10 +120,14 @@ const SettingsTab = () => {
   };
 
   const handleDeleteAccount = async () => {
-    const confirmation = prompt('Wpisz "DELETE_MY_ACCOUNT" aby potwierdzić usunięcie konta:');
-    if (confirmation === 'DELETE_MY_ACCOUNT') {
+    const confirmed = await confirm(
+      'Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć.',
+      'Usuń',
+      'Anuluj'
+    );
+    if (confirmed) {
       try {
-        await deleteAccount(confirmation);
+        await deleteAccount(confirmed);
         showSuccess('Konto zostało usunięte. Przekierowanie...');
         setTimeout(() => window.location.href = '/', 2000);
       } catch (error) {

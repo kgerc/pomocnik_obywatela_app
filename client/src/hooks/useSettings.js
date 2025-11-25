@@ -204,7 +204,7 @@ export const useSettings = () => {
     }
   };
 
-  const deleteAccount = async (confirmation) => {
+  const deleteAccount = async (confirmed) => {
     if (!session) {
       throw new Error('Brak sesji użytkownika');
     }
@@ -219,7 +219,7 @@ export const useSettings = () => {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ confirmation })
+        body: JSON.stringify({ confirmed })
       });
 
       if (!response.ok) throw new Error('Failed to delete account');
