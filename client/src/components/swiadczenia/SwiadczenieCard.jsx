@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle, Info, Heart } from 'lucide-react';
+import { CheckCircle, Info, Shield } from 'lucide-react';
 import SwiadczenieDetailsModal from './SwiadczenieDetailsModal';
 
 const SwiadczenieCard = ({ swiadczenie, onToggleFavorite, isFavorite, showFavoriteButton = true }) => {
@@ -51,7 +51,7 @@ const SwiadczenieCard = ({ swiadczenie, onToggleFavorite, isFavorite, showFavori
           gap: '10px',
           marginBottom: '10px'
         }}>
-          <Heart size={24} color="#2c5aa0" />
+          <Shield size={24} color="#2c5aa0" />
           <h3 style={{
             fontSize: '20px',
             fontWeight: '700',
