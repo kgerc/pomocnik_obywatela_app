@@ -167,6 +167,7 @@ const MainApp = () => {
         {activeTab === 'swiadczenia' && (
           <SwiadczeniaTab
             preloadedIsPremium={isPremium}
+            subscriptionLoading={subscriptionLoading}
             onToggleFavorite={handleToggleFavorite}
             isFavorite={isFavorite}
           />

@@ -8,7 +8,7 @@ import SwiadczenieDetailsModal from '../swiadczenia/SwiadczenieDetailsModal';
 
 const ITEMS_PER_PAGE = 9;
 
-const SwiadczeniaTab = ({ preloadedIsPremium = null, onToggleFavorite, isFavorite }) => {
+const SwiadczeniaTab = ({ preloadedIsPremium = null, subscriptionLoading = true, onToggleFavorite, isFavorite }) => {
   const [swiadczeniaQuery, setSwiadczeniaQuery] = useState('');
   const [swiadczeniaLoading, setSwiadczeniaLoading] = useState(false);
   const [swiadczeniaResult, setSwiadczeniaResult] = useState(null);
@@ -174,122 +174,126 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null, onToggleFavorite, isFavorit
         Sprawdź dostępne świadczenia społeczne - przeglądaj bazę lub zapytaj AI o konkretną pomoc.
       </p>
 
-      {/* AI Search - PREMIUM */}
-      <PremiumFeatureTeaser
-        feature="asystenta AI dla świadczeń"
-        title="Zapytaj AI o świadczenie"
-        preloadedIsPremium={preloadedIsPremium}
-      >
-        <div style={{
-          background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
-          padding: '25px',
-          borderRadius: '12px',
-          marginBottom: '30px',
-          border: '2px solid #2c5aa0'
-        }}>
-        <h3 style={{
-          fontSize: '18px',
-          fontWeight: '700',
-          color: '#2c3e50',
-          marginBottom: '15px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px'
-        }}>
-          <Sparkles size={20} color="#2c5aa0" />
-          Zapytaj AI o świadczenie
-        </h3>
-
-        <textarea
-          value={swiadczeniaQuery}
-          onChange={(e) => setSwiadczeniaQuery(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Np. 'Mam dwójkę dzieci i nie stać mnie na rachunki' lub 'Pomoc dla osób niepełnosprawnych'"
-          style={{
-            width: '100%',
-            minHeight: '80px',
-            padding: '15px',
-            fontSize: '16px',
-            border: '2px solid #2c5aa0',
-            background: 'white',
-            color: 'black',
-            borderRadius: '8px',
-            resize: 'vertical',
-            fontFamily: 'inherit',
+      {subscriptionLoading && !preloadedIsPremium ? (
+        <></>
+      ): (
+        <PremiumFeatureTeaser
+          feature="asystenta AI dla świadczeń"
+          title="Zapytaj AI o świadczenie"
+          preloadedIsPremium={preloadedIsPremium}
+        >
+          <div style={{
+            background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
+            padding: '25px',
+            borderRadius: '12px',
+            marginBottom: '30px',
+            border: '2px solid #2c5aa0'
+          }}>
+          <h3 style={{
+            fontSize: '18px',
+            fontWeight: '700',
+            color: '#2c3e50',
             marginBottom: '15px',
-            boxSizing: 'border-box'
-          }}
-        />
-
-        <button
-          onClick={handleSwiadczeniaSearch}
-          disabled={swiadczeniaLoading || !swiadczeniaQuery.trim()}
-          style={{
-            background: swiadczeniaLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-            color: 'white',
-            border: 'none',
-            padding: '12px 25px',
-            borderRadius: '8px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: swiadczeniaLoading ? 'not-allowed' : 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '10px',
-            transition: 'transform 0.2s'
-          }}
-          onMouseOver={(e) => !swiadczeniaLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-        >
-          {swiadczeniaLoading ? (
-            <>
-              <Loader size={18} className="spin" />
-              Szukam...
-            </>
-          ) : (
-            <>
-              <Search size={18} />
-              Znajdź świadczenie
-            </>
-          )}
-        </button>
-
-        {/* AI Result */}
-        {swiadczeniaResult && (
-          <div style={{
-            marginTop: '20px',
-            background: 'white',
-            padding: '20px',
-            borderRadius: '12px'
+            gap: '10px'
           }}>
-            <div style={{
-              color: '#2c3e50',
-              lineHeight: '1.6',
-              marginBottom: '20px',
-              whiteSpace: 'pre-wrap'
-            }}>
-              {swiadczeniaResult.content}
-            </div>
+            <Sparkles size={20} color="#2c5aa0" />
+            Zapytaj AI o świadczenie
+          </h3>
 
-            {swiadczeniaResult.matches && swiadczeniaResult.matches.length > 0 && (
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                gap: '20px'
-              }}>
-                {swiadczeniaResult.matches.map((swiadczenie, idx) => (
-                  <SwiadczenieCard
-                    key={idx}
-                    swiadczenie={swiadczenie}
-                    onClick={() => setSelectedSwiadczenie(swiadczenie)}
-                  />
-                ))}
-              </div>
+          <textarea
+            value={swiadczeniaQuery}
+            onChange={(e) => setSwiadczeniaQuery(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Np. 'Mam dwójkę dzieci i nie stać mnie na rachunki' lub 'Pomoc dla osób niepełnosprawnych'"
+            style={{
+              width: '100%',
+              minHeight: '80px',
+              padding: '15px',
+              fontSize: '16px',
+              border: '2px solid #2c5aa0',
+              background: 'white',
+              color: 'black',
+              borderRadius: '8px',
+              resize: 'vertical',
+              fontFamily: 'inherit',
+              marginBottom: '15px',
+              boxSizing: 'border-box'
+            }}
+          />
+
+          <button
+            onClick={handleSwiadczeniaSearch}
+            disabled={swiadczeniaLoading || !swiadczeniaQuery.trim()}
+            style={{
+              background: swiadczeniaLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '12px 25px',
+              borderRadius: '8px',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: swiadczeniaLoading ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              transition: 'transform 0.2s'
+            }}
+            onMouseOver={(e) => !swiadczeniaLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+          >
+            {swiadczeniaLoading ? (
+              <>
+                <Loader size={18} className="spin" />
+                Szukam...
+              </>
+            ) : (
+              <>
+                <Search size={18} />
+                Znajdź świadczenie
+              </>
             )}
+          </button>
+
+          {/* AI Result */}
+          {swiadczeniaResult && (
+            <div style={{
+              marginTop: '20px',
+              background: 'white',
+              padding: '20px',
+              borderRadius: '12px'
+            }}>
+              <div style={{
+                color: '#2c3e50',
+                lineHeight: '1.6',
+                marginBottom: '20px',
+                whiteSpace: 'pre-wrap'
+              }}>
+                {swiadczeniaResult.content}
+              </div>
+
+              {swiadczeniaResult.matches && swiadczeniaResult.matches.length > 0 && (
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                  gap: '20px'
+                }}>
+                  {swiadczeniaResult.matches.map((swiadczenie, idx) => (
+                    <SwiadczenieCard
+                      key={idx}
+                      swiadczenie={swiadczenie}
+                      onClick={() => setSelectedSwiadczenie(swiadczenie)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           </div>
-        )}
-        </div>
-      </PremiumFeatureTeaser>
+        </PremiumFeatureTeaser>
+      )}
+
 
       {/* Category Filter */}
       <div style={{
