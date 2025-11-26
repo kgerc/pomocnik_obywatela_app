@@ -427,42 +427,6 @@ const SecuritySection = ({ passwordData, setPasswordData, handleChangePassword, 
         </button>
       </div>
     </div>
-
-    {/* 2FA */}
-    <div style={{
-      background: '#f8f9fb',
-      padding: '20px',
-      borderRadius: '12px'
-    }}>
-      <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#2c3e50', marginBottom: '12px' }}>
-        Weryfikacja dwuetapowa (2FA)
-      </h4>
-
-      <p style={{ color: '#5a6c7d', fontSize: '14px', marginBottom: '16px' }}>
-        Dodatkowa warstwa bezpieczeństwa dla Twojego konta
-      </p>
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-          <input
-            type="checkbox"
-            checked={twoFactorEnabled}
-            onChange={async (e) => {
-              try {
-                await toggle2FA(e.target.checked, 'email');
-                showSuccess(e.target.checked ? '2FA zostało włączone' : '2FA zostało wyłączone');
-              } catch (error) {
-                showError('Błąd podczas zmiany ustawień 2FA');
-              }
-            }}
-            style={{ width: '18px', height: '18px' }}
-          />
-          <span style={{ fontWeight: '500', color: '#2c3e50' }}>
-            {twoFactorEnabled ? 'Włączone' : 'Wyłączone'}
-          </span>
-        </label>
-      </div>
-    </div>
   </div>
 );
 
