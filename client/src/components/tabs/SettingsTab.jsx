@@ -567,7 +567,7 @@ const PrivacySection = ({ formData, setFormData, handleUpdateGDPR, handleExportD
           }}
         >
           <Trash2 size={16} />
-          Usuń konto na zawsze
+          Usuń konto
         </button>
       </div>
     </div>
