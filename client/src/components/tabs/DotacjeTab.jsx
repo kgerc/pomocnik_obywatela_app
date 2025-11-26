@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, Sparkles, Search, Loader, Building2, AlertCircle, ExternalLink, Eraser } from 'lucide-react';
+import { TrendingUp, Sparkles, Search, Loader, Building2, AlertCircle, ExternalLink, Eraser, Clock, AlertTriangle, XCircle } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useDotacje } from '../../hooks/useDotacje';
 import Pagination from '../common/Pagination';
@@ -419,172 +419,251 @@ const DotacjeTab = () => {
   );
 };
 
-const DotacjaCard = ({ dotacja }) => (
-  <div style={{
-    background: '#f8f9fb',
-    padding: '20px',
-    borderRadius: '12px',
-    border: '2px solid #e1e8ed'
-  }}>
+const DotacjaCard = ({ dotacja }) => {
+  // Funkcja obliczająca pozostałe dni do terminu
+  const calculateDaysRemaining = (terminString) => {
+    if (!terminString) return null;
+
+    // Obsługa zakresu dat (np. "12.02.2024 - 31.08.2026")
+    // Szukamy drugiej daty (data końcowa) po myślniku lub słowie "do"
+    let dateToUse = terminString;
+
+    // Jeśli jest zakres (zawiera " - " lub " do "), weź drugą datę
+    if (terminString.includes(' - ')) {
+      const parts = terminString.split(' - ');
+      dateToUse = parts[1]?.trim() || parts[0];
+    } else if (terminString.toLowerCase().includes(' do ')) {
+      const parts = terminString.toLowerCase().split(' do ');
+      dateToUse = parts[1]?.trim() || parts[0];
+    }
+
+    // Próbuj parsować różne formaty daty
+    const dateMatch = dateToUse.match(/(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})/);
+    if (!dateMatch) return null;
+
+    const [, day, month, year] = dateMatch;
+    const deadlineDate = new Date(year, month - 1, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    deadlineDate.setHours(0, 0, 0, 0);
+
+    const diffTime = deadlineDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays;
+  };
+
+  const status = (dotacja.status || 'aktywna').toLowerCase();
+  const daysRemaining = calculateDaysRemaining(dotacja.termin);
+  const shouldShowDaysRemaining = status === 'aktywna' && daysRemaining !== null;
+
+  return (
     <div style={{
-      display: 'flex',
-      alignItems: 'flex-start',
-      justifyContent: 'space-between',
-      marginBottom: '15px',
-      gap: '15px',
-      flexWrap: 'wrap'
+      background: '#f8f9fb',
+      padding: '20px',
+      borderRadius: '12px',
+      border: '2px solid #e1e8ed'
     }}>
-      <div style={{ flex: 1, minWidth: '250px' }}>
-        <h4 style={{
-          fontSize: '20px',
-          fontWeight: '700',
-          color: '#2c3e50',
-          marginBottom: '8px'
-        }}>
-          {dotacja.nazwa}
-        </h4>
-        <div style={{
-          display: 'flex',
-          gap: '8px',
-          flexWrap: 'wrap',
-          marginBottom: '10px'
-        }}>
-          <span style={{
-            background: '#e8f4f8',
-            color: '#2c5aa0',
-            padding: '4px 12px',
-            borderRadius: '15px',
-            fontSize: '13px',
-            fontWeight: '600'
-          }}>
-            {dotacja.sektor}
-          </span>
-          <span style={{
-            background: '#d1fae5',
-            color: '#059669',
-            padding: '4px 12px',
-            borderRadius: '15px',
-            fontSize: '13px',
-            fontWeight: '600'
-          }}>
-            {dotacja.status || 'aktywna'}
-          </span>
-        </div>
-      </div>
       <div style={{
-        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-        color: 'white',
-        padding: '12px 16px',
-        borderRadius: '8px',
-        textAlign: 'center',
-        minWidth: '140px'
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        marginBottom: '15px',
+        gap: '15px',
+        flexWrap: 'wrap'
       }}>
-        <div style={{
-          fontSize: '12px',
-          opacity: '0.9',
-          marginBottom: '4px'
-        }}>
-          Max kwota
+        <div style={{ flex: 1, minWidth: '250px' }}>
+          <h4 style={{
+            fontSize: '20px',
+            fontWeight: '700',
+            color: '#2c3e50',
+            marginBottom: '8px'
+          }}>
+            {dotacja.nazwa}
+          </h4>
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            flexWrap: 'wrap',
+            marginBottom: '10px'
+          }}>
+            <span style={{
+              background: '#e8f4f8',
+              color: '#2c5aa0',
+              padding: '4px 12px',
+              borderRadius: '15px',
+              fontSize: '13px',
+              fontWeight: '600'
+            }}>
+              {dotacja.sektor}
+            </span>
+            <span style={{
+              background: status === 'aktywna' ? '#d1fae5' : status === 'zamknięty' ? '#fee' : '#fef3c7',
+              color: status === 'aktywna' ? '#059669' : status === 'zamknięty' ? '#c33' : '#d97706',
+              padding: '4px 12px',
+              borderRadius: '15px',
+              fontSize: '13px',
+              fontWeight: '600'
+            }}>
+              {dotacja.status || 'aktywna'}
+            </span>
+          </div>
         </div>
         <div style={{
-          fontSize: '18px',
-          fontWeight: '700'
+          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+          color: 'white',
+          padding: '12px 16px',
+          borderRadius: '8px',
+          textAlign: 'center',
+          minWidth: '140px'
         }}>
-          {dotacja.kwota_max}
+          <div style={{
+            fontSize: '12px',
+            opacity: '0.9',
+            marginBottom: '4px'
+          }}>
+            Max kwota
+          </div>
+          <div style={{
+            fontSize: '18px',
+            fontWeight: '700'
+          }}>
+            {dotacja.kwota_max}
+          </div>
         </div>
       </div>
-    </div>
 
-    <p style={{
-      color: '#5a6c7d',
-      lineHeight: '1.6',
-      marginBottom: '15px'
-    }}>
-      {dotacja.opis}
-    </p>
-
-    {dotacja.beneficjenci && dotacja.beneficjenci.length > 0 && (
-      <div style={{
-        background: 'white',
-        padding: '15px',
-        borderRadius: '8px',
+      <p style={{
+        color: '#5a6c7d',
+        lineHeight: '1.6',
         marginBottom: '15px'
       }}>
-        <h5 style={{
-          fontSize: '14px',
-          fontWeight: '700',
-          color: '#2c3e50',
-          marginBottom: '8px',
+        {dotacja.opis}
+      </p>
+
+      {dotacja.beneficjenci && dotacja.beneficjenci.length > 0 && (
+        <div style={{
+          background: 'white',
+          padding: '15px',
+          borderRadius: '8px',
+          marginBottom: '15px'
+        }}>
+          <h5 style={{
+            fontSize: '14px',
+            fontWeight: '700',
+            color: '#2c3e50',
+            marginBottom: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <Building2 size={16} color="#2c5aa0" />
+            Beneficjenci:
+          </h5>
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            flexWrap: 'wrap'
+          }}>
+            {dotacja.beneficjenci.map((ben, benIdx) => (
+              <span key={benIdx} style={{
+                background: '#f8f9fb',
+                color: '#5a6c7d',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '13px',
+                border: '1px solid #e1e8ed'
+              }}>
+                {ben}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {dotacja.termin && (
+        <div style={{
+          background: 'white',
+          padding: '15px',
+          borderRadius: '8px',
+          marginBottom: '15px',
           display: 'flex',
           alignItems: 'center',
-          gap: '8px'
-        }}>
-          <Building2 size={16} color="#2c5aa0" />
-          Beneficjenci:
-        </h5>
-        <div style={{
-          display: 'flex',
-          gap: '8px',
+          justifyContent: 'space-between',
+          gap: '15px',
           flexWrap: 'wrap'
         }}>
-          {dotacja.beneficjenci.map((ben, benIdx) => (
-            <span key={benIdx} style={{
-              background: '#f8f9fb',
-              color: '#5a6c7d',
-              padding: '6px 12px',
-              borderRadius: '6px',
-              fontSize: '13px',
-              border: '1px solid #e1e8ed'
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: '200px' }}>
+            <AlertCircle size={20} color="#ff9800" />
+            <div>
+              <strong style={{ color: '#2c3e50' }}>Termin:</strong>{' '}
+              <span style={{ color: '#5a6c7d' }}>{dotacja.termin}</span>
+            </div>
+          </div>
+
+          {daysRemaining !== null && shouldShowDaysRemaining && (
+            <div style={{
+              background: daysRemaining < 7 ? '#fee2e2' : daysRemaining < 30 ? '#fef3c7' : '#d1fae5',
+              color: daysRemaining < 7 ? '#c33' : daysRemaining < 30 ? '#d97706' : '#059669',
+              padding: '8px 16px',
+              borderRadius: '20px',
+              fontSize: '14px',
+              fontWeight: '700',
+              textAlign: 'center',
+              whiteSpace: 'nowrap',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}>
-              {ben}
-            </span>
-          ))}
+              {daysRemaining > 0 ? (
+                <>
+                  <Clock size={16} />
+                  {daysRemaining >= 365
+                    ? `Pozostało ${Math.floor(daysRemaining / 365)} ${Math.floor(daysRemaining / 365) === 1 ? 'rok' : Math.floor(daysRemaining / 365) < 5 ? 'lata' : 'lat'}`
+                    : `Pozostało ${daysRemaining} ${daysRemaining === 1 ? 'dzień' : daysRemaining < 5 ? 'dni' : 'dni'}`
+                  }
+                </>
+              ) : daysRemaining === 0 ? (
+                <>
+                  <AlertTriangle size={16} />
+                  Ostatni dzień!
+                </>
+              ) : (
+                <>
+                  <XCircle size={16} />
+                  Termin minął
+                </>
+              )}
+            </div>
+          )}
         </div>
-      </div>
-    )}
+      )}
 
-    {dotacja.termin && (
-      <div style={{
-        background: 'white',
-        padding: '15px',
-        borderRadius: '8px',
-        marginBottom: '15px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px'
-      }}>
-        <AlertCircle size={20} color="#ff9800" />
-        <div>
-          <strong style={{ color: '#2c3e50' }}>Termin:</strong>{' '}
-          <span style={{ color: '#5a6c7d' }}>{dotacja.termin}</span>
-        </div>
-      </div>
-    )}
-
-    <a
-      href={dotacja.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '8px',
-        background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-        color: 'white',
-        padding: '12px 20px',
-        borderRadius: '8px',
-        textDecoration: 'none',
-        fontWeight: '600',
-        fontSize: '14px',
-        transition: 'transform 0.2s'
-      }}
-      onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-      onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-    >
-      <ExternalLink size={16} />
-      Sprawdź program
-    </a>
-  </div>
-);
+      <a
+        href={dotacja.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '8px',
+          background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+          color: 'white',
+          padding: '12px 20px',
+          borderRadius: '8px',
+          textDecoration: 'none',
+          fontWeight: '600',
+          fontSize: '14px',
+          transition: 'transform 0.2s'
+        }}
+        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+      >
+        <ExternalLink size={16} />
+        Sprawdź program
+      </a>
+    </div>
+  );
+};
 
 export default DotacjeTab;
