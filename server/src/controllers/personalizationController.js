@@ -136,59 +136,191 @@ export const getRecommendations = async (req, res) => {
     // Algorytm rekomendacji
     const recommendations = [];
 
-    // 500+ dla rodzin z dziećmi
+    // 800+ i świadczenia dla rodzin z dziećmi
     if (personalization.liczba_dzieci > 0) {
-      const sw500 = allSwiadczenia.find(s => s.id === '500plus');
-      if (sw500) recommendations.push(sw500);
+      const sw800 = allSwiadczenia.find(s => s.id === 'rodzina_800_plus');
+      if (sw800) recommendations.push(sw800);
 
-      const zasilekRodzinny = allSwiadczenia.find(s => s.id === 'zasilek-rodzinny');
+      const zasilekRodzinny = allSwiadczenia.find(s => s.id === 'zasilek_rodzinny');
       if (zasilekRodzinny) recommendations.push(zasilekRodzinny);
 
-      const dobryStart = allSwiadczenia.find(s => s.id === 'dobry-start');
+      const dobryStart = allSwiadczenia.find(s => s.id === 'dobry_start');
       if (dobryStart) recommendations.push(dobryStart);
+
+      const becikowe = allSwiadczenia.find(s => s.id === 'becikowe');
+      if (becikowe) recommendations.push(becikowe);
+
+      const swiadczenieRodzicielskie = allSwiadczenia.find(s => s.id === 'swiadczenie_rodzicielskie');
+      if (swiadczenieRodzicielskie) recommendations.push(swiadczenieRodzicielskie);
+
+      const aktynieWZlobku = allSwiadczenia.find(s => s.id === 'aktywnie_w_zlobku');
+      if (aktynieWZlobku) recommendations.push(aktynieWZlobku);
+
+      const aktywnieWDomu = allSwiadczenia.find(s => s.id === 'aktywnie_w_domu');
+      if (aktywnieWDomu) recommendations.push(aktywnieWDomu);
+
+      const dodatekUrodzenieDziecka = allSwiadczenia.find(s => s.id === 'dodatek_urodzenie_dziecka');
+      if (dodatekUrodzenieDziecka) recommendations.push(dodatekUrodzenieDziecka);
+
+      const dodatekRozpoczecieRokuSzkolnego = allSwiadczenia.find(s => s.id === 'dodatek_rozpoczecie_roku_szkolnego');
+      if (dodatekRozpoczecieRokuSzkolnego) recommendations.push(dodatekRozpoczecieRokuSzkolnego);
     }
 
     // Karta Dużej Rodziny
     if (personalization.liczba_dzieci >= 3) {
-      const kdr = allSwiadczenia.find(s => s.id === 'karta-duzej-rodziny');
+      const kdr = allSwiadczenia.find(s => s.id === 'karta_duzej_rodziny');
       if (kdr) recommendations.push(kdr);
+
+      const dodatekRodzinaWielodzietna = allSwiadczenia.find(s => s.id === 'dodatek_rodzina_wielodzietna');
+      if (dodatekRodzinaWielodzietna) recommendations.push(dodatekRodzinaWielodzietna);
     }
 
     // Świadczenia dla osób o niskich dochodach
     if (personalization.dochod_na_osobe < 1000) {
-      const dodatekMieszkaniowy = allSwiadczenia.find(s => s.id === 'dodatek-mieszkaniowy');
+      const dodatekMieszkaniowy = allSwiadczenia.find(s => s.id === 'dodatek_mieszkaniowy');
       if (dodatekMieszkaniowy) recommendations.push(dodatekMieszkaniowy);
 
-      const dodatekOslonowy = allSwiadczenia.find(s => s.id === 'dodatek-oslonowy');
-      if (dodatekOslonowy) recommendations.push(dodatekOslonowy);
+      const bonCieplowniczy = allSwiadczenia.find(s => s.id === 'bon_cieplowniczy');
+      if (bonCieplowniczy) recommendations.push(bonCieplowniczy);
+
+      const zasilekCelowy = allSwiadczenia.find(s => s.id === 'zasilek_celowy');
+      if (zasilekCelowy) recommendations.push(zasilekCelowy);
+
+      const zasilekStaly = allSwiadczenia.find(s => s.id === 'zasilek_staly');
+      if (zasilekStaly) recommendations.push(zasilekStaly);
+
+      const zasilekOkresowy = allSwiadczenia.find(s => s.id === 'zasilek_okresowy');
+      if (zasilekOkresowy) recommendations.push(zasilekOkresowy);
+
+      const posilekWSzkoleIDDomu = allSwiadczenia.find(s => s.id === 'posilek_w_szkole_i_w_domu');
+      if (posilekWSzkoleIDDomu) recommendations.push(posilekWSzkoleIDDomu);
     }
 
     // Świadczenia dla osób z niepełnosprawnością
     if (personalization.niepelnosprawnosc) {
-      const zasilekPielegnacyjny = allSwiadczenia.find(s => s.id === 'zasilek-pielegnacyjny');
+      const zasilekPielegnacyjny = allSwiadczenia.find(s => s.id === 'zasilek_pielegnacyjny');
       if (zasilekPielegnacyjny) recommendations.push(zasilekPielegnacyjny);
 
-      const swiadczenieWspierajace = allSwiadczenia.find(s => s.id === 'swiadczenie-wspierajace');
+      const swiadczenieWspierajace = allSwiadczenia.find(s => s.id === 'swiadczenie_wspierajace');
       if (swiadczenieWspierajace) recommendations.push(swiadczenieWspierajace);
 
-      const dofinansowanieTurnusu = allSwiadczenia.find(s => s.id === 'dofinansowanie-turnusu');
+      const dofinansowanieTurnusu = allSwiadczenia.find(s => s.id === 'dofinansowanie_turnus_rehabilitacyjny');
       if (dofinansowanieTurnusu) recommendations.push(dofinansowanieTurnusu);
+
+      const dodatekPielegnacyjny = allSwiadczenia.find(s => s.id === 'dodatek_pielegnacyjny');
+      if (dodatekPielegnacyjny) recommendations.push(dodatekPielegnacyjny);
+
+      const rentaSocjalna = allSwiadczenia.find(s => s.id === 'renta_socjalna');
+      if (rentaSocjalna) recommendations.push(rentaSocjalna);
+
+      const dofinansowanieSprzetu = allSwiadczenia.find(s => s.id === 'dofinansowanie-sprzetu');
+      if (dofinansowanieSprzetu) recommendations.push(dofinansowanieSprzetu);
+
+      const dofinansowanieBariery = allSwiadczenia.find(s => s.id === 'dofinansowanie_bariery_architektoniczne');
+      if (dofinansowanieBariery) recommendations.push(dofinansowanieBariery);
+
+      const ulgaRehabilitacyjna = allSwiadczenia.find(s => s.id === 'ulga-rehabilitacyjna');
+      if (ulgaRehabilitacyjna) recommendations.push(ulgaRehabilitacyjna);
+
+      const dodatekKsztalcenieRehabilitacja = allSwiadczenia.find(s => s.id === 'dodatek_ksztalcenie_rehabilitacja');
+      if (dodatekKsztalcenieRehabilitacja) recommendations.push(dodatekKsztalcenieRehabilitacja);
+
+      const jednorazowe4000 = allSwiadczenia.find(s => s.id === 'jednorazowe_4000_dziecko_chore');
+      if (jednorazowe4000) recommendations.push(jednorazowe4000);
     }
 
     // Świadczenia związane ze statusem zawodowym
     if (personalization.status_zawodowy === 'bezrobotny') {
-      const zasilekBezrobotnych = allSwiadczenia.find(s => s.id === 'zasilek-dla-bezrobotnych');
+      const zasilekBezrobotnych = allSwiadczenia.find(s => s.id === 'zasilek_dla_bezrobotnych');
       if (zasilekBezrobotnych) recommendations.push(zasilekBezrobotnych);
+
+      const bonStazowy = allSwiadczenia.find(s => s.id === 'bon_stazowy');
+      if (bonStazowy) recommendations.push(bonStazowy);
+
+      const praceInterwencyjne = allSwiadczenia.find(s => s.id === 'prace_interwencyjne');
+      if (praceInterwencyjne) recommendations.push(praceInterwencyjne);
+
+      const stypendiumSzkolenie = allSwiadczenia.find(s => s.id === 'stypendium_szkolenie_staz_2025');
+      if (stypendiumSzkolenie) recommendations.push(stypendiumSzkolenie);
+
+      const dodatekAktywizacyjny = allSwiadczenia.find(s => s.id === 'dodatek_aktywizacyjny');
+      if (dodatekAktywizacyjny) recommendations.push(dodatekAktywizacyjny);
+
+      const refundacjaDojazdu = allSwiadczenia.find(s => s.id === 'refundacja_kosztow_dojazdu_praca_2025');
+      if (refundacjaDojazdu) recommendations.push(refundacjaDojazdu);
     }
 
     if (personalization.status_zawodowy === 'student') {
       const stypendium = allSwiadczenia.find(s => s.id === 'stypendium-socjalne');
       if (stypendium) recommendations.push(stypendium);
+
+      const dofinansowanieStudiow = allSwiadczenia.find(s => s.id === 'dofinansowanie-studiow');
+      if (dofinansowanieStudiow) recommendations.push(dofinansowanieStudiow);
     }
 
     if (personalization.status_zawodowy === 'emeryt') {
       const emerytura = allSwiadczenia.find(s => s.id === 'emerytura');
       if (emerytura) recommendations.push(emerytura);
+
+      const ryczaltEnergetyczny = allSwiadczenia.find(s => s.id === 'ryczalt-energetyczny');
+      if (ryczaltEnergetyczny) recommendations.push(ryczaltEnergetyczny);
+
+      const dodatekTajneNauczanie = allSwiadczenia.find(s => s.id === 'dodatek-tajne-nauczanie');
+      if (dodatekTajneNauczanie) recommendations.push(dodatekTajneNauczanie);
+    }
+
+    // Renty
+    if (personalization.niepelnosprawnosc || personalization.status_zawodowy === 'rencista') {
+      const renta = allSwiadczenia.find(s => s.id === 'renta');
+      if (renta) recommendations.push(renta);
+
+      const rentaRodzinna = allSwiadczenia.find(s => s.id === 'renta-rodzinna');
+      if (rentaRodzinna) recommendations.push(rentaRodzinna);
+    }
+
+    // Świadczenia rodzicielskie
+    if (personalization.liczba_dzieci > 0 || personalization.stan_cywilny === 'parent') {
+      const zasilekMacierzynski = allSwiadczenia.find(s => s.id === 'zasilek_macierzynski');
+      if (zasilekMacierzynski) recommendations.push(zasilekMacierzynski);
+
+      const zasilekOpiekunczy = allSwiadczenia.find(s => s.id === 'zasilek_opiekunczy');
+      if (zasilekOpiekunczy) recommendations.push(zasilekOpiekunczy);
+
+      const dodatekSamotneWychowywanie = allSwiadczenia.find(s => s.id === 'dodatek_samotne_wychowywanie');
+      if (dodatekSamotneWychowywanie) recommendations.push(dodatekSamotneWychowywanie);
+
+      const funduszAlimentacyjny = allSwiadczenia.find(s => s.id === 'fundusz_alimentacyjny');
+      if (funduszAlimentacyjny) recommendations.push(funduszAlimentacyjny);
+
+      const dodatekUrlopWychowawczy = allSwiadczenia.find(s => s.id === 'dodatek_urlop_wychowawczy');
+      if (dodatekUrlopWychowawczy) recommendations.push(dodatekUrlopWychowawczy);
+
+      const dodatkowyUrlopWczesniaki = allSwiadczenia.find(s => s.id === 'dodatkowy_urlop_wczesniaki');
+      if (dodatkowyUrlopWczesniaki) recommendations.push(dodatkowyUrlopWczesniaki);
+
+      const dodatekSzkolaPozaMiejscem = allSwiadczenia.find(s => s.id === 'dodatek_szkola_poza_miejscem_zamieszkania');
+      if (dodatekSzkolaPozaMiejscem) recommendations.push(dodatekSzkolaPozaMiejscem);
+    }
+
+    // Inne świadczenia
+    if (personalization.status_zawodowy === 'zatrudniony' || personalization.status_zawodowy === 'bezrobotny') {
+      const zasilekChorobowy = allSwiadczenia.find(s => s.id === 'zasilek-chorobowy');
+      if (zasilekChorobowy) recommendations.push(zasilekChorobowy);
+
+      const zasilekRehabilitacyjny = allSwiadczenia.find(s => s.id === 'zasilek_rehabilitacyjny');
+      if (zasilekRehabilitacyjny) recommendations.push(zasilekRehabilitacyjny);
+    }
+
+    const zasilekPogrzebowy = allSwiadczenia.find(s => s.id === 'zasilek-pogrzebowy');
+    if (zasilekPogrzebowy) recommendations.push(zasilekPogrzebowy);
+
+    // Świadczenia mieszkaniowe
+    if (personalization.wlasnosc_mieszkania === 'wlasne' || personalization.wlasnosc_mieszkania === 'wynajem') {
+      const ulgaTermomodernizacyjna = allSwiadczenia.find(s => s.id === 'ulga-termomodernizacyjna');
+      if (ulgaTermomodernizacyjna) recommendations.push(ulgaTermomodernizacyjna);
+
+      const bonZasiedlenie = allSwiadczenia.find(s => s.id === 'bon_zasiedlenie');
+      if (bonZasiedlenie) recommendations.push(bonZasiedlenie);
     }
 
     // Usuń duplikaty

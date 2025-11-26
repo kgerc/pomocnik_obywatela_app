@@ -5,6 +5,7 @@ import { usePisma } from '../../hooks/usePisma';
 import SaveDocumentButton from '../common/SaveDocumentButton';
 import Pagination from '../common/Pagination';
 import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
+import { saveConversationToHistory } from '../../utils/saveToHistory';
 
 const ITEMS_PER_PAGE = 12;
 
@@ -60,15 +61,21 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
     if (!pismaQuery.trim()) return;
 
     setPismaLoading(true);
+    const userQuery = pismaQuery.trim();
 
     try {
       const all = pisma; // cała baza pism
 
       if (!all || all.length === 0) {
+        const emptyResponse = "Baza pism jest pusta. Spróbuj ponownie później.";
         setPismaResult({
-          content: "Baza pism jest pusta. Spróbuj ponownie później.",
+          content: emptyResponse,
           matches: []
         });
+
+        // Zapisz do historii
+        await saveConversationToHistory(userQuery, emptyResponse, []);
+
         setPismaLoading(false);
         return;
       }
@@ -93,7 +100,7 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
         Jesteś precyzyjnym asystentem prawnym w Polsce. Odpowiadasz TYLKO po polsku.
 
         ## Zadanie
-        Użytkownik wpisuje zapytanie: "${pismaQuery}"
+        Użytkownik wpisuje zapytanie: "${userQuery}"
 
         Twoim zadaniem jest:
         1. Dokładnie przeanalizować CAŁĄ poniższą listę pism.
@@ -127,12 +134,19 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
         matches: matched
       });
 
+      // Zapisz do historii
+      await saveConversationToHistory(userQuery, aiResponse, matched);
+
     } catch (error) {
       console.error('Błąd:', error);
+      const errorResponse = 'Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.';
       setPismaResult({
-        content: 'Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.',
+        content: errorResponse,
         matches: []
       });
+
+      // Zapisz błąd do historii
+      await saveConversationToHistory(userQuery, errorResponse, []);
     }
 
     setPismaLoading(false);

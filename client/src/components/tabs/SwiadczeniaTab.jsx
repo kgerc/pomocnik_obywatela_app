@@ -5,6 +5,7 @@ import { useSwiadczenia } from '../../hooks/useSwiadczenia';
 import Pagination from '../common/Pagination';
 import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
 import SwiadczenieDetailsModal from '../swiadczenia/SwiadczenieDetailsModal';
+import { saveConversationToHistory } from '../../utils/saveToHistory';
 
 const ITEMS_PER_PAGE = 9;
 
@@ -61,22 +62,28 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null, subscriptionLoading = true,
     if (!swiadczeniaQuery.trim()) return;
 
     setSwiadczeniaLoading(true);
+    const userQuery = swiadczeniaQuery.trim();
 
     try {
       const all = swiadczenia;
 
       if (!all || all.length === 0) {
+        const emptyResponse = "Baza świadczeń jest pusta. Spróbuj ponownie później.";
         setSwiadczeniaResult({
-          content: "Baza świadczeń jest pusta. Spróbuj ponownie później.",
+          content: emptyResponse,
           matches: []
         });
+
+        // Zapisz do historii
+        await saveConversationToHistory(userQuery, emptyResponse, []);
+
         setSwiadczeniaLoading(false);
         return;
       }
 
       // 2. Budujemy pełny kontekst RAG
       const contextForAI = all
-        .map(m => 
+        .map(m =>
           `• Nazwa: ${m.nazwa}
               Krótki opis: ${m.krotki_opis}
               Słowa kluczowe: ${m.slowa_kluczowe?.join(', ')}
@@ -94,7 +101,7 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null, subscriptionLoading = true,
         Jesteś bardzo precyzyjnym asystentem obywatela w Polsce. Odpowiadasz TYLKO po polsku.
 
         ## Zadanie
-        Użytkownik wpisuje zapytanie: "${swiadczeniaQuery}"
+        Użytkownik wpisuje zapytanie: "${userQuery}"
 
         Twoim zadaniem jest:
         1. Dokładnie przeanalizować CAŁĄ poniższą listę świadczeń.
@@ -130,12 +137,19 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null, subscriptionLoading = true,
         matches: matched
       });
 
+      // Zapisz do historii
+      await saveConversationToHistory(userQuery, aiResponse, matched);
+
     } catch (error) {
       console.error('Błąd:', error);
+      const errorResponse = 'Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.';
       setSwiadczeniaResult({
-        content: 'Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.',
+        content: errorResponse,
         matches: []
       });
+
+      // Zapisz błąd do historii
+      await saveConversationToHistory(userQuery, errorResponse, []);
     }
 
     setSwiadczeniaLoading(false);

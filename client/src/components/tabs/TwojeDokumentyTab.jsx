@@ -91,7 +91,7 @@ const TwojeDokumentyTab = () => {
 
   const getFileIcon = (fileType) => {
     if (fileType?.includes('pdf')) {
-      return <FileText size={24} color="#c33" />;
+      return <FileText size={24} color="#d97706" />;
     }
     if (fileType?.includes('image')) {
       return <FileText size={24} color="#10b981" />;
@@ -733,6 +733,8 @@ const UploadModal = ({ onClose, onUpload }) => {
                 width: '100%',
                 padding: '12px',
                 border: '2px solid #e1e8ed',
+                background: 'white',
+                color: 'black',
                 borderRadius: '8px',
                 fontSize: '14px',
                 outline: 'none',

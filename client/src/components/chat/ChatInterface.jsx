@@ -3,6 +3,7 @@ import { Search, Loader, Sparkles } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import SwiadczenieCard from '../swiadczenia/SwiadczenieCard';
 import { useSwiadczenia } from '../../hooks/useSwiadczenia';
+import { historyAPI } from '../../services/api';
 
 const ChatInterface = ({ onToggleFavorite, isFavorite, preloadedSwiadczenia = null }) => {
   const [query, setQuery] = useState('');
@@ -51,25 +52,47 @@ const ChatInterface = ({ onToggleFavorite, isFavorite, preloadedSwiadczenia = nu
     if (!query.trim()) return;
 
     setLoading(true);
+    const userQuery = query.trim();
 
     try {
       // Użyj preloadowanych danych lub wyszukaj przez API
-      const allSwiadczenia = preloadedSwiadczenia || await search(query);
+      const allSwiadczenia = preloadedSwiadczenia || await search(userQuery);
 
       if (allSwiadczenia.length === 0) {
+        const noMatchResponse = `Nie znalazłem dokładnego dopasowania do Twojego pytania. Sprawdź oficjalne źródła:\n\n• [Portal Gov.pl](https://www.gov.pl)\n• [ZUS](https://www.zus.pl)\n• [Biznes.gov.pl](https://www.biznes.gov.pl)\n\nMożesz też spróbować doprecyzować pytanie lub zapytać o konkretne świadczenie.`;
+
         setResult({
-          content: `Nie znalazłem dokładnego dopasowania do Twojego pytania. Sprawdź oficjalne źródła:\n\n• [Portal Gov.pl](https://www.gov.pl)\n• [ZUS](https://www.zus.pl)\n• [Biznes.gov.pl](https://www.biznes.gov.pl)\n\nMożesz też spróbować doprecyzować pytanie lub zapytać o konkretne świadczenie.`,
+          content: noMatchResponse,
           matches: []
         });
+
+        // Zapisz do historii - pytanie użytkownika
+        try {
+          await historyAPI.add({
+            role: 'user',
+            content: userQuery,
+            matches: null
+          });
+
+          // Zapisz do historii - odpowiedź AI
+          await historyAPI.add({
+            role: 'assistant',
+            content: noMatchResponse,
+            matches: null
+          });
+        } catch (historyError) {
+          console.error('Error saving to history:', historyError);
+        }
+
         setLoading(false);
         return;
       }
 
       // Znajdź najlepsze dopasowania
-      const matches = findBestMatches(allSwiadczenia, query, 3);
+      const matches = findBestMatches(allSwiadczenia, userQuery, 3);
 
       // Przygotuj kontekst dla AI
-      const contextForAI = matches.map(m => 
+      const contextForAI = matches.map(m =>
         `${m.nazwa}: ${m.krotki_opis}`
       ).join('\n');
 
@@ -77,8 +100,8 @@ const ChatInterface = ({ onToggleFavorite, isFavorite, preloadedSwiadczenia = nu
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-      
-      const prompt = `Jesteś asystentem obywatela w Polsce. Odpowiadaj TYLKO po polsku. Użytkownik pyta: "${query}"\n\nDostępne świadczenia w bazie danych:\n${contextForAI}\n\nOdpowiedz krótko i konkretnie (max 3-4 zdania):
+
+      const prompt = `Jesteś asystentem obywatela w Polsce. Odpowiadaj TYLKO po polsku. Użytkownik pyta: "${userQuery}"\n\nDostępne świadczenia w bazie danych:\n${contextForAI}\n\nOdpowiedz krótko i konkretnie (max 3-4 zdania):
       1. Które świadczenie/a pasują do pytania użytkownika
       2. Podstawowe informacje o kwalifikacji
       3. Zachęć do sprawdzenia szczegółów poniżej. NIE podawaj linków ani nie wymyślaj świadczeń spoza podanej bazy.`;
@@ -90,15 +113,52 @@ const ChatInterface = ({ onToggleFavorite, isFavorite, preloadedSwiadczenia = nu
         content: aiResponse,
         matches: matches
       });
-      
+
+      // Zapisz do historii - pytanie użytkownika
+      try {
+        await historyAPI.add({
+          role: 'user',
+          content: userQuery,
+          matches: matches.map(m => ({ id: m.id, nazwa: m.nazwa }))
+        });
+
+        // Zapisz do historii - odpowiedź AI
+        await historyAPI.add({
+          role: 'assistant',
+          content: aiResponse,
+          matches: matches.map(m => ({ id: m.id, nazwa: m.nazwa }))
+        });
+      } catch (historyError) {
+        console.error('Error saving to history:', historyError);
+      }
+
     } catch (error) {
       console.error('Błąd:', error);
+      const errorResponse = 'Wystąpił błąd podczas przetwarzania zapytania. Spróbuj ponownie.';
+
       setResult({
-        content: 'Wystąpił błąd podczas przetwarzania zapytania. Spróbuj ponownie.',
+        content: errorResponse,
         matches: []
       });
+
+      // Zapisz błąd do historii
+      try {
+        await historyAPI.add({
+          role: 'user',
+          content: userQuery,
+          matches: null
+        });
+
+        await historyAPI.add({
+          role: 'assistant',
+          content: errorResponse,
+          matches: null
+        });
+      } catch (historyError) {
+        console.error('Error saving to history:', historyError);
+      }
     }
-    
+
     setLoading(false);
     setQuery('');
   };

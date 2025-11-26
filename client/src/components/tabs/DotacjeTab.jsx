@@ -3,6 +3,7 @@ import { TrendingUp, Sparkles, Search, Loader, Building2, AlertCircle, ExternalL
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useDotacje } from '../../hooks/useDotacje';
 import Pagination from '../common/Pagination';
+import { saveConversationToHistory } from '../../utils/saveToHistory';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -57,15 +58,21 @@ const DotacjeTab = () => {
     if (!dotacjeQuery.trim()) return;
 
     setDotacjeLoading(true);
+    const userQuery = dotacjeQuery.trim();
 
     try {
       const all = dotacje; // cała baza dotacji
 
       if (!all || all.length === 0) {
+        const emptyResponse = "Baza dotacji jest pusta. Spróbuj ponownie później.";
         setDotacjeResult({
-          content: "Baza dotacji jest pusta. Spróbuj ponownie później.",
+          content: emptyResponse,
           matches: []
         });
+
+        // Zapisz do historii
+        await saveConversationToHistory(userQuery, emptyResponse, []);
+
         setDotacjeLoading(false);
         return;
       }
@@ -91,7 +98,7 @@ const DotacjeTab = () => {
         Jesteś doradcą ds. dotacji w Polsce. Odpowiadasz TYLKO po polsku.
 
         ## Zadanie
-        Użytkownik wpisuje zapytanie: "${dotacjeQuery}"
+        Użytkownik wpisuje zapytanie: "${userQuery}"
 
         Twoim zadaniem jest:
         1. Dokładnie przeanalizować CAŁĄ poniższą listę dotacji.
@@ -125,12 +132,19 @@ const DotacjeTab = () => {
         matches: matched
       });
 
+      // Zapisz do historii
+      await saveConversationToHistory(userQuery, aiResponse, matched);
+
     } catch (error) {
       console.error('Błąd:', error);
+      const errorResponse = 'Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.';
       setDotacjeResult({
-        content: 'Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.',
+        content: errorResponse,
         matches: []
       });
+
+      // Zapisz błąd do historii
+      await saveConversationToHistory(userQuery, errorResponse, []);
     }
 
     setDotacjeLoading(false);
