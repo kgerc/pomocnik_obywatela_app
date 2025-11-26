@@ -25,7 +25,7 @@ const SwiadczeniaTab = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedSwiadczenie, setSelectedSwiadczenie] = useState(null);
 
-  const { swiadczenia, loading, error, fetchAll, search, getByCategory, getCategories } = useSwiadczenia();
+  const { swiadczenia, loading, error, fetchAll, getCategories } = useSwiadczenia();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -44,18 +44,15 @@ const SwiadczeniaTab = () => {
     loadData();
   }, []);
 
-  // Filtruj świadczenia gdy zmieni się kategoria
+  // Filtruj świadczenia lokalnie gdy zmieni się kategoria
   useEffect(() => {
-    const filterSwiadczenia = async () => {
-      if (selectedCategory === 'wszystkie') {
-        setFilteredSwiadczenia(swiadczenia);
-      } else {
-        const filtered = await getByCategory(selectedCategory);
-        setFilteredSwiadczenia(filtered);
-      }
-      setCurrentPage(1); // Reset do pierwszej strony przy zmianie kategorii
-    };
-    filterSwiadczenia();
+    if (selectedCategory === 'wszystkie') {
+      setFilteredSwiadczenia(swiadczenia);
+    } else {
+      const filtered = swiadczenia.filter(s => s.kategoria === selectedCategory);
+      setFilteredSwiadczenia(filtered);
+    }
+    setCurrentPage(1); // Reset do pierwszej strony przy zmianie kategorii
   }, [selectedCategory, swiadczenia]);
 
   // Oblicz paginację
@@ -172,12 +169,8 @@ const SwiadczeniaTab = () => {
   if (loading) {
     return (
       <div style={{
-        background: 'white',
-        borderRadius: '16px',
-        padding: '60px',
-        marginBottom: '20px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-        textAlign: 'center'
+        textAlign: 'center',
+        padding: '60px'
       }}>
         <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
         <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie świadczeń...</p>

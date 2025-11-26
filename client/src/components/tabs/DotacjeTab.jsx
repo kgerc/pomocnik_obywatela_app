@@ -16,7 +16,7 @@ const DotacjeTab = () => {
   const [filteredDotacje, setFilteredDotacje] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { dotacje, loading, error, fetchAll, search, getBySektor, getSektory } = useDotacje();
+  const { dotacje, loading, error, fetchAll, getSektory } = useDotacje();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -34,18 +34,15 @@ const DotacjeTab = () => {
     loadData();
   }, []);
 
-  // Filtruj dotacje gdy zmieni się sektor
+  // Filtruj dotacje lokalnie gdy zmieni się sektor
   useEffect(() => {
-    const filterDotacje = async () => {
-      if (selectedSektor === 'wszystkie') {
-        setFilteredDotacje(dotacje);
-      } else {
-        const filtered = await getBySektor(selectedSektor);
-        setFilteredDotacje(filtered);
-      }
-      setCurrentPage(1); // Reset do pierwszej strony przy zmianie sektora
-    };
-    filterDotacje();
+    if (selectedSektor === 'wszystkie') {
+      setFilteredDotacje(dotacje);
+    } else {
+      const filtered = dotacje.filter(d => d.sektor === selectedSektor);
+      setFilteredDotacje(filtered);
+    }
+    setCurrentPage(1); // Reset do pierwszej strony przy zmianie sektora
   }, [selectedSektor, dotacje]);
 
   // Oblicz paginację
@@ -161,12 +158,8 @@ const DotacjeTab = () => {
   if (loading) {
     return (
       <div style={{
-        background: 'white',
-        borderRadius: '16px',
-        padding: '60px',
-        marginBottom: '20px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-        textAlign: 'center'
+        textAlign: 'center',
+        padding: '60px'
       }}>
         <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
         <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie dotacji...</p>

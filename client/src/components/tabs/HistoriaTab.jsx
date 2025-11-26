@@ -11,6 +11,13 @@ const HistoriaTab = () => {
   const { showSuccess, showError, confirm } = useToast();
   const [chatHistory, setChatHistory] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // małe opóźnienie żeby animacja była bardziej naturalna
+    const timer = setTimeout(() => setIsVisible(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Pobierz historię przy montowaniu
   useEffect(() => {
@@ -49,6 +56,18 @@ const HistoriaTab = () => {
     }
   };
 
+  if (historyLoading) {
+    return (
+      <div style={{
+        textAlign: 'center',
+        padding: '60px'
+      }}>
+        <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
+        <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie historii rozmów...</p>
+      </div>
+    );
+  }
+
   return (
     <div style={{
       background: 'white',
@@ -56,7 +75,7 @@ const HistoriaTab = () => {
       padding: '30px',
       marginBottom: '20px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
-    }}>
+    }} className={`fade-in ${isVisible ? "visible" : ""}`}>
       {/* Header */}
       <div style={{
         display: 'flex',
@@ -111,7 +130,7 @@ const HistoriaTab = () => {
       {historyLoading ? (
         <div style={{ textAlign: 'center', padding: '40px' }}>
           <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
-          <p style={{ color: '#5a6c7d' }}>Ładowanie historii...</p>
+          <p style={{ color: '#5a6c7d' }}>Ładowanie historii rozmów...</p>
         </div>
       ) : chatHistory.length === 0 ? (
         <div style={{

@@ -1,12 +1,19 @@
-import { useEffect } from 'react';
-import { Heart } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Heart, Loader } from 'lucide-react';
 import SwiadczenieCard from '../../components/swiadczenia/SwiadczenieCard';
 import { useAppData } from '../../contexts/AppDataContext';
 import { useSwiadczenia } from '../../hooks/useSwiadczenia';
 
 const FavoritesTab = () => {
   const { favorites, toggleFavorite } = useAppData();
-  const { swiadczenia, fetchAll } = useSwiadczenia();
+  const { swiadczenia, loading, fetchAll } = useSwiadczenia();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // małe opóźnienie żeby animacja była bardziej naturalna
+    const timer = setTimeout(() => setIsVisible(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     fetchAll();
@@ -19,13 +26,26 @@ const FavoritesTab = () => {
   const favoriteSwiadczenia = swiadczenia.filter(sw =>
     favorites.some(fav => fav.item_id === sw.id)
   );
+
+  if (loading) {
+    return (
+      <div style={{
+        textAlign: 'center',
+        padding: '60px'
+      }}>
+        <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
+        <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie ulubionych świadczeń...</p>
+      </div>
+    );
+  }
+
   return (
     <div style={{
       background: 'white',
       borderRadius: '16px',
       padding: '30px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
-    }}>
+    }} className={`fade-in ${isVisible ? "visible" : ""}`}>
       <h2 style={{
         fontSize: '24px',
         fontWeight: '700',

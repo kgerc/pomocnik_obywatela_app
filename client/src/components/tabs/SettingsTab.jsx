@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  User, Shield, Lock, Download, Trash2,
+  User, Shield, Lock, Loader, Trash2,
   Save, Mail, Key, CreditCard,
   HelpCircle, Crown, ExternalLink
 } from 'lucide-react';
@@ -139,11 +139,10 @@ const SettingsTab = () => {
   if (loading && !settings) {
     return (
       <div style={{
-        background: 'white',
-        borderRadius: '16px',
         padding: '40px',
         textAlign: 'center'
       }}>
+         <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
         <p style={{ color: '#5a6c7d' }}>Ładowanie ustawień...</p>
       </div>
     );

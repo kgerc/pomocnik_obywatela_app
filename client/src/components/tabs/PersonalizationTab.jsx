@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Loader } from 'lucide-react';
 import SwiadczenieCard from '../../components/swiadczenia/SwiadczenieCard';
 import { usePersonalization } from '../../hooks/usePersonalization';
@@ -10,14 +10,35 @@ const PersonalizationTab = () => {
     setPersonalizationData,
     recommendations,
     recommendationsLoading,
-    savePersonalization
+    savePersonalization,
+    loading
   } = usePersonalization();
 
   const { toggleFavorite, isFavorite } = useAppData();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // małe opóźnienie żeby animacja była bardziej naturalna
+    const timer = setTimeout(() => setIsVisible(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleToggleFavorite = async (itemId) => {
     await toggleFavorite('swiadczenie', itemId);
   };
+
+  if (loading) {
+    return (
+      <div style={{
+        textAlign: 'center',
+        padding: '60px'
+      }}>
+        <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
+        <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie personalizacji...</p>
+      </div>
+    );
+  }
+
   return (
     <div style={{
       background: 'white',
@@ -25,7 +46,7 @@ const PersonalizationTab = () => {
       padding: '30px',
       marginBottom: '20px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
-    }}>
+    }} className={`fade-in ${isVisible ? "visible" : ""}`}>
       <h2 style={{
         fontSize: '24px',
         fontWeight: '700',

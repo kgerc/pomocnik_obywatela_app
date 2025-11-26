@@ -18,7 +18,7 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
   const [filteredPisma, setFilteredPisma] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { pisma, loading, error, fetchAll, search, getByCategory, getCategories } = usePisma();
+  const { pisma, loading, error, fetchAll, getCategories } = usePisma();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -37,18 +37,15 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
     loadData();
   }, []);
 
-  // Filtruj pisma gdy zmieni się kategoria
+  // Filtruj pisma lokalnie gdy zmieni się kategoria
   useEffect(() => {
-    const filterPisma = async () => {
-      if (selectedCategory === 'wszystkie') {
-        setFilteredPisma(pisma);
-      } else {
-        const filtered = await getByCategory(selectedCategory);
-        setFilteredPisma(filtered);
-      }
-      setCurrentPage(1); // Reset do pierwszej strony przy zmianie kategorii
-    };
-    filterPisma();
+    if (selectedCategory === 'wszystkie') {
+      setFilteredPisma(pisma);
+    } else {
+      const filtered = pisma.filter(p => p.kategoria === selectedCategory);
+      setFilteredPisma(filtered);
+    }
+    setCurrentPage(1); // Reset do pierwszej strony przy zmianie kategorii
   }, [selectedCategory, pisma]);
 
   // Oblicz paginację
@@ -163,12 +160,8 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
   if (loading) {
     return (
       <div style={{
-        background: 'white',
-        borderRadius: '16px',
-        padding: '60px',
-        marginBottom: '20px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-        textAlign: 'center'
+        textAlign: 'center',
+        padding: '60px'
       }}>
         <Loader size={48} className="spin" style={{ color: '#2c5aa0', marginBottom: '20px' }} />
         <p style={{ color: '#5a6c7d', fontSize: '16px' }}>Ładowanie pism...</p>
