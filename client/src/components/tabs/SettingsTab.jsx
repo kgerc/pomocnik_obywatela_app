@@ -535,63 +535,6 @@ const PrivacySection = ({ formData, setFormData, handleUpdateGDPR, handleExportD
         </button>
       </div>
 
-      {/* Export Data */}
-      <div style={{
-        background: '#f8f9fb',
-        padding: '20px',
-        borderRadius: '12px'
-      }}>
-        <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#2c3e50', marginBottom: '12px' }}>
-          Eksport danych
-        </h4>
-
-        <p style={{ color: '#5a6c7d', fontSize: '14px', marginBottom: '16px' }}>
-          Pobierz kopię swoich danych zgodnie z RODO
-        </p>
-
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <button
-            onClick={() => handleExportData('json')}
-            style={{
-              padding: '10px 20px',
-              background: 'white',
-              color: '#2c5aa0',
-              border: '2px solid #2c5aa0',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '14px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Download size={16} />
-            Eksportuj JSON
-          </button>
-
-          <button
-            onClick={() => handleExportData('csv')}
-            style={{
-              padding: '10px 20px',
-              background: 'white',
-              color: '#2c5aa0',
-              border: '2px solid #2c5aa0',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '14px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Download size={16} />
-            Eksportuj CSV
-          </button>
-        </div>
-      </div>
-
       {/* Delete Account */}
       <div style={{
         background: '#fee',
@@ -745,7 +688,7 @@ const HelpSection = () => (
         </h4>
 
         <p style={{ color: '#5a6c7d', fontSize: '14px' }}>
-          Odwiedź naszą bazę wiedzy: <a href="#" style={{ color: '#2c5aa0', fontWeight: '600' }}>Centrum pomocy</a>
+          Odwiedź naszą bazę wiedzy: <a href="https://pomocnikobywatela.pl/#faq" target="_blank" rel="noopener noreferrer" style={{ color: '#2c5aa0', fontWeight: '600' }}>Centrum pomocy</a>
         </p>
       </div>
 
@@ -762,8 +705,10 @@ const HelpSection = () => (
           Pomóż nam się rozwijać - zgłoś problem lub podziel się pomysłem
         </p>
 
-        <button
+        <a
+          href="mailto:kontakt@pomocnikobywatela.pl?subject=Zgłoszenie błędu lub sugestii"
           style={{
+            display: 'inline-block',
             padding: '10px 20px',
             background: '#2c5aa0',
             color: 'white',
@@ -771,11 +716,12 @@ const HelpSection = () => (
             borderRadius: '8px',
             cursor: 'pointer',
             fontWeight: '600',
-            fontSize: '14px'
+            fontSize: '14px',
+            textDecoration: 'none'
           }}
         >
           Wyślij zgłoszenie
-        </button>
+        </a>
       </div>
     </div>
   </div>

@@ -1,15 +1,23 @@
 import React from 'react';
-import { User } from 'lucide-react';
+import { User, Loader } from 'lucide-react';
 import SwiadczenieCard from '../../components/swiadczenia/SwiadczenieCard';
+import { usePersonalization } from '../../hooks/usePersonalization';
+import { useAppData } from '../../contexts/AppDataContext';
 
-const PersonalizationTab = ({ 
-  personalizationData, 
-  setPersonalizationData, 
-  savePersonalization,
-  recommendations,
-  onToggleFavorite,
-  isFavorite 
-}) => {
+const PersonalizationTab = () => {
+  const {
+    personalizationData,
+    setPersonalizationData,
+    recommendations,
+    recommendationsLoading,
+    savePersonalization
+  } = usePersonalization();
+
+  const { toggleFavorite, isFavorite } = useAppData();
+
+  const handleToggleFavorite = async (itemId) => {
+    await toggleFavorite('swiadczenie', itemId);
+  };
   return (
     <div style={{
       background: 'white',
@@ -162,25 +170,60 @@ const PersonalizationTab = ({
 
       <button
         onClick={savePersonalization}
+        disabled={recommendationsLoading}
         style={{
-          background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+          background: recommendationsLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
           color: 'white',
           border: 'none',
           padding: '12px 24px',
           borderRadius: '8px',
-          cursor: 'pointer',
+          cursor: recommendationsLoading ? 'not-allowed' : 'pointer',
           fontWeight: '600',
           fontSize: '16px',
           marginBottom: '30px',
-          transition: 'transform 0.2s'
+          transition: 'transform 0.2s',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
         }}
-        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+        onMouseOver={(e) => !recommendationsLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
         onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
       >
-        Zapisz i pokaż rekomendacje
+        {recommendationsLoading ? (
+          <>
+            <Loader size={20} className="spin" />
+            Szukam rekomendacji...
+          </>
+        ) : (
+          'Zapisz i pokaż rekomendacje'
+        )}
       </button>
 
-      {recommendations.length > 0 && (
+      {recommendationsLoading && (
+        <div style={{
+          background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
+          padding: '40px',
+          borderRadius: '12px',
+          border: '2px solid #2c5aa0',
+          textAlign: 'center',
+          marginBottom: '30px'
+        }}>
+          <Loader size={48} className="spin" style={{ color: '#2c5aa0', margin: '0 auto 20px' }} />
+          <p style={{ color: '#2c3e50', fontSize: '16px', fontWeight: '600' }}>
+            Szukam rekomendacji...
+          </p>
+          <style>{`
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+            .spin {
+              animation: spin 1s linear infinite;
+            }
+          `}</style>
+        </div>
+      )}
+
+      {!recommendationsLoading && recommendations.length > 0 && (
         <div style={{
           background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
           padding: '25px',
@@ -199,7 +242,7 @@ const PersonalizationTab = ({
             <SwiadczenieCard
               key={sw.id}
               swiadczenie={sw}
-              onToggleFavorite={onToggleFavorite}
+              onToggleFavorite={handleToggleFavorite}
               isFavorite={isFavorite(sw.id)}
             />
           ))}

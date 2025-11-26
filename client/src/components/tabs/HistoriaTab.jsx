@@ -21,6 +21,7 @@ const HistoriaTab = () => {
     setHistoryLoading(true);
     try {
       const response = await historyAPI.getAll();
+      debugger;
       setChatHistory(response.data || []);
     } catch (err) {
       console.error('Error loading chat history:', err);
@@ -171,7 +172,7 @@ const ChatMessage = ({ message }) => (
         color: '#999',
         marginLeft: 'auto'
       }}>
-        {new Date(message.timestamp).toLocaleString('pl-PL')}
+        {new Date(message.created_at).toLocaleString('pl-PL')}
       </div>
     </div>
     <div style={{

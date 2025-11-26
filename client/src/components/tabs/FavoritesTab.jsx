@@ -1,8 +1,24 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import SwiadczenieCard from '../../components/swiadczenia/SwiadczenieCard';
+import { useAppData } from '../../contexts/AppDataContext';
+import { useSwiadczenia } from '../../hooks/useSwiadczenia';
 
-const FavoritesTab = ({ favoriteSwiadczenia, onToggleFavorite }) => {
+const FavoritesTab = () => {
+  const { favorites, toggleFavorite } = useAppData();
+  const { swiadczenia, fetchAll } = useSwiadczenia();
+
+  useEffect(() => {
+    fetchAll();
+  }, []);
+
+  const handleToggleFavorite = async (itemId) => {
+    await toggleFavorite('swiadczenie', itemId);
+  };
+
+  const favoriteSwiadczenia = swiadczenia.filter(sw =>
+    favorites.some(fav => fav.item_id === sw.id)
+  );
   return (
     <div style={{
       background: 'white',
@@ -44,7 +60,7 @@ const FavoritesTab = ({ favoriteSwiadczenia, onToggleFavorite }) => {
           <SwiadczenieCard
             key={sw.id}
             swiadczenie={sw}
-            onToggleFavorite={onToggleFavorite}
+            onToggleFavorite={handleToggleFavorite}
             isFavorite={true}
           />
         ))

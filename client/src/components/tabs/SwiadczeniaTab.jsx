@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Heart, Sparkles, Search, Loader, Shield, AlertCircle, Info, CheckCircle, Eraser } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useSwiadczenia } from '../../hooks/useSwiadczenia';
+import { useAppData } from '../../contexts/AppDataContext';
 import Pagination from '../common/Pagination';
 import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
 import SwiadczenieDetailsModal from '../swiadczenia/SwiadczenieDetailsModal';
@@ -9,7 +10,12 @@ import { saveConversationToHistory } from '../../utils/saveToHistory';
 
 const ITEMS_PER_PAGE = 9;
 
-const SwiadczeniaTab = ({ preloadedIsPremium = null, subscriptionLoading = true, onToggleFavorite, isFavorite }) => {
+const SwiadczeniaTab = () => {
+  const { toggleFavorite, isFavorite, isPremium: preloadedIsPremium, loading: subscriptionLoading } = useAppData();
+
+  const handleToggleFavorite = async (itemId) => {
+    await toggleFavorite('swiadczenie', itemId);
+  };
   const [swiadczeniaQuery, setSwiadczeniaQuery] = useState('');
   const [swiadczeniaLoading, setSwiadczeniaLoading] = useState(false);
   const [swiadczeniaResult, setSwiadczeniaResult] = useState(null);
@@ -463,8 +469,8 @@ const SwiadczeniaTab = ({ preloadedIsPremium = null, subscriptionLoading = true,
         <SwiadczenieDetailsModal
           swiadczenie={selectedSwiadczenie}
           onClose={() => setSelectedSwiadczenie(null)}
-          onToggleFavorite={onToggleFavorite}
-          isFavorite={isFavorite ? isFavorite(selectedSwiadczenie.id) : false}
+          onToggleFavorite={handleToggleFavorite}
+          isFavorite={isFavorite(selectedSwiadczenie.id)}
         />
       )}
     </div>
