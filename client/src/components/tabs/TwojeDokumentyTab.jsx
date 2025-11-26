@@ -36,7 +36,6 @@ const TwojeDokumentyTab = () => {
     stats,
     fetchAll,
     fetchStats,
-    search,
     upload,
     deleteDocument
   } = useUserDocuments();
@@ -47,22 +46,20 @@ const TwojeDokumentyTab = () => {
     fetchStats();
   }, []);
 
-  // Filtruj dokumenty na podstawie źródła
-  useEffect(() => {
-    if (filterSource === 'wszystkie') {
-      fetchAll();
-    } else {
-      fetchAll({ source: filterSource });
-    }
-  }, [filterSource]);
+  // Filtruj dokumenty lokalnie na podstawie źródła i wyszukiwania
+  const filteredDocuments = documents.filter(doc => {
+    // Filtruj po źródle
+    const matchesSource = filterSource === 'wszystkie' || doc.source === filterSource;
 
-  const handleSearch = async () => {
-    if (searchQuery.trim()) {
-      await search(searchQuery);
-    } else {
-      await fetchAll({ source: filterSource !== 'wszystkie' ? filterSource : undefined });
-    }
-  };
+    // Filtruj po zapytaniu wyszukiwania
+    const query = searchQuery.toLowerCase().trim();
+    const matchesSearch = !query ||
+      doc.title?.toLowerCase().includes(query) ||
+      doc.description?.toLowerCase().includes(query) ||
+      doc.fileName?.toLowerCase().includes(query);
+
+    return matchesSource && matchesSearch;
+  });
 
   const handleDeleteDocument = async (id) => {
     const confirmed = await confirm(
@@ -82,7 +79,8 @@ const TwojeDokumentyTab = () => {
   };
 
   const formatFileSize = (bytes) => {
-    if (bytes === 0) return '0 B';
+    if (!bytes || bytes === 0) return '0 B';
+    if (isNaN(bytes)) return 'Nieznany';
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -230,40 +228,50 @@ const TwojeDokumentyTab = () => {
         gap: '10px',
         marginBottom: '25px'
       }}>
-        <input
-          type="text"
-          placeholder="Szukaj dokumentów..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-          style={{
-            flex: 1,
-            padding: '12px 15px',
-            border: '2px solid #e1e8ed',
-            borderRadius: '8px',
-            fontSize: '14px',
-            outline: 'none'
-          }}
-        />
-        <button
-          onClick={handleSearch}
-          style={{
-            background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-            color: 'white',
-            border: 'none',
-            padding: '12px 20px',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontWeight: '600',
-            fontSize: '14px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <Search size={16} />
-          Szukaj
-        </button>
+        <div style={{ position: 'relative', flex: 1 }}>
+          <Search size={18} color="#5a6c7d" style={{
+            position: 'absolute',
+            left: '15px',
+            top: '50%',
+            transform: 'translateY(-50%)'
+          }} />
+          <input
+            type="text"
+            placeholder="Szukaj po tytule, opisie lub nazwie pliku..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '12px 15px 12px 45px',
+              border: '2px solid #e1e8ed',
+              borderRadius: '8px',
+              fontSize: '14px',
+              outline: 'none',
+              boxSizing: 'border-box'
+            }}
+          />
+        </div>
+        {searchQuery && (
+          <button
+            onClick={() => setSearchQuery('')}
+            style={{
+              background: '#f8f9fb',
+              color: '#5a6c7d',
+              border: '2px solid #e1e8ed',
+              padding: '12px 20px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <X size={16} />
+            Wyczyść
+          </button>
+        )}
       </div>
 
       {/* Filter Buttons */}
@@ -339,13 +347,29 @@ const TwojeDokumentyTab = () => {
             Prześlij własne dokumenty lub zapisz dokumenty z aplikacji
           </p>
         </div>
+      ) : filteredDocuments.length === 0 ? (
+        <div style={{
+          background: '#f8f9fb',
+          borderRadius: '12px',
+          padding: '40px',
+          textAlign: 'center',
+          color: '#5a6c7d'
+        }}>
+          <Search size={48} color="#ccc" style={{ marginBottom: '15px' }} />
+          <p style={{ fontSize: '18px', marginBottom: '10px' }}>
+            Brak wyników wyszukiwania
+          </p>
+          <p>
+            Spróbuj użyć innych słów kluczowych lub wyczyść filtr
+          </p>
+        </div>
       ) : (
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
           gap: '20px'
         }}>
-          {documents.map(doc => (
+          {filteredDocuments.map(doc => (
             <DocumentCard
               key={doc.id}
               document={doc}
@@ -397,7 +421,10 @@ const DocumentCard = ({ document, onDelete, getFileIcon, formatFileSize }) => {
       padding: '20px',
       border: '2px solid #e1e8ed',
       position: 'relative',
-      transition: 'all 0.3s ease'
+      transition: 'all 0.3s ease',
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '220px'
     }}
     onMouseOver={(e) => {
       e.currentTarget.style.transform = 'translateY(-5px)';
@@ -422,49 +449,54 @@ const DocumentCard = ({ document, onDelete, getFileIcon, formatFileSize }) => {
         {document.source === 'upload' ? 'Przesłany' : 'Z aplikacji'}
       </div>
 
-      <div style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '12px',
-        marginBottom: '15px',
-        marginTop: '15px'
-      }}>
-        {getFileIcon(document.fileType)}
-        <div style={{ flex: 1 }}>
-          <h4 style={{
-            fontSize: '16px',
-            fontWeight: '700',
-            color: '#2c3e50',
-            margin: '0 0 5px 0',
-            lineHeight: '1.3'
-          }}>
-            {document.title}
-          </h4>
-          {document.description && (
-            <p style={{
-              fontSize: '13px',
-              color: '#5a6c7d',
-              margin: 0,
-              lineHeight: '1.4'
+      {/* Treść karty - flex: 1 sprawia że zajmuje całą dostępną przestrzeń */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: '12px',
+          marginBottom: '15px',
+          marginTop: '15px'
+        }}>
+          {getFileIcon(document.fileType)}
+          <div style={{ flex: 1 }}>
+            <h4 style={{
+              fontSize: '16px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              margin: '0 0 5px 0',
+              lineHeight: '1.3'
             }}>
-              {document.description}
-            </p>
-          )}
+              {document.title}
+            </h4>
+            {document.description && (
+              <p style={{
+                fontSize: '13px',
+                color: '#5a6c7d',
+                margin: 0,
+                lineHeight: '1.4'
+              }}>
+                {document.description}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div style={{
+          fontSize: '12px',
+          color: '#999',
+          marginBottom: '15px'
+        }}>
+          <div>{document.fileName}</div>
+          <div>{formatFileSize(document.fileSize)} • {new Date(document.createdAt).toLocaleDateString('pl-PL')}</div>
         </div>
       </div>
 
-      <div style={{
-        fontSize: '12px',
-        color: '#999',
-        marginBottom: '15px'
-      }}>
-        <div>{document.fileName}</div>
-        <div>{formatFileSize(document.fileSize)} • {new Date(document.createdAt).toLocaleDateString('pl-PL')}</div>
-      </div>
-
+      {/* Przyciski zawsze na dole - marginTop: auto popycha je na dół */}
       <div style={{
         display: 'flex',
-        gap: '8px'
+        gap: '8px',
+        marginTop: 'auto'
       }}>
         <button
           onClick={() => window.open(document.fileUrl, '_blank', 'noopener,noreferrer')}

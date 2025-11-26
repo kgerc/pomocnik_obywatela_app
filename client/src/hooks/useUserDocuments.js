@@ -35,10 +35,13 @@ export const useUserDocuments = () => {
     setError(null);
     try {
       const response = await userDocumentsAPI.search(query);
-      return response.data || [];
+      const results = response.data || [];
+      setDocuments(results); // Ustaw wyniki wyszukiwania jako aktualne dokumenty
+      return results;
     } catch (err) {
       setError(err.message);
       console.error('Error searching documents:', err);
+      setDocuments([]); // Wyczyść dokumenty przy błędzie
       return [];
     } finally {
       setLoading(false);

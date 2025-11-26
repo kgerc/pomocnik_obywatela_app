@@ -48,8 +48,8 @@ const LandingPage = () => {
           margin: '0 auto 40px',
           lineHeight: '1.6'
         }}>
-          Twój inteligentny asystent w nawigacji po świadczeniach społecznych, 
-          dotacjach i dokumentach urzędowych. Powered by AI.
+          Twój cyfrowy asystent w nawigacji po świadczeniach społecznych, 
+          dotacjach i dokumentach urzędowych.
         </p>
 
         <div style={{
@@ -119,7 +119,7 @@ const LandingPage = () => {
           {[
             {
               icon: <Sparkles size={32} />,
-              title: 'AI-Powered Wyszukiwanie',
+              title: 'Asystent wyszukiwania',
               description: 'Inteligentny asystent pomoże Ci znaleźć świadczenia dopasowane do Twojej sytuacji'
             },
             {
