@@ -7,11 +7,15 @@ const notificationsBase = '/api/notifications';
 const apiCall = async (endpoint, options = {}) => {
   try {
     const { data: { session } } = await supabase.auth.getSession();
-    
+
     const headers = {
-      'Content-Type': 'application/json',
       ...options.headers,
     };
+
+    // Dodaj Content-Type tylko jeśli body nie jest FormData
+    if (!(options.body instanceof FormData)) {
+      headers['Content-Type'] = 'application/json';
+    }
 
     if (session?.access_token) {
       headers['Authorization'] = `Bearer ${session.access_token}`;
@@ -128,8 +132,7 @@ export const userDocumentsAPI = {
 
     return apiCall('/api/documents/upload', {
       method: 'POST',
-      body: formData,
-      headers: {} // Usuń Content-Type, przeglądarka ustawi automatycznie z boundary
+      body: formData
     });
   },
   saveFromApp: (documentData) =>
@@ -174,7 +177,7 @@ export const notificationsAPI = {
   create: (payload) =>
     apiCall(`${notificationsBase}/create`, {
       method: 'POST',
-      body: payload
+      body: JSON.stringify(payload)
     }),
 
   getSubscriptions: () => apiCall(`${notificationsBase}/subscriptions`)

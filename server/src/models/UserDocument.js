@@ -195,15 +195,16 @@ class UserDocument {
   // Upload pliku do Supabase Storage
   static async uploadFile(userId, file) {
     try {
-      const fileExt = file.name.split('.').pop();
+      const fileExt = file.originalname.split('.').pop();
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
       const filePath = `${userId}/${fileName}`;
 
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from('user-documents')
-        .upload(filePath, file, {
+        .upload(filePath, file.buffer, {
           cacheControl: '3600',
-          upsert: false
+          upsert: false,
+          contentType: file.mimetype
         });
 
       if (error) throw error;

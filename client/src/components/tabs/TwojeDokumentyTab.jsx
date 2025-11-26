@@ -370,6 +370,26 @@ const TwojeDokumentyTab = () => {
 
 // Komponent karty dokumentu
 const DocumentCard = ({ document, onDelete, getFileIcon, formatFileSize }) => {
+  const handleDownload = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(document.fileUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = document.fileName;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      // Fallback do zwykłego linku
+      window.open(document.fileUrl, '_blank');
+    }
+  };
+
   return (
     <div style={{
       background: '#f8f9fb',
@@ -446,10 +466,8 @@ const DocumentCard = ({ document, onDelete, getFileIcon, formatFileSize }) => {
         display: 'flex',
         gap: '8px'
       }}>
-        <a
-          href={document.fileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          onClick={() => window.open(document.fileUrl, '_blank', 'noopener,noreferrer')}
           style={{
             flex: 1,
             display: 'flex',
@@ -460,7 +478,8 @@ const DocumentCard = ({ document, onDelete, getFileIcon, formatFileSize }) => {
             color: 'white',
             padding: '10px',
             borderRadius: '8px',
-            textDecoration: 'none',
+            border: 'none',
+            cursor: 'pointer',
             fontWeight: '600',
             fontSize: '13px',
             transition: 'transform 0.2s'
@@ -470,10 +489,9 @@ const DocumentCard = ({ document, onDelete, getFileIcon, formatFileSize }) => {
         >
           <Eye size={14} />
           Zobacz
-        </a>
-        <a
-          href={document.fileUrl}
-          download={document.fileName}
+        </button>
+        <button
+          onClick={handleDownload}
           style={{
             flex: 1,
             display: 'flex',
@@ -484,7 +502,7 @@ const DocumentCard = ({ document, onDelete, getFileIcon, formatFileSize }) => {
             color: '#2c5aa0',
             padding: '10px',
             borderRadius: '8px',
-            textDecoration: 'none',
+            cursor: 'pointer',
             fontWeight: '600',
             fontSize: '13px',
             border: '2px solid #2c5aa0',
@@ -495,7 +513,7 @@ const DocumentCard = ({ document, onDelete, getFileIcon, formatFileSize }) => {
         >
           <Download size={14} />
           Pobierz
-        </a>
+        </button>
         <button
           onClick={() => onDelete(document.id)}
           style={{
