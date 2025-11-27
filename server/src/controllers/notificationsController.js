@@ -36,27 +36,26 @@ export const deliverNotificationToSubscribers = async (notification) => {
 };
 
 /**
- * Deliver all existing premium notifications to a new premium user
+ * Deliver all existing notifications to a new premium user
  * Called when user purchases Premium subscription
  */
 export const deliverPremiumNotificationsToUser = async (userId) => {
   try {
-    console.log(`Delivering premium notifications to user ${userId}`);
+    console.log(`Delivering all notifications to user ${userId}`);
 
-    // Pobierz wszystkie aktywne powiadomienia z kategorii premium
-    const { data: premiumNotifications, error: notifError } = await supabase
+    // Pobierz wszystkie aktywne powiadomienia (bez filtrowania po kategorii)
+    const { data: allNotifications, error: notifError } = await supabase
       .from('notifications')
       .select('id, category, created_at')
-      .eq('category', 'premium')
       .order('created_at', { ascending: false });
 
     if (notifError) {
-      console.error('Error fetching premium notifications:', notifError);
+      console.error('Error fetching notifications:', notifError);
       return;
     }
 
-    if (!premiumNotifications || premiumNotifications.length === 0) {
-      console.log('No premium notifications found');
+    if (!allNotifications || allNotifications.length === 0) {
+      console.log('No notifications found');
       return;
     }
 
@@ -75,12 +74,12 @@ export const deliverPremiumNotificationsToUser = async (userId) => {
     );
 
     // Filtruj tylko te powiadomienia, których użytkownik jeszcze nie ma
-    const notificationsToDeliver = premiumNotifications.filter(
+    const notificationsToDeliver = allNotifications.filter(
       n => !existingNotificationIds.has(n.id)
     );
 
     if (notificationsToDeliver.length === 0) {
-      console.log('User already has all premium notifications');
+      console.log('User already has all notifications');
       return;
     }
 
@@ -97,7 +96,7 @@ export const deliverPremiumNotificationsToUser = async (userId) => {
     if (insertErr) {
       console.error('Error creating delivered notifications for new premium user:', insertErr);
     } else {
-      console.log(`Successfully delivered ${rows.length} premium notifications to user ${userId}`);
+      console.log(`Successfully delivered ${rows.length} notifications to user ${userId}`);
     }
   } catch (error) {
     console.error('Error in deliverPremiumNotificationsToUser:', error);
