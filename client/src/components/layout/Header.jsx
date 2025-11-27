@@ -1,12 +1,14 @@
-import React from 'react';
-import { LogOut, Settings } from 'lucide-react';
+import React, { useState } from 'react';
+import { LogOut, Settings, Lightbulb } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import SubscriptionButton from '../premium/SubscriptionButton';
+import UserGuide from '../UserGuide';
 
 const Header = ({ setActiveTab }) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const [showUserGuide, setShowUserGuide] = useState(false);
 
   const handleLogout = async () => {
     const { error } = await signOut();
@@ -16,13 +18,18 @@ const Header = ({ setActiveTab }) => {
   };
 
   return (
-    <div style={{
-      background: 'white',
-      borderRadius: '16px',
-      padding: '30px',
-      marginBottom: '20px',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
-    }}>
+    <>
+      {showUserGuide && (
+        <UserGuide onClose={() => setShowUserGuide(false)} />
+      )}
+
+      <div style={{
+        background: 'white',
+        borderRadius: '16px',
+        padding: '30px',
+        marginBottom: '20px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+      }}>
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -70,6 +77,33 @@ const Header = ({ setActiveTab }) => {
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {/* Crown Button for Premium Users */}
           <SubscriptionButton />
+
+          <button
+            onClick={() => setShowUserGuide(true)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: '#fff8e1',
+              color: '#ffc107',
+              border: '2px solid #ffc107',
+              padding: '5px 5px',
+              width: '44px',
+              height: '44px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#fff3cd';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = '#fff8e1';
+            }}
+            title="Wskazówki"
+          >
+            <Lightbulb size={18} />
+          </button>
 
           <button
             onClick={() => setActiveTab && setActiveTab('settings')}
@@ -126,7 +160,8 @@ const Header = ({ setActiveTab }) => {
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

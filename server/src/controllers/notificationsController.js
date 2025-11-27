@@ -35,6 +35,75 @@ export const deliverNotificationToSubscribers = async (notification) => {
   if (insertErr) console.error('Error creating delivered notifications:', insertErr);
 };
 
+/**
+ * Deliver all existing premium notifications to a new premium user
+ * Called when user purchases Premium subscription
+ */
+export const deliverPremiumNotificationsToUser = async (userId) => {
+  try {
+    console.log(`Delivering premium notifications to user ${userId}`);
+
+    // Pobierz wszystkie aktywne powiadomienia z kategorii premium
+    const { data: premiumNotifications, error: notifError } = await supabase
+      .from('notifications')
+      .select('id, category, created_at')
+      .eq('category', 'premium')
+      .order('created_at', { ascending: false });
+
+    if (notifError) {
+      console.error('Error fetching premium notifications:', notifError);
+      return;
+    }
+
+    if (!premiumNotifications || premiumNotifications.length === 0) {
+      console.log('No premium notifications found');
+      return;
+    }
+
+    // Sprawdź które powiadomienia użytkownik już ma
+    const { data: existingDelivered, error: existingError } = await supabase
+      .from('delivered_notifications')
+      .select('notification_id')
+      .eq('user_id', userId);
+
+    if (existingError) {
+      console.error('Error fetching existing delivered notifications:', existingError);
+    }
+
+    const existingNotificationIds = new Set(
+      (existingDelivered || []).map(d => d.notification_id)
+    );
+
+    // Filtruj tylko te powiadomienia, których użytkownik jeszcze nie ma
+    const notificationsToDeliver = premiumNotifications.filter(
+      n => !existingNotificationIds.has(n.id)
+    );
+
+    if (notificationsToDeliver.length === 0) {
+      console.log('User already has all premium notifications');
+      return;
+    }
+
+    // Przygotuj batch insert delivered_notifications
+    const rows = notificationsToDeliver.map(n => ({
+      user_id: userId,
+      notification_id: n.id
+    }));
+
+    const { error: insertErr } = await supabase
+      .from('delivered_notifications')
+      .insert(rows);
+
+    if (insertErr) {
+      console.error('Error creating delivered notifications for new premium user:', insertErr);
+    } else {
+      console.log(`Successfully delivered ${rows.length} premium notifications to user ${userId}`);
+    }
+  } catch (error) {
+    console.error('Error in deliverPremiumNotificationsToUser:', error);
+  }
+};
+
 /* ============ CONTROLLERS ============ */
 
 // GET /api/notifications?category=&limit=&offset=

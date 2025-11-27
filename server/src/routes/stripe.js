@@ -2,6 +2,7 @@ import express from 'express';
 import Stripe from 'stripe';
 import Subscription from '../models/Subscription.js';
 import { authenticateUser } from '../middleware/auth.js';
+import { deliverPremiumNotificationsToUser } from '../controllers/notificationsController.js';
 
 const router = express.Router();
 
@@ -41,6 +42,7 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
     if (useBlik) {
       // BLIK - płatność jednorazowa za rok (mode: payment)
       // Cena: 39.99 zł/mies * 12 = 479.88 zł
+      // Zniżka 10% dla płatności rocznej: 479.88 * 0.90 = 431.89 zł
       session = await stripe.checkout.sessions.create({
         customer: customerId,
         payment_method_types: ['blik', 'card'],
@@ -50,9 +52,9 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
               currency: 'pln',
               product_data: {
                 name: 'Premium - Roczny dostęp',
-                description: 'Pełen dostęp do funkcji Premium przez 12 miesięcy'
+                description: 'Pełen dostęp do funkcji Premium przez 12 miesięcy (10% zniżki w porównaniu do płatności miesięcznej)'
               },
-              unit_amount: 47988 // 479.88 zł w groszach
+              unit_amount: 43189 // 431.89 zł w groszach (10% zniżki)
             },
             quantity: 1,
           },
@@ -249,6 +251,9 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           // Utwórz nową
           await Subscription.create(subscriptionData);
           console.log('Subscription created for user:', userId);
+
+          // Dostarczenie powiadomień premium dla nowego użytkownika premium
+          await deliverPremiumNotificationsToUser(userId);
         }
 
         break;
@@ -315,6 +320,9 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         if (!existingSub) {
           await Subscription.create(subscriptionData);
           console.log('Subscription created via customer.subscription.created for user:', userId);
+
+          // Dostarczenie powiadomień premium dla nowego użytkownika premium
+          await deliverPremiumNotificationsToUser(userId);
         }
         break;
       }
@@ -451,6 +459,9 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
               });
             } else {
               await Subscription.create(subscriptionData);
+
+              // Dostarczenie powiadomień premium dla nowego użytkownika premium
+              await deliverPremiumNotificationsToUser(userId);
             }
 
             console.log('BLIK yearly subscription created for user:', userId);
@@ -503,6 +514,9 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
                 await Subscription.update(userId, subscriptionData);
               } else {
                 await Subscription.create(subscriptionData);
+
+                // Dostarczenie powiadomień premium dla nowego użytkownika premium
+                await deliverPremiumNotificationsToUser(userId);
               }
 
               console.log('✔ BLIK yearly subscription saved for user:', userId);

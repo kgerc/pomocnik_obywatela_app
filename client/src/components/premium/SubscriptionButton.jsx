@@ -257,7 +257,7 @@ const SubscriptionButton = () => {
                   <span>✓</span> Powiadomienia o zmianach
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span>✓</span> Przegląd dotacji i ulg
+                  <span>✓</span> Przegląd historii rozmów z asystentem AI
                 </div>
               </div>
             </div>

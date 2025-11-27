@@ -1,4 +1,7 @@
 import { supabase } from '../config/supabase.js';
+import Stripe from 'stripe';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 class UserSettings {
   constructor(data) {
@@ -145,7 +148,40 @@ class UserSettings {
   // Usuń konto użytkownika (GDPR - prawo do bycia zapomnianym)
   static async deleteAccount(userId) {
     try {
-      // Supabase automatycznie usunie powiązane dane przez CASCADE
+      // Najpierw anuluj subskrypcję w Stripe (jeśli istnieje)
+      const { data: subscriptionData, error: subError } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+      if (subscriptionData && !subError) {
+        const { stripeCustomerId, stripeSubscriptionId } = subscriptionData;
+
+        // Anuluj subskrypcję w Stripe (jeśli to prawdziwa subskrypcja, nie BLIK)
+        if (stripeSubscriptionId && !stripeSubscriptionId.startsWith('blik_')) {
+          try {
+            await stripe.subscriptions.cancel(stripeSubscriptionId);
+            console.log(`Stripe subscription ${stripeSubscriptionId} canceled for user ${userId}`);
+          } catch (stripeError) {
+            console.error('Error canceling Stripe subscription:', stripeError);
+            // Kontynuuj usuwanie konta nawet jeśli anulowanie subskrypcji się nie powiodło
+          }
+        }
+
+        // Usuń klienta z Stripe (opcjonalne, ale zalecane dla GDPR)
+        if (stripeCustomerId && !stripeCustomerId.startsWith('promo_')) {
+          try {
+            await stripe.customers.del(stripeCustomerId);
+            console.log(`Stripe customer ${stripeCustomerId} deleted for user ${userId}`);
+          } catch (stripeError) {
+            console.error('Error deleting Stripe customer:', stripeError);
+            // Kontynuuj usuwanie konta
+          }
+        }
+      }
+
+      // Usuń użytkownika z Supabase (automatycznie usunie powiązane dane przez CASCADE)
       const { error } = await supabase.auth.admin.deleteUser(userId);
 
       if (error) throw error;
