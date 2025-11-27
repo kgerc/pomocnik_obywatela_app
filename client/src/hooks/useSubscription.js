@@ -102,8 +102,10 @@ export const useSubscription = () => {
 
       const data = await response.json();
 
-      // Przekieruj do Stripe Checkout
+      // Przekieruj do Stripe Checkout z małym opóźnieniem, aby użytkownik zobaczył loader
       if (data.url) {
+        // Daj użytkownikowi czas na zobaczenie loadera (minimum 300ms)
+        await new Promise(resolve => setTimeout(resolve, 300));
         window.location.href = data.url;
       }
 
