@@ -260,7 +260,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         }
 
         // Dostarczenie powiadomień premium dla użytkownika który staje się premium po raz pierwszy
-        if (wasNotActiveBefore && subscriptionData.status === 'active') {
+        if (wasNotActiveBefore && ['active', 'trialing'].includes(subscriptionData.status)) {
           await deliverPremiumNotificationsToUser(userId);
         }
 
