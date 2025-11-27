@@ -6,7 +6,7 @@ const AppContext = createContext({});
 export const useApp = () => {
   const context = useContext(AppContext);
   if (!context) {
-    throw new Error('useApp must be used within AppProvider');
+    throw new Error('useApp musi być użyty wewnątrz AppProvider');
   }
   return context;
 };

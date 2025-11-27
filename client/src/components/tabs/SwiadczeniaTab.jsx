@@ -8,7 +8,7 @@ import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
 import SwiadczenieDetailsModal from '../swiadczenia/SwiadczenieDetailsModal';
 import { saveConversationToHistory } from '../../utils/saveToHistory';
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 10;
 
 const SwiadczeniaTab = () => {
   const { toggleFavorite, isFavorite, isPremium: preloadedIsPremium, loading: subscriptionLoading } = useAppData();

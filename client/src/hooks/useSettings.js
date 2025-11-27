@@ -27,7 +27,7 @@ export const useSettings = () => {
         }
       });
 
-      if (!response.ok) throw new Error('Failed to fetch settings');
+      if (!response.ok) throw new Error('Nie udało się pobrać ustawień');
 
       const data = await response.json();
       setSettings(data);
@@ -58,7 +58,7 @@ export const useSettings = () => {
         body: JSON.stringify(updates)
       });
 
-      if (!response.ok) throw new Error('Failed to update settings');
+      if (!response.ok) throw new Error('Nie udało się zaktualizować ustawień');
 
       const data = await response.json();
       setSettings(data);
@@ -157,7 +157,7 @@ export const useSettings = () => {
         body: JSON.stringify({ enabled, method })
       });
 
-      if (!response.ok) throw new Error('Failed to toggle 2FA');
+      if (!response.ok) throw new Error('Nie udało się przełączyć 2FA');
 
       const data = await response.json();
       setSettings(data.settings);
@@ -186,7 +186,7 @@ export const useSettings = () => {
         }
       });
 
-      if (!response.ok) throw new Error('Failed to export data');
+      if (!response.ok) throw new Error('Nie udało się wyeksportować danych');
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -222,7 +222,7 @@ export const useSettings = () => {
         body: JSON.stringify({ confirmed })
       });
 
-      if (!response.ok) throw new Error('Failed to delete account');
+      if (!response.ok) throw new Error('Nie udało się usunąć konta');
 
       const data = await response.json();
       setError(null);

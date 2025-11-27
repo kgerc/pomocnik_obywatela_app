@@ -191,7 +191,7 @@ const NotificationsTab = ({ setActiveTab, setQuery }) => {
           };
 
           return (
-            <div key={notification.delivered_id} style={containerStyle}>
+            <div key={notification.id} style={containerStyle}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
                 {icon}
                 <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#2c3e50', margin: 0, flex: 1 }}>

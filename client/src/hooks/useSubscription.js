@@ -28,7 +28,7 @@ export const useSubscription = () => {
         }
       });
 
-      if (!response.ok) throw new Error('Failed to fetch subscription status');
+      if (!response.ok) throw new Error('Nie udało się pobrać statusu subskrypcji');
 
       const data = await response.json();
       setSubscription(data.subscription || null);
@@ -97,7 +97,7 @@ export const useSubscription = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create checkout session');
+        throw new Error(errorData.error || 'Nie udało się utworzyć sesji płatności');
       }
 
       const data = await response.json();
@@ -136,7 +136,7 @@ export const useSubscription = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create portal session');
+        throw new Error(errorData.error || 'Nie udało się utworzyć sesji portalu');
       }
 
       const data = await response.json();

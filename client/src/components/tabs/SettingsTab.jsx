@@ -17,7 +17,16 @@ const SettingsTab = () => {
 
   const [activeSection, setActiveSection] = useState('personal');
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    theme: 'light',
+    emailNotifications: true,
+    smsNotifications: false,
+    notificationTypes: {},
+    gdprConsents: {},
+    twoFactorEnabled: false
+  });
   const [passwordData, setPasswordData] = useState({ current: '', new: '', confirm: '' });
 
   const sections = [
@@ -283,63 +292,65 @@ const PersonalDataSection = ({ formData, setFormData, editMode, setEditMode, han
       <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#2c3e50', margin: 0 }}>
         Dane osobowe
       </h3>
-      {!editMode ? (
-        <button
-          onClick={() => setEditMode(true)}
-          style={{
-            padding: '8px 16px',
-            background: '#2c5aa0',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontWeight: '600',
-            fontSize: '14px'
-          }}
-        >
-          Edytuj
-        </button>
-      ) : (
-        <div style={{ display: 'flex', gap: '8px' }}>
+      <div style={{ minWidth: '188px', display: 'flex', justifyContent: 'flex-end' }}>
+        {!editMode ? (
           <button
-            onClick={() => setEditMode(false)}
-            disabled={loading}
+            onClick={() => setEditMode(true)}
             style={{
               padding: '8px 16px',
-              background: '#f8f9fb',
-              color: '#5a6c7d',
-              border: '2px solid #e1e8ed',
-              borderRadius: '6px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              fontWeight: '600',
-              fontSize: '14px',
-              opacity: loading ? 0.6 : 1
-            }}
-          >
-            Anuluj
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={loading}
-            style={{
-              padding: '8px 16px',
-              background: loading ? '#ccc' : '#10b981',
+              background: '#2c5aa0',
               color: 'white',
-              border: 'none',
+              border: '2px solid transparent',
               borderRadius: '6px',
-              cursor: loading ? 'not-allowed' : 'pointer',
+              cursor: 'pointer',
               fontWeight: '600',
-              fontSize: '14px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
+              fontSize: '14px'
             }}
           >
-            <Save size={16} />
-            {loading ? 'Zapisywanie...' : 'Zapisz'}
+            Edytuj
           </button>
-        </div>
-      )}
+        ) : (
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              onClick={() => setEditMode(false)}
+              disabled={loading}
+              style={{
+                padding: '8px 16px',
+                background: '#f8f9fb',
+                color: '#5a6c7d',
+                border: '2px solid #e1e8ed',
+                borderRadius: '6px',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                fontWeight: '600',
+                fontSize: '14px',
+                opacity: loading ? 0.6 : 1
+              }}
+            >
+              Anuluj
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={loading}
+              style={{
+                padding: '8px 16px',
+                background: loading ? '#ccc' : '#10b981',
+                color: 'white',
+                border: '2px solid transparent',
+                borderRadius: '6px',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                fontWeight: '600',
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <Save size={16} />
+              {loading ? 'Zapisywanie...' : 'Zapisz'}
+            </button>
+          </div>
+        )}
+      </div>
     </div>
 
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -459,7 +470,7 @@ const PrivacySection = ({ formData, setFormData, handleUpdateGDPR, handleExportD
           />
 
           <CheckboxField
-            label="Zgoda na newsletter i marketing"
+            label="Zgoda na marketing"
             checked={formData.gdprConsents?.marketing ?? false}
             onChange={(checked) => setFormData({
               ...formData,
@@ -633,10 +644,7 @@ const HelpSection = () => (
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <p style={{ color: '#2c3e50', fontSize: '14px', margin: 0 }}>
-            <strong>Email:</strong> pomoc@pomocnikobywatela.pl
-          </p>
-          <p style={{ color: '#2c3e50', fontSize: '14px', margin: 0 }}>
-            <strong>Telefon:</strong> +48 123 456 789
+            <strong>Email:</strong> kontakt@pomocnikobywatela.pl
           </p>
         </div>
       </div>
@@ -651,7 +659,7 @@ const HelpSection = () => (
         </h4>
 
         <p style={{ color: '#5a6c7d', fontSize: '14px' }}>
-          Odwiedź naszą bazę wiedzy: <a href="https://pomocnikobywatela.pl/#faq" target="_blank" rel="noopener noreferrer" style={{ color: '#2c5aa0', fontWeight: '600' }}>Centrum pomocy</a>
+          Odwiedź naszą bazę wiedzy (sekcja FAQ): <a href="https://pomocnikobywatela.pl/#faq" target="_blank" rel="noopener noreferrer" style={{ color: '#2c5aa0', fontWeight: '600' }}>Centrum pomocy</a>
         </p>
       </div>
 
@@ -715,7 +723,7 @@ const FormField = ({ label, icon: Icon, value, onChange, disabled, hint, placeho
 
       {multiline ? (
         <textarea
-          value={value}
+          value={value || ''}
           onChange={onChange}
           disabled={disabled}
           placeholder={placeholder}
@@ -735,7 +743,7 @@ const FormField = ({ label, icon: Icon, value, onChange, disabled, hint, placeho
       ) : (
         <input
           type={type}
-          value={value}
+          value={value || ''}
           onChange={onChange}
           disabled={disabled}
           placeholder={placeholder}

@@ -2,13 +2,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { notificationsAPI } from '../services/api';
 
-export const useNotifications = ({ pollInterval = 600000 } = {}) => {
+export const useNotifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [subscriptions, setSubscriptions] = useState([]);
   const mounted = useRef(true);
-  const visibilityRef = useRef(document.visibilityState);
 
   const fetchAll = useCallback(async (opts = {}) => {
     setLoading(true);
@@ -64,15 +63,7 @@ export const useNotifications = ({ pollInterval = 600000 } = {}) => {
     fetchUnreadCount();
     fetchSubscriptions();
 
-    // polling
-    const id = setInterval(() => {
-      if (document.visibilityState === 'visible') {
-        fetchAll();
-        fetchUnreadCount();
-      }
-    }, pollInterval);
-
-    // visibility change: fetch when tab becomes visible
+    // Odświeżaj powiadomienia gdy użytkownik wraca do zakładki
     const handler = () => {
       if (document.visibilityState === 'visible') {
         fetchAll();
@@ -83,14 +74,12 @@ export const useNotifications = ({ pollInterval = 600000 } = {}) => {
 
     return () => {
       mounted.current = false;
-      clearInterval(id);
       document.removeEventListener('visibilitychange', handler);
     };
-  }, [fetchAll, fetchUnreadCount, fetchSubscriptions, pollInterval]);
+  }, [fetchAll, fetchUnreadCount, fetchSubscriptions]);
 
   const markAsRead = async (deliveredIds = []) => {
     try {
-      debugger;
       await notificationsAPI.markRead(deliveredIds);
       // optimistic update
       setNotifications(prev => prev.map(it => deliveredIds.includes(it.id) ? { ...it, seen: true } : it));

@@ -5,7 +5,7 @@ import { useDotacje } from '../../hooks/useDotacje';
 import Pagination from '../common/Pagination';
 import { saveConversationToHistory } from '../../utils/saveToHistory';
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 6;
 
 const DotacjeTab = () => {
   const [dotacjeQuery, setDotacjeQuery] = useState('');

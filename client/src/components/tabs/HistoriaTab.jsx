@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   History,
-  Trash2,
+  Eraser,
   Loader
 } from 'lucide-react';
 import { historyAPI } from '../../services/api';
@@ -28,7 +28,6 @@ const HistoriaTab = () => {
     setHistoryLoading(true);
     try {
       const response = await historyAPI.getAll();
-      debugger;
       setChatHistory(response.data || []);
     } catch (err) {
       console.error('Error loading chat history:', err);
@@ -120,7 +119,7 @@ const HistoriaTab = () => {
               fontSize: '14px'
             }}
           >
-            <Trash2 size={16} />
+            <Eraser size={16} />
             Wyczyść historię
           </button>
         )}
@@ -149,13 +148,36 @@ const HistoriaTab = () => {
           </p>
         </div>
       ) : (
-        <div style={{
-          maxHeight: '600px',
-          overflowY: 'auto'
-        }}>
+        <div
+          className="historia-scroll"
+          style={{
+            maxHeight: '600px',
+            overflowY: 'auto'
+          }}
+        >
           {chatHistory.map((msg, idx) => (
             <ChatMessage key={idx} message={msg} />
           ))}
+          <style>{`
+            .historia-scroll::-webkit-scrollbar {
+              width: 8px;
+            }
+            .historia-scroll::-webkit-scrollbar-track {
+              background: #f1f3f5;
+              border-radius: 4px;
+            }
+            .historia-scroll::-webkit-scrollbar-thumb {
+              background: #c1c9d2;
+              border-radius: 4px;
+            }
+            .historia-scroll::-webkit-scrollbar-thumb:hover {
+              background: #a0aab5;
+            }
+            .historia-scroll {
+              scrollbar-width: thin;
+              scrollbar-color: #c1c9d2 #f1f3f5;
+            }
+          `}</style>
         </div>
       )}
     </div>
