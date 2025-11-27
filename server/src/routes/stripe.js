@@ -76,11 +76,24 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
         payment_method_types: ['card'],
         line_items: [
           {
-            price: process.env.STRIPE_PRICE_ID,
+            price_data: {
+              currency: 'pln',
+              product_data: {
+                name: 'Premium - Miesięczny dostęp',
+                description: 'Pełen dostęp do funkcji Premium - subskrypcja miesięczna'
+              },
+              unit_amount: 3999, // 39.99 zł w groszach
+              recurring: {
+                interval: 'month',
+                interval_count: 1
+              }
+            },
             quantity: 1,
           },
         ],
         mode: 'subscription',
+        payment_behavior: 'default_incomplete',
+        payment_method_collection: 'always',
         success_url: `${process.env.FRONTEND_URL}/app?success=true`,
         cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true`,
         metadata: {
