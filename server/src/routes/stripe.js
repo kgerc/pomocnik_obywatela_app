@@ -343,8 +343,8 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           await Subscription.create(subscriptionData);
           console.log('Subscription created via customer.subscription.created for user:', userId);
 
-          // Dostarczenie powiadomień premium dla nowego użytkownika premium (tylko jeśli aktywna)
-          if (subscriptionData.status === 'active') {
+          // Dostarczenie powiadomień premium dla nowego użytkownika premium (tylko jeśli aktywna lub trialing)
+          if (['active', 'trialing'].includes(subscriptionData.status)) {
             await deliverPremiumNotificationsToUser(userId);
           }
         }
