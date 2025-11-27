@@ -86,7 +86,9 @@ const MainAppContent = () => {
 
         {/* Twoje Dokumenty Tab - FREE (but upload is premium) */}
         {activeTab === 'dokumenty' && (
-          <TwojeDokumentyTab />
+          <PremiumGate feature="Dokumenty">
+            <TwojeDokumentyTab />
+          </PremiumGate>
         )}
 
         {/* Historia Tab - PREMIUM */}

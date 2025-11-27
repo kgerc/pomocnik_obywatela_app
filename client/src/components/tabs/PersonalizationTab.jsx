@@ -17,11 +17,13 @@ const PersonalizationTab = () => {
   const { toggleFavorite, isFavorite } = useAppData();
   const [isVisible, setIsVisible] = useState(false);
 
+  // Uruchom animację dopiero gdy dane się załadują
   useEffect(() => {
-    // małe opóźnienie żeby animacja była bardziej naturalna
-    const timer = setTimeout(() => setIsVisible(true), 400);
-    return () => clearTimeout(timer);
-  }, []);
+    if (!loading && !recommendationsLoading) {
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, recommendationsLoading]);
 
   const handleToggleFavorite = async (itemId) => {
     await toggleFavorite('swiadczenie', itemId);

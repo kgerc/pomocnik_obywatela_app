@@ -4,7 +4,7 @@ import { useSubscription } from '../../hooks/useSubscription';
 import PromoCodeInput from './PromoCodeInput';
 
 const MONTHLY_PRICE = 39.99;
-const YEARLY_PRICE = 479.88;
+const YEARLY_PRICE = 431.89;
 
 const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
   const { isPremium, loading, createCheckoutSession } = useSubscription();
@@ -104,7 +104,6 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
           'Dostęp do asystenta AI',
           'Personalizacja świadczeń',
           'Powiadomienia o nowych świadczeniach',
-          'Przegląd dotacji',
           'Historia i dokumenty',
           'Priorytetowe wsparcie'
         ].map((feature, index) => (

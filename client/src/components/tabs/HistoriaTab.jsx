@@ -13,16 +13,18 @@ const HistoriaTab = () => {
   const [historyLoading, setHistoryLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    // małe opóźnienie żeby animacja była bardziej naturalna
-    const timer = setTimeout(() => setIsVisible(true), 400);
-    return () => clearTimeout(timer);
-  }, []);
-
   // Pobierz historię przy montowaniu
   useEffect(() => {
     loadChatHistory();
   }, []);
+
+  // Uruchom animację dopiero gdy dane się załadują
+  useEffect(() => {
+    if (!historyLoading) {
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [historyLoading]);
 
   const loadChatHistory = async () => {
     setHistoryLoading(true);

@@ -27,11 +27,14 @@ const NotificationsTab = ({ setActiveTab, setQuery }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isVisible, setIsVisible] = useState(false);
 
+  // Uruchom animację dopiero gdy dane się załadują
   useEffect(() => {
-    // małe opóźnienie żeby animacja była bardziej naturalna
-    const timer = setTimeout(() => setIsVisible(true), 400);
-    return () => clearTimeout(timer);
-  }, []);
+    if (!loading) {
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
   const handleMarkAsRead = (deliveredId) => {
     markAsRead([deliveredId]);
   };

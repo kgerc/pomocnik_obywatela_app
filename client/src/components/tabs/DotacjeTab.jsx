@@ -19,11 +19,6 @@ const DotacjeTab = () => {
   const { dotacje, loading, error, fetchAll, getSektory } = useDotacje();
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    // małe opóźnienie żeby animacja była bardziej naturalna
-    const timer = setTimeout(() => setIsVisible(true), 400);
-    return () => clearTimeout(timer);
-  }, []);
   // Pobierz dotacje i sektory przy montowaniu komponentu
   useEffect(() => {
     const loadData = async () => {
@@ -33,6 +28,14 @@ const DotacjeTab = () => {
     };
     loadData();
   }, []);
+
+  // Uruchom animację dopiero gdy dane się załadują
+  useEffect(() => {
+    if (!loading && dotacje.length > 0) {
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, dotacje]);
 
   // Filtruj dotacje lokalnie gdy zmieni się sektor
   useEffect(() => {

@@ -23,12 +23,6 @@ const TwojeDokumentyTab = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    // małe opóźnienie żeby animacja była bardziej naturalna
-    const timer = setTimeout(() => setIsVisible(true), 400);
-    return () => clearTimeout(timer);
-  }, []);
-
   const {
     documents,
     loading,
@@ -45,6 +39,14 @@ const TwojeDokumentyTab = () => {
     fetchAll();
     fetchStats();
   }, []);
+
+  // Uruchom animację dopiero gdy dane się załadują
+  useEffect(() => {
+    if (!loading && documents.length >= 0) {
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, documents]);
 
   // Filtruj dokumenty lokalnie na podstawie źródła i wyszukiwania
   const filteredDocuments = documents.filter(doc => {

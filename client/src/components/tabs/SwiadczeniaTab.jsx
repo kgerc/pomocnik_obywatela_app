@@ -28,12 +28,6 @@ const SwiadczeniaTab = () => {
   const { swiadczenia, loading, error, fetchAll, getCategories } = useSwiadczenia();
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    // małe opóźnienie żeby animacja była bardziej naturalna
-    const timer = setTimeout(() => setIsVisible(true), 400);
-    return () => clearTimeout(timer);
-  }, []);
-
   // Pobierz świadczenia i kategorie przy montowaniu komponentu
   useEffect(() => {
     const loadData = async () => {
@@ -43,6 +37,15 @@ const SwiadczeniaTab = () => {
     };
     loadData();
   }, []);
+
+  // Uruchom animację dopiero gdy dane się załadują
+  useEffect(() => {
+    if (!loading && swiadczenia.length > 0) {
+      // małe opóźnienie żeby animacja była bardziej naturalna
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, swiadczenia]);
 
   // Filtruj świadczenia lokalnie gdy zmieni się kategoria
   useEffect(() => {

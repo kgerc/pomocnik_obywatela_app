@@ -10,14 +10,16 @@ const FavoritesTab = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // małe opóźnienie żeby animacja była bardziej naturalna
-    const timer = setTimeout(() => setIsVisible(true), 400);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
     fetchAll();
   }, []);
+
+  // Uruchom animację dopiero gdy dane się załadują
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
 
   const handleToggleFavorite = async (itemId) => {
     await toggleFavorite('swiadczenie', itemId);

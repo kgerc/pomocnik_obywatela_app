@@ -21,12 +21,6 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
   const { pisma, loading, error, fetchAll, getCategories } = usePisma();
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    // małe opóźnienie żeby animacja była bardziej naturalna
-    const timer = setTimeout(() => setIsVisible(true), 400);
-    return () => clearTimeout(timer);
-  }, []);
-
   // Pobierz pisma i kategorie przy montowaniu komponentu
   useEffect(() => {
     const loadData = async () => {
@@ -36,6 +30,14 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
     };
     loadData();
   }, []);
+
+  // Uruchom animację dopiero gdy dane się załadują
+  useEffect(() => {
+    if (!loading && pisma.length > 0) {
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, pisma]);
 
   // Filtruj pisma lokalnie gdy zmieni się kategoria
   useEffect(() => {

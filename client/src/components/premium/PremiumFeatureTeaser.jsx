@@ -12,7 +12,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
 
   // Base prices
   const MONTHLY_PRICE = 39.99;
-  const YEARLY_PRICE = 479.88;
+  const YEARLY_PRICE = 431.89;
 
   // Calculated discounted prices
   let discountedMonthly = MONTHLY_PRICE;
@@ -170,7 +170,6 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
               'Dostęp do asystenta AI',
               'Personalizacja świadczeń',
               'Powiadomienia o nowych świadczeniach',
-              'Przegląd dotacji i grantów',
               'Historia rozmów z AI',
               'Przesyłanie własnych dokumentów'
             ].map((feature, index) => (
