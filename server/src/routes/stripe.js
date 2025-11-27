@@ -119,8 +119,6 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
           },
         ],
         mode: 'subscription',
-        payment_behavior: 'default_incomplete',
-        payment_method_collection: 'always',
         success_url: `${process.env.FRONTEND_URL}/app?success=true`,
         cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true`,
         metadata: {

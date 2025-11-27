@@ -45,10 +45,10 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
     setLoadingCheckout(true);
     try {
       await createCheckoutSession(useBlik, validatedPromoCode);
+      // Don't setLoadingCheckout(false) here - keep loader visible until redirect
     } catch (err) {
       console.error(err);
-    } finally {
-      setLoadingCheckout(false);
+      setLoadingCheckout(false); // Only disable on error
     }
   };
 
