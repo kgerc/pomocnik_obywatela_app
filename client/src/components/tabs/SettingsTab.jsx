@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import {
   User, Shield, Lock, Loader, Trash2,
   Save, Mail, Key, CreditCard,
-  HelpCircle, Crown, ExternalLink
+  HelpCircle, Crown, ExternalLink, FileText
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useSettings } from '../../hooks/useSettings';
 import { useSubscription } from '../../hooks/useSubscription';
 import { useToast } from '../../contexts/ToastContext';
+import PrivacyPolicy from '../PrivacyPolicy';
 
 const SettingsTab = () => {
   const { user } = useAuth();
@@ -17,6 +18,7 @@ const SettingsTab = () => {
 
   const [activeSection, setActiveSection] = useState('personal');
   const [editMode, setEditMode] = useState(false);
+  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -194,6 +196,7 @@ const SettingsTab = () => {
             handleExportData={handleExportData}
             handleDeleteAccount={handleDeleteAccount}
             loading={loading}
+            showPrivacyPolicy={() => setShowPrivacyPolicy(true)}
           />
         );
 
@@ -215,20 +218,25 @@ const SettingsTab = () => {
   };
 
   return (
-    <div style={{
-      background: 'white',
-      borderRadius: '16px',
-      padding: '30px',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
-    }}>
-      <h2 style={{
-        fontSize: '24px',
-        fontWeight: '700',
-        color: '#2c3e50',
-        marginBottom: '30px'
+    <>
+      {showPrivacyPolicy && (
+        <PrivacyPolicy onClose={() => setShowPrivacyPolicy(false)} />
+      )}
+
+      <div style={{
+        background: 'white',
+        borderRadius: '16px',
+        padding: '30px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
       }}>
-        Ustawienia
-      </h2>
+        <h2 style={{
+          fontSize: '24px',
+          fontWeight: '700',
+          color: '#2c3e50',
+          marginBottom: '30px'
+        }}>
+          Ustawienia
+        </h2>
 
       <div style={{ display: 'flex', gap: '30px' }}>
         {/* Sidebar */}
@@ -276,7 +284,8 @@ const SettingsTab = () => {
           {renderSection()}
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
@@ -440,13 +449,58 @@ const SecuritySection = ({ passwordData, setPasswordData, handleChangePassword, 
   </div>
 );
 
-const PrivacySection = ({ formData, setFormData, handleUpdateGDPR, handleExportData, handleDeleteAccount, loading }) => (
+const PrivacySection = ({ formData, setFormData, handleUpdateGDPR, handleExportData, handleDeleteAccount, loading, showPrivacyPolicy }) => (
   <div>
     <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#2c3e50', marginBottom: '20px' }}>
       Prywatność i RODO
     </h3>
 
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      {/* Privacy Policy Link */}
+      <div style={{
+        background: '#e8f4f8',
+        padding: '20px',
+        borderRadius: '12px',
+        border: '2px solid #2c5aa0'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
+          <div style={{ flex: 1 }}>
+            <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#2c3e50', marginBottom: '8px', marginTop: '0px' }}>
+              Polityka Prywatności
+            </h4>
+            <p style={{ color: '#5a6c7d', fontSize: '14px', marginBottom: '12px', lineHeight: '1.6' }}>
+              Dowiedz się, jak przetwarzamy i chronimy Twoje dane osobowe zgodnie z RODO.
+            </p>
+            <button
+              onClick={showPrivacyPolicy}
+              style={{
+                padding: '10px 20px',
+                background: '#2c5aa0',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.background = '#1e4278';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.background = '#2c5aa0';
+              }}
+            >
+              <FileText size={16} />
+              Zobacz politykę prywatności
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* GDPR Consents */}
       <div style={{
         background: '#f8f9fb',

@@ -90,7 +90,6 @@ export const getUnreadCount = async (req, res) => {
 // POST /api/notifications/mark-read  { deliveredIds: [id1,id2] }
 export const markAsRead = async (req, res) => {
   try {
-    debugger;
     const userId = req.userId;
     const { deliveredIds } = req.body;
     if (!Array.isArray(deliveredIds) || deliveredIds.length === 0) {

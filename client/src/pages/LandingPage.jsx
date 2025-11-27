@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check, Sparkles, Shield, Zap } from 'lucide-react';
+import PrivacyPolicy from '../components/PrivacyPolicy';
 
 const LandingPage = () => {
+  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
+
   return (
-    <div style={{
+    <>
+      {showPrivacyPolicy && (
+        <PrivacyPolicy onClose={() => setShowPrivacyPolicy(false)} />
+      )}
+
+      <div style={{
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%)'
     }}>
@@ -195,30 +203,56 @@ const LandingPage = () => {
         }}>
           Dołącz do tysięcy Polaków korzystających z naszego asystenta
         </p>
-        <Link
-          to="/register"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '10px',
-            background: 'white',
-            color: '#2c5aa0',
-            padding: '16px 32px',
-            borderRadius: '12px',
-            textDecoration: 'none',
-            fontWeight: '700',
-            fontSize: '18px',
-            boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-            transition: 'transform 0.2s'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-        >
-          Utwórz darmowe konto
-          <ArrowRight size={20} />
-        </Link>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '15px'
+        }}>
+          <Link
+            to="/register"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              background: 'white',
+              color: '#2c5aa0',
+              padding: '16px 32px',
+              borderRadius: '12px',
+              textDecoration: 'none',
+              fontWeight: '700',
+              fontSize: '18px',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+              transition: 'transform 0.2s'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+          >
+            Utwórz darmowe konto
+            <ArrowRight size={20} />
+          </Link>
+
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setShowPrivacyPolicy(true);
+            }}
+            style={{
+              color: 'rgba(255,255,255,0.9)',
+              fontSize: '14px',
+              textDecoration: 'underline',
+              transition: 'color 0.2s'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.color = 'white'}
+            onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.9)'}
+          >
+            Polityka prywatności
+          </a>
+        </div>
       </div>
     </div>
+    </>
   );
 };
 
