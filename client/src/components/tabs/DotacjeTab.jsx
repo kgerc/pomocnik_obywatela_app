@@ -208,7 +208,7 @@ const DotacjeTab = () => {
         gap: '10px'
       }}>
         <TrendingUp size={24} color="#2c5aa0" />
-        Dotacje i granty - aktywne programy 2024-2025
+        Dotacje i granty - aktywne programy 2025
       </h2>
       <p style={{
         color: '#5a6c7d',
@@ -538,7 +538,7 @@ const DotacjaCard = ({ dotacja }) => {
             fontSize: '18px',
             fontWeight: '700'
           }}>
-            {dotacja.kwota_max}
+            {dotacja.kwota_max ?? "Brak informacji"}
           </div>
         </div>
       </div>

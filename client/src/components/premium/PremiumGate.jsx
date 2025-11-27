@@ -4,7 +4,6 @@ import { useSubscription } from '../../hooks/useSubscription';
 import PromoCodeInput from './PromoCodeInput';
 
 const MONTHLY_PRICE = 39.99;
-const YEARLY_PRICE = 431.89;
 
 const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
   const { isPremium, loading, createCheckoutSession } = useSubscription();
@@ -40,7 +39,6 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
   };
 
   const discountedMonthly = getDiscountedPrice(MONTHLY_PRICE);
-  const discountedYearly = getDiscountedPrice(YEARLY_PRICE);
 
   const handleCheckout = async () => {
     setLoadingCheckout(true);
@@ -196,18 +194,18 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
           {validatedPromoCode ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <span style={{ textDecoration: 'line-through', color: '#a1a1a1', fontSize: '24px' }}>
-                {useBlik ? YEARLY_PRICE.toFixed(2) : MONTHLY_PRICE.toFixed(2)} zł
+                {MONTHLY_PRICE.toFixed(2)} zł
               </span>
               <span style={{ color: '#2c5aa0' }}>
-                {useBlik ? discountedYearly : discountedMonthly} zł
+                {discountedMonthly} zł
               </span>
             </div>
           ) : (
-            `${useBlik ? YEARLY_PRICE.toFixed(2) : MONTHLY_PRICE.toFixed(2)} zł`
+            `${MONTHLY_PRICE.toFixed(2)} zł`
           )}
         </div>
         <div style={{ fontSize: '16px', color: '#5a6c7d', marginTop: '8px' }}>
-          {useBlik ? 'rocznie' : 'miesięcznie'}
+          miesięcznie
         </div>
       </div>
 
@@ -230,7 +228,7 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
           <span>Płacę BLIK</span>
         </label>
         <p style={{ margin: '8px 0 0 32px', fontSize: '13px', color: '#5a6c7d', lineHeight: '1.5' }}>
-          💳 Płatność jednorazowa BLIK - pełny dostęp przez 12 miesięcy
+          💳 Płatność jednorazowa BLIK - pełny dostęp przez 1 miesiąc
         </p>
       </div>
 
@@ -267,7 +265,7 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
           <>
             <Crown size={22} />
             {useBlik
-              ? validatedPromoCode ? `Zapłać ${discountedYearly} zł` : `Zapłać ${YEARLY_PRICE.toFixed(2)} zł`
+              ? validatedPromoCode ? `Zapłać ${discountedMonthly} zł` : `Zapłać ${MONTHLY_PRICE.toFixed(2)} zł`
               : validatedPromoCode ? `Subskrybuj za ${discountedMonthly} zł/mies` : `Subskrybuj za ${MONTHLY_PRICE.toFixed(2)} zł/mies`
             }
           </>
@@ -277,7 +275,7 @@ const PremiumGate = ({ children, feature = 'tej funkcji' }) => {
       {/* Security Note */}
       <p style={{ fontSize: '13px', color: '#5a6c7d', marginTop: '25px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
         <Lock size={14} />
-        Bezpieczne płatności przez Stripe {useBlik && '• BLIK dostępny'}
+        Bezpieczne płatności przez Stripe
       </p>
       </div>
     </>

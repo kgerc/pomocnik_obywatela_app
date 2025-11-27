@@ -19,6 +19,7 @@ const SettingsTab = () => {
   const [activeSection, setActiveSection] = useState('personal');
   const [editMode, setEditMode] = useState(false);
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
+  const [loadingPortal, setLoadingPortal] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -206,6 +207,8 @@ const SettingsTab = () => {
             subscription={subscription}
             isPremium={isPremium}
             createPortalSession={createPortalSession}
+            loadingPortal={loadingPortal}
+            setLoadingPortal={setLoadingPortal}
           />
         );
 
@@ -219,6 +222,64 @@ const SettingsTab = () => {
 
   return (
     <>
+      {/* Full-screen Loading Overlay */}
+      {loadingPortal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.75)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9999,
+          animation: 'fadeIn 0.2s ease-in'
+        }}>
+          <div style={{
+            background: 'white',
+            borderRadius: '20px',
+            padding: '40px 60px',
+            textAlign: 'center',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+            animation: 'slideUp 0.3s ease-out'
+          }}>
+            <div style={{
+              width: '80px',
+              height: '80px',
+              margin: '0 auto 24px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              animation: 'pulse 1.5s ease-in-out infinite'
+            }}>
+              <Loader size={40} color="white" className="spin" />
+            </div>
+            <h3 style={{
+              fontSize: '20px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              margin: '0 0 12px 0'
+            }}>
+              Przekierowujemy do panelu zarządzania
+            </h3>
+            <p style={{
+              fontSize: '14px',
+              color: '#5a6c7d',
+              margin: 0,
+              maxWidth: '280px'
+            }}>
+              Przygotowujemy bezpieczną sesję w Stripe...
+            </p>
+          </div>
+        </div>
+      )}
+
       {showPrivacyPolicy && (
         <PrivacyPolicy onClose={() => setShowPrivacyPolicy(false)} />
       )}
@@ -602,7 +663,7 @@ const PrivacySection = ({ formData, setFormData, handleUpdateGDPR, handleExportD
   </div>
 );
 
-const SubscriptionSection = ({ subscription, isPremium, createPortalSession }) => (
+const SubscriptionSection = ({ subscription, isPremium, createPortalSession, loadingPortal, setLoadingPortal }) => (
   <div>
     <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#2c3e50', marginBottom: '20px' }}>
       Subskrypcja i płatności
@@ -629,19 +690,28 @@ const SubscriptionSection = ({ subscription, isPremium, createPortalSession }) =
         </div>
 
         <button
-          onClick={createPortalSession}
+          onClick={async () => {
+            setLoadingPortal(true);
+            try {
+              await createPortalSession();
+            } finally {
+              setLoadingPortal(false);
+            }
+          }}
+          disabled={loadingPortal}
           style={{
             padding: '12px 24px',
             background: 'white',
             color: '#2c5aa0',
             border: 'none',
             borderRadius: '8px',
-            cursor: 'pointer',
+            cursor: loadingPortal ? 'not-allowed' : 'pointer',
             fontWeight: '600',
             fontSize: '15px',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '8px',
+            opacity: loadingPortal ? 0.7 : 1
           }}
         >
           <CreditCard size={18} />

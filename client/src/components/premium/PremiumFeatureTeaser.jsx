@@ -12,18 +12,14 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
 
   // Base prices
   const MONTHLY_PRICE = 39.99;
-  const YEARLY_PRICE = 431.89;
 
-  // Calculated discounted prices
+  // Calculated discounted price
   let discountedMonthly = MONTHLY_PRICE;
-  let discountedYearly = YEARLY_PRICE;
 
   // If promo code validated
   if (validatedPromoCode?.discountPercent) {
     const discount = validatedPromoCode.discountPercent;
-
     discountedMonthly = (MONTHLY_PRICE * (1 - discount / 100)).toFixed(2);
-    discountedYearly = (YEARLY_PRICE * (1 - discount / 100)).toFixed(2);
   }
 
   // Use preloaded value if available, otherwise fall back to hook
@@ -58,7 +54,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
 
   const getLabel = () => {
     if (useBlik) {
-      return validatedPromoCode ? `Zapłać ${discountedYearly} zł` : `Zapłać ${YEARLY_PRICE.toFixed(2)} zł`;
+      return validatedPromoCode ? `Zapłać ${discountedMonthly} zł` : `Zapłać ${MONTHLY_PRICE.toFixed(2)} zł`;
     } else {
       return validatedPromoCode ? `Subskrybuj za ${discountedMonthly} zł/mies` : `Subskrybuj za ${MONTHLY_PRICE.toFixed(2)} zł/mies`;
     }
@@ -292,15 +288,15 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
                       fontSize: '20px'
                     }}
                   >
-                    {(useBlik ? YEARLY_PRICE : MONTHLY_PRICE).toFixed(2)} zł
+                    {MONTHLY_PRICE.toFixed(2)} zł
                   </span>
 
                   <span style={{ color: '#2c5aa0' }}>
-                    {useBlik ? discountedYearly : discountedMonthly} zł
+                    {discountedMonthly} zł
                   </span>
                 </div>
               ) : (
-                `${(useBlik ? YEARLY_PRICE : MONTHLY_PRICE).toFixed(2)} zł`
+                `${MONTHLY_PRICE.toFixed(2)} zł`
               )}
             </div>
 
@@ -311,7 +307,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
                 marginTop: '5px'
               }}
             >
-              {useBlik ? 'rocznie' : 'miesięcznie'}
+              miesięcznie
             </div>
           </div>
 
@@ -368,7 +364,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
               color: '#5a6c7d',
               lineHeight: '1.5'
             }}>
-              {'💳 Płatność jednorazowa BLIK- pełny dostęp przez 12 miesięcy' }
+              {'💳 Płatność jednorazowa BLIK - pełny dostęp przez 1 miesiąc' }
             </p>
           </div>
 
@@ -419,7 +415,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
             gap: '6px'
           }}>
             <Lock size={12} />
-            Bezpieczne płatności przez Stripe {useBlik && '• BLIK dostępny'}
+            Bezpieczne płatności przez Stripe
           </p>
 
         </div>

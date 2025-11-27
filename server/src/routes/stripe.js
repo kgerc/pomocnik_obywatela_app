@@ -41,9 +41,7 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
     let session;
 
     if (useBlik) {
-      // BLIK - płatność jednorazowa za rok (mode: payment)
-      // Cena: 39.99 zł/mies * 12 = 479.88 zł
-      // Zniżka 10% dla płatności rocznej: 479.88 * 0.90 = 431.89 zł
+      // BLIK - płatność jednorazowa za miesiąc (mode: payment)
       session = await stripe.checkout.sessions.create({
         customer: customerId,
         payment_method_types: ['blik', 'card'],
@@ -52,10 +50,10 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
             price_data: {
               currency: 'pln',
               product_data: {
-                name: 'Premium - Roczny dostęp',
-                description: 'Pełen dostęp do funkcji Premium przez 12 miesięcy (10% zniżki w porównaniu do płatności miesięcznej)'
+                name: 'Premium - Miesięczny dostęp',
+                description: 'Pełen dostęp do funkcji Premium przez 1 miesiąc'
               },
-              unit_amount: 43189 // 431.89 zł w groszach (10% zniżki)
+              unit_amount: 3999 // 39.99 zł w groszach
             },
             quantity: 1,
           },
@@ -65,11 +63,11 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
         cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true`,
         metadata: {
           userId: userId,
-          paymentType: 'blik_yearly'
+          paymentType: 'blik_monthly'
         }
       });
 
-      console.log(`BLIK yearly payment session created for user ${userId}`);
+      console.log(`BLIK monthly payment session created for user ${userId}`);
     } else {
       // Karta - subskrypcja miesięczna (mode: subscription)
       session = await stripe.checkout.sessions.create({
@@ -447,17 +445,17 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         if (sessions.data.length > 0) {
           const session = sessions.data[0];
 
-          // Sprawdź czy to płatność BLIK yearly
-          if (session.metadata.paymentType === 'blik_yearly') {
+          // Sprawdź czy to płatność BLIK monthly
+          if (session.metadata.paymentType === 'blik_monthly') {
             const userId = session.metadata.userId;
             const customerId = session.customer;
 
-            console.log('Processing BLIK yearly payment for user:', userId);
+            console.log('Processing BLIK monthly payment for user:', userId);
 
-            // Utwórz subskrypcję na rok
+            // Utwórz subskrypcję na miesiąc
             const now = new Date();
-            const oneYearLater = new Date();
-            oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+            const oneMonthLater = new Date();
+            oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
 
             const existingSub = await Subscription.findByUserId(userId);
 
@@ -465,10 +463,10 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
               userId: userId,
               stripeCustomerId: customerId,
               stripeSubscriptionId: `blik_${paymentIntent.id}`,
-              stripePriceId: 'blik_yearly',
+              stripePriceId: 'blik_monthly',
               status: 'active',
               currentPeriodStart: now,
-              currentPeriodEnd: oneYearLater,
+              currentPeriodEnd: oneMonthLater,
               cancelAtPeriodEnd: false
             };
 
@@ -488,7 +486,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
               await Subscription.create(subscriptionData);
             }
 
-            console.log('BLIK yearly subscription created for user:', userId);
+            console.log('BLIK monthly subscription created for user:', userId);
 
             // Dostarczenie powiadomień premium dla użytkownika który staje się premium po raz pierwszy
             if (wasNotActiveBefore) {
@@ -529,15 +527,15 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           if (sessions.data.length > 0) {
             const session = sessions.data[0];
 
-            if (session.metadata.paymentType === 'blik_yearly') {
+            if (session.metadata.paymentType === 'blik_monthly') {
               const userId = session.metadata.userId;
               const customerId = session.customer;
 
-              console.log('Processing BLIK yearly payment (charge.succeeded) for user:', userId);
+              console.log('Processing BLIK monthly payment (charge.succeeded) for user:', userId);
 
               const now = new Date();
-              const oneYearLater = new Date();
-              oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+              const oneMonthLater = new Date();
+              oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
 
               const existingSub = await Subscription.findByUserId(userId);
 
@@ -545,10 +543,10 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
                 userId: userId,
                 stripeCustomerId: customerId,
                 stripeSubscriptionId: `blik_${paymentIntentId}`,
-                stripePriceId: 'blik_yearly',
+                stripePriceId: 'blik_monthly',
                 status: 'active',
                 currentPeriodStart: now,
-                currentPeriodEnd: oneYearLater,
+                currentPeriodEnd: oneMonthLater,
                 cancelAtPeriodEnd: false
               };
 
@@ -561,7 +559,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
                 await Subscription.create(subscriptionData);
               }
 
-              console.log('✔ BLIK yearly subscription saved for user:', userId);
+              console.log('✔ BLIK monthly subscription saved for user:', userId);
 
               // Dostarczenie powiadomień premium dla użytkownika który staje się premium po raz pierwszy
               if (wasNotActiveBefore) {

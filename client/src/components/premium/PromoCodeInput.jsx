@@ -181,7 +181,7 @@ const PromoCodeInput = ({ onCodeValidated, useBlik = false }) => {
       </form>
 
       <p style={{ margin: '12px 0 0 0', fontSize: '12px', color: '#5a6c7d', lineHeight: '1.5' }}>
-        {'Aktywacja kodu promocyjnego daje dostęp do Premium na 12 miesięcy z rabatem.' }
+        {'Aktywacja kodu promocyjnego daje dostęp do Premium na 12 miesięcy z rabatem w subskrypcji' }
       </p>
     </div>
   );
