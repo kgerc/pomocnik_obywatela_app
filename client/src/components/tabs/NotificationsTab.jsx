@@ -125,9 +125,6 @@ const NotificationsTab = ({ setActiveTab, setQuery }) => {
           <p style={{ fontSize: '16px', fontWeight: '600' }}>
             Brak powiadomień
           </p>
-          <p style={{ fontSize: '14px', marginTop: '8px' }}>
-            Zasubskrybuj kategorie poniżej, aby otrzymywać powiadomienia
-          </p>
         </div>
       )}
 
