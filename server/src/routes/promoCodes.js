@@ -75,16 +75,16 @@ router.post('/redeem', authenticateUser, async (req, res) => {
       return res.status(404).json({ error: 'Nieprawidłowy kod promocyjny' });
     }
 
-    // Validate and redeem
+    // Validate code
     const validation = await promoCode.validate(userId);
     if (!validation.valid) {
       return res.status(400).json({ error: validation.reason });
     }
 
-    await promoCode.redeem(userId);
-
     // Handle based on discount percentage
     if (promoCode.isFree()) {
+      // Free code - redeem immediately (no payment required)
+      await promoCode.redeem(userId);
       // 100% discount - create free subscription (existing logic)
       const now = new Date();
       const oneYearLater = new Date();

@@ -1,6 +1,7 @@
 import express from 'express';
 import Stripe from 'stripe';
 import Subscription from '../models/Subscription.js';
+import PromoCode from '../models/PromoCode.js';
 import { authenticateUser } from '../middleware/auth.js';
 import { deliverPremiumNotificationsToUser } from '../controllers/notificationsController.js';
 
@@ -93,6 +94,7 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
         ],
         mode: 'subscription',
         subscription_data: {
+          collection_method: 'charge_automatically',
           trial_period_days: 0, // Brak okresu próbnego - płatność natychmiastowa
         },
         payment_method_collection: 'always', // Zawsze zbieraj metodę płatności
@@ -269,6 +271,20 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
           // Dostarczenie powiadomień premium dla nowego użytkownika premium
           await deliverPremiumNotificationsToUser(userId);
+        }
+
+        // Jeśli użyto kodu promocyjnego, oznacz go jako wykorzystany
+        if (session.metadata.promoCode) {
+          try {
+            const promoCode = await PromoCode.findByCode(session.metadata.promoCode);
+            if (promoCode) {
+              await promoCode.redeem(userId);
+              console.log(`Promo code ${session.metadata.promoCode} redeemed for user ${userId} after successful payment`);
+            }
+          } catch (promoErr) {
+            console.error('Error redeeming promo code after payment:', promoErr);
+            // Nie przerywaj procesu - subskrypcja została już utworzona
+          }
         }
 
         break;
@@ -480,6 +496,19 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
             }
 
             console.log('BLIK yearly subscription created for user:', userId);
+
+            // Jeśli użyto kodu promocyjnego, oznacz go jako wykorzystany
+            if (session.metadata.promoCode) {
+              try {
+                const promoCode = await PromoCode.findByCode(session.metadata.promoCode);
+                if (promoCode) {
+                  await promoCode.redeem(userId);
+                  console.log(`Promo code ${session.metadata.promoCode} redeemed for user ${userId} after BLIK payment`);
+                }
+              } catch (promoErr) {
+                console.error('Error redeeming promo code after BLIK payment:', promoErr);
+              }
+            }
           }
         }
         break;
@@ -535,7 +564,41 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
               }
 
               console.log('✔ BLIK yearly subscription saved for user:', userId);
+
+              // Jeśli użyto kodu promocyjnego, oznacz go jako wykorzystany
+              if (session.metadata.promoCode) {
+                try {
+                  const promoCode = await PromoCode.findByCode(session.metadata.promoCode);
+                  if (promoCode) {
+                    await promoCode.redeem(userId);
+                    console.log(`Promo code ${session.metadata.promoCode} redeemed for user ${userId} after BLIK charge`);
+                  }
+                } catch (promoErr) {
+                  console.error('Error redeeming promo code after BLIK charge:', promoErr);
+                }
+              }
             }
+          }
+        }
+        break;
+      }
+
+      case 'checkout.session.expired': {
+        // Użytkownik anulował checkout lub sesja wygasła - usuń redemption kodu promocyjnego
+        const session = event.data.object;
+        const userId = session.metadata.userId;
+
+        console.log('Checkout session expired/cancelled for user:', userId);
+
+        if (session.metadata.promoCode) {
+          try {
+            const promoCode = await PromoCode.findByCode(session.metadata.promoCode);
+            if (promoCode) {
+              await PromoCode.unredeemForUser(promoCode.id, userId);
+              console.log(`Promo code ${session.metadata.promoCode} rolled back for user ${userId} - checkout cancelled`);
+            }
+          } catch (promoErr) {
+            console.error('Error rolling back promo code after checkout cancellation:', promoErr);
           }
         }
         break;

@@ -126,6 +126,49 @@ class PromoCode {
     }
   }
 
+  // Unredeem code for user (rollback when payment fails/cancelled)
+  static async unredeemForUser(promoCodeId, userId) {
+    try {
+      // Delete redemption record
+      const { error: deleteError } = await supabase
+        .from('promo_code_redemptions')
+        .delete()
+        .eq('promo_code_id', promoCodeId)
+        .eq('user_id', userId);
+
+      if (deleteError) throw deleteError;
+
+      // Decrement current uses
+      const { error: updateError } = await supabase
+        .rpc('decrement_promo_code_uses', { promo_code_id: promoCodeId });
+
+      if (updateError) {
+        // Fallback to manual decrement if RPC doesn't exist
+        const { data: promoCode } = await supabase
+          .from('promo_codes')
+          .select('current_uses')
+          .eq('id', promoCodeId)
+          .single();
+
+        if (promoCode && promoCode.current_uses > 0) {
+          await supabase
+            .from('promo_codes')
+            .update({
+              current_uses: promoCode.current_uses - 1,
+              updated_at: new Date()
+            })
+            .eq('id', promoCodeId);
+        }
+      }
+
+      console.log(`Promo code ${promoCodeId} unredeemed for user ${userId}`);
+      return true;
+    } catch (error) {
+      console.error('Error unredeeming promo code:', error);
+      throw error;
+    }
+  }
+
   // Create new promo code (admin function)
   static async create(codeData) {
     try {
