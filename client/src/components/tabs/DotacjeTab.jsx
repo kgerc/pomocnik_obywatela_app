@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { TrendingUp, Sparkles, Search, Loader, Building2, AlertCircle, ExternalLink, Eraser, Clock, AlertTriangle, XCircle } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useDotacje } from '../../hooks/useDotacje';
+import { useAppData } from '../../contexts/AppDataContext';
 import Pagination from '../common/Pagination';
+import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
 import { saveConversationToHistory } from '../../utils/saveToHistory';
 
 const ITEMS_PER_PAGE = 6;
 
 const DotacjeTab = () => {
+  const { isPremium: preloadedIsPremium, loading: subscriptionLoading } = useAppData();
+
   const [dotacjeQuery, setDotacjeQuery] = useState('');
   const [dotacjeLoading, setDotacjeLoading] = useState(false);
   const [dotacjeResult, setDotacjeResult] = useState(null);
@@ -215,14 +219,22 @@ const DotacjeTab = () => {
       </p>
 
       {/* AI Search */}
-        <div style={{
-          background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
-          padding: '25px',
-          borderRadius: '12px',
-          marginBottom: '30px',
-          border: '2px solid #2c5aa0'
-        }}>
-              <h3 style={{
+      {subscriptionLoading && !preloadedIsPremium ? (
+        <></>
+      ) : (
+        <PremiumFeatureTeaser
+          feature="asystenta AI dla dotacji"
+          title="Zapytaj AI o dotację"
+          preloadedIsPremium={preloadedIsPremium}
+        >
+          <div style={{
+            background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
+            padding: '25px',
+            borderRadius: '12px',
+            marginBottom: '30px',
+            border: '2px solid #2c5aa0'
+          }}>
+            <h3 style={{
               fontSize: '18px',
               fontWeight: '700',
               color: '#2c3e50',
@@ -259,7 +271,7 @@ const DotacjeTab = () => {
             {/* Kontener przycisków */}
             <div style={{
               display: 'flex',
-              justifyContent: 'space-between', // Znajdź po lewej, Wyczyść po prawej
+              justifyContent: 'space-between',
               gap: '10px'
             }}>
               <button
@@ -322,32 +334,34 @@ const DotacjeTab = () => {
             </div>
           </div>
 
-        {/* AI Result */}
-        {dotacjeResult && (
-          <div style={{
-            marginTop: '20px',
-            background: 'white',
-            padding: '20px',
-            borderRadius: '12px'
-          }}>
+          {/* AI Result */}
+          {dotacjeResult && (
             <div style={{
-              color: '#2c3e50',
-              lineHeight: '1.6',
-              marginBottom: '20px',
-              whiteSpace: 'pre-wrap'
+              marginTop: '20px',
+              background: 'white',
+              padding: '20px',
+              borderRadius: '12px'
             }}>
-              {dotacjeResult.content}
-            </div>
-
-            {dotacjeResult.matches && dotacjeResult.matches.length > 0 && (
-              <div>
-                {dotacjeResult.matches.map((dotacja, idx) => (
-                  <DotacjaCard key={idx} dotacja={dotacja} />
-                ))}
+              <div style={{
+                color: '#2c3e50',
+                lineHeight: '1.6',
+                marginBottom: '20px',
+                whiteSpace: 'pre-wrap'
+              }}>
+                {dotacjeResult.content}
               </div>
-            )}
-          </div>
-        )}
+
+              {dotacjeResult.matches && dotacjeResult.matches.length > 0 && (
+                <div>
+                  {dotacjeResult.matches.map((dotacja, idx) => (
+                    <DotacjaCard key={idx} dotacja={dotacja} />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </PremiumFeatureTeaser>
+      )}
 
       {/* Filter by Sektor */}
       <div style={{
