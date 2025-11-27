@@ -77,11 +77,9 @@ const MainAppContent = () => {
           <PismaTab preloadedIsPremium={isPremium} />
         )}
 
-        {/* Dotacje Tab - PREMIUM */}
+        {/* Dotacje Tab - FREE (but AI search inside is premium) */}
         {activeTab === 'dotacje' && (
-          <PremiumGate feature="dotacji i grantów">
-            <DotacjeTab />
-          </PremiumGate>
+          <DotacjeTab preloadedIsPremium={isPremium}/>
         )}
 
         {/* Twoje Dokumenty Tab - FREE (but upload is premium) */}
