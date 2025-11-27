@@ -241,6 +241,9 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end || false
         };
 
+        // Check if this is first time becoming premium (was not active before)
+        const wasNotActiveBefore = !existingSub || !existingSub.isActive();
+
         if (existingSub) {
           // Zaktualizuj istniejącą
           await Subscription.update(userId, {
@@ -254,8 +257,10 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           // Utwórz nową
           await Subscription.create(subscriptionData);
           console.log('Subscription created for user:', userId);
+        }
 
-          // Dostarczenie powiadomień premium dla nowego użytkownika premium
+        // Dostarczenie powiadomień premium dla użytkownika który staje się premium po raz pierwszy
+        if (wasNotActiveBefore && subscriptionData.status === 'active') {
           await deliverPremiumNotificationsToUser(userId);
         }
 
@@ -338,8 +343,10 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           await Subscription.create(subscriptionData);
           console.log('Subscription created via customer.subscription.created for user:', userId);
 
-          // Dostarczenie powiadomień premium dla nowego użytkownika premium
-          await deliverPremiumNotificationsToUser(userId);
+          // Dostarczenie powiadomień premium dla nowego użytkownika premium (tylko jeśli aktywna)
+          if (subscriptionData.status === 'active') {
+            await deliverPremiumNotificationsToUser(userId);
+          }
         }
         break;
       }
@@ -465,6 +472,9 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
               cancelAtPeriodEnd: false
             };
 
+            // Check if this is first time becoming premium
+            const wasNotActiveBefore = !existingSub || !existingSub.isActive();
+
             if (existingSub) {
               await Subscription.update(userId, {
                 status: subscriptionData.status,
@@ -476,12 +486,14 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
               });
             } else {
               await Subscription.create(subscriptionData);
-
-              // Dostarczenie powiadomień premium dla nowego użytkownika premium
-              await deliverPremiumNotificationsToUser(userId);
             }
 
             console.log('BLIK yearly subscription created for user:', userId);
+
+            // Dostarczenie powiadomień premium dla użytkownika który staje się premium po raz pierwszy
+            if (wasNotActiveBefore) {
+              await deliverPremiumNotificationsToUser(userId);
+            }
 
             // Jeśli użyto kodu promocyjnego, oznacz go jako wykorzystany
             if (session.metadata.promoCode) {
@@ -540,16 +552,21 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
                 cancelAtPeriodEnd: false
               };
 
+              // Check if this is first time becoming premium
+              const wasNotActiveBefore = !existingSub || !existingSub.isActive();
+
               if (existingSub) {
                 await Subscription.update(userId, subscriptionData);
               } else {
                 await Subscription.create(subscriptionData);
-
-                // Dostarczenie powiadomień premium dla nowego użytkownika premium
-                await deliverPremiumNotificationsToUser(userId);
               }
 
               console.log('✔ BLIK yearly subscription saved for user:', userId);
+
+              // Dostarczenie powiadomień premium dla użytkownika który staje się premium po raz pierwszy
+              if (wasNotActiveBefore) {
+                await deliverPremiumNotificationsToUser(userId);
+              }
 
               // Jeśli użyto kodu promocyjnego, oznacz go jako wykorzystany
               if (session.metadata.promoCode) {
