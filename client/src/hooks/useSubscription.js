@@ -52,8 +52,8 @@ export const useSubscription = () => {
       setLoading(true);
       const token = session.access_token;
 
-      // If promo code is provided, redeem it first
-      if (promoCode && promoCode.code) {
+      // If promo code is 100% free (isFree), use the redeem endpoint
+      if (promoCode && promoCode.isFree) {
         const redeemResponse = await fetch(`${API_URL}/api/promo-codes/redeem`, {
           method: 'POST',
           headers: {
@@ -73,26 +73,24 @@ export const useSubscription = () => {
 
         const redeemData = await redeemResponse.json();
 
-        // If it's a free code or requires payment, handle accordingly
-        if (redeemData.requiresPayment && redeemData.checkoutUrl) {
-          // Redirect to Stripe Checkout with discount
-          window.location.href = redeemData.checkoutUrl;
-          return redeemData;
-        } else if (redeemData.success && !redeemData.requiresPayment) {
-          // Free code - refresh subscription status and return
+        // Free code - refresh subscription status and return
+        if (redeemData.success && !redeemData.requiresPayment) {
           await fetchSubscriptionStatus();
           return redeemData;
         }
       }
 
-      // No promo code - regular checkout
+      // Regular checkout or promo code with discount (not free)
       const response = await fetch(`${API_URL}/api/stripe/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ useBlik })
+        body: JSON.stringify({
+          useBlik,
+          promoCode: promoCode && !promoCode.isFree ? promoCode : null
+        })
       });
 
       if (!response.ok) {

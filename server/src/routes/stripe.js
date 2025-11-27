@@ -15,7 +15,9 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
   try {
     const userId = req.user.id;
     const userEmail = req.user.email;
-    const { useBlik } = req.body; // Czy użytkownik chce płacić BLIK
+    const { useBlik, promoCode } = req.body; // Czy użytkownik chce płacić BLIK i kod promocyjny
+
+    console.log('Create checkout session - userId:', userId, 'useBlik:', useBlik, 'promoCode:', JSON.stringify(promoCode, null, 2));
 
     // Sprawdź czy użytkownik już ma subskrypcję
     const existingSub = await Subscription.findByUserId(userId);
@@ -38,6 +40,27 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
       customerId = customer.id;
     }
 
+    // Calculate price with promo code if provided
+    let finalPrice = 3999; // Default: 39.99 zł w groszach
+    let promoCodeData = null;
+
+    if (promoCode) {
+      const promoCodeObj = await PromoCode.findByCode(promoCode.code);
+      if (promoCodeObj) {
+        const validation = await promoCodeObj.validate(userId);
+        if (validation.valid) {
+          const discount = promoCodeObj.discountPercent;
+          finalPrice = Math.round(3999 * (1 - discount / 100));
+          promoCodeData = promoCodeObj;
+          console.log(`Promo code ${promoCode.code} applied: ${discount}% discount, final price: ${finalPrice} groszy`);
+        } else {
+          console.log(`Promo code ${promoCode.code} validation failed:`, validation.error);
+        }
+      } else {
+        console.log(`Promo code ${promoCode.code} not found in database`);
+      }
+    }
+
     let session;
 
     if (useBlik) {
@@ -51,9 +74,11 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
               currency: 'pln',
               product_data: {
                 name: 'Premium - Miesięczny dostęp',
-                description: 'Pełen dostęp do funkcji Premium przez 1 miesiąc'
+                description: promoCodeData
+                  ? `Pełen dostęp do funkcji Premium przez 1 miesiąc (kod: ${promoCodeData.code}, -${promoCodeData.discountPercent}%)`
+                  : 'Pełen dostęp do funkcji Premium przez 1 miesiąc'
               },
-              unit_amount: 3999 // 39.99 zł w groszach
+              unit_amount: finalPrice // Uses calculated price with discount
             },
             quantity: 1,
           },
@@ -63,7 +88,8 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
         cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true`,
         metadata: {
           userId: userId,
-          paymentType: 'blik_monthly'
+          paymentType: 'blik_monthly',
+          promoCode: promoCodeData?.code || ''
         }
       });
 
@@ -75,7 +101,20 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
         payment_method_types: ['card'],
         line_items: [
           {
-            price: process.env.STRIPE_PRICE_ID,
+            price_data: {
+              currency: 'pln',
+              product_data: {
+                name: 'Premium - Miesięczny dostęp',
+                description: promoCodeData
+                  ? `Pełen dostęp do funkcji Premium - subskrypcja miesięczna (kod: ${promoCodeData.code}, -${promoCodeData.discountPercent}%)`
+                  : 'Pełen dostęp do funkcji Premium - subskrypcja miesięczna'
+              },
+              unit_amount: finalPrice,
+              recurring: {
+                interval: 'month',
+                interval_count: 1
+              }
+            },
             quantity: 1,
           },
         ],
@@ -85,7 +124,8 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
         success_url: `${process.env.FRONTEND_URL}/app?success=true`,
         cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true`,
         metadata: {
-          userId: userId
+          userId: userId,
+          promoCode: promoCodeData?.code || ''
         }
       });
 
