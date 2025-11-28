@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, CheckCircle, FileText, ExternalLink, Download, Clock, MapPin, AlertCircle, Loader } from 'lucide-react';
 
-const SwiadczenieDetailsModal = ({ swiadczenie, onClose, onToggleFavorite, isFavorite, showFavoriteButton = true }) => {
+const SwiadczenieDetailsModal = ({ swiadczenie, onClose, onToggleFavorite, isFavorite, showFavoriteButton = true, isPremium = true }) => {
   const [downloading, setDownloading] = useState(false);
 
   if (!swiadczenie) return null;
@@ -115,8 +115,11 @@ const SwiadczenieDetailsModal = ({ swiadczenie, onClose, onToggleFavorite, isFav
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                onToggleFavorite(swiadczenie.id);
+                if (isPremium) {
+                  onToggleFavorite(swiadczenie.id);
+                }
               }}
+              disabled={!isPremium}
               style={{
                 position: 'absolute',
                 top: '25px',
@@ -127,7 +130,7 @@ const SwiadczenieDetailsModal = ({ swiadczenie, onClose, onToggleFavorite, isFav
                 width: '40px',
                 height: '40px',
                 borderRadius: '50%',
-                cursor: 'pointer',
+                cursor: isPremium ? 'pointer' : 'not-allowed',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -135,10 +138,11 @@ const SwiadczenieDetailsModal = ({ swiadczenie, onClose, onToggleFavorite, isFav
                 transition: 'all 0.2s',
                 flexShrink: 0,
                 marginRight: 5,
-                zIndex: 20
+                zIndex: 20,
+                opacity: isPremium ? 1 : 0.5
               }}
-              onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'}
-              onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
+              onMouseOver={(e) => isPremium && (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)')}
+              onMouseOut={(e) => isPremium && (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)')}
             >
               {isFavorite ? '❤️' : '🤍'}
             </button>

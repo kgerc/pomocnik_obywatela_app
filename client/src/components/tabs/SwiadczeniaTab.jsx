@@ -467,6 +467,7 @@ const SwiadczeniaTab = () => {
           onClose={() => setSelectedSwiadczenie(null)}
           onToggleFavorite={handleToggleFavorite}
           isFavorite={isFavorite(selectedSwiadczenie.id)}
+          isPremium={preloadedIsPremium}
         />
       )}
     </div>
