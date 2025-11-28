@@ -348,7 +348,7 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
             {pismaResult.matches && pismaResult.matches.length > 0 && (
               <div>
                 {pismaResult.matches.map((pismo, idx) => (
-                  <PismoCard key={idx} pismo={pismo} />
+                  <PismoCard key={idx} pismo={pismo} preloadedIsPremium={preloadedIsPremium} />
                 ))}
               </div>
             )}
@@ -408,7 +408,7 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
             marginBottom: '20px'
           }}>
             {currentPisma.map(pismo => (
-              <PismoCardSmall key={pismo.id} pismo={pismo} />
+              <PismoCardSmall key={pismo.id} pismo={pismo} preloadedIsPremium={preloadedIsPremium} />
             ))}
           </div>
 
@@ -528,7 +528,7 @@ const PdfDownloadButton = ({ pismo, fullWidth = false }) => {
 };
 
 // Duża karta pisma (w wynikach AI)
-const PismoCard = ({ pismo }) => (
+const PismoCard = ({ pismo, preloadedIsPremium }) => (
   <div style={{
     background: '#f8f9fb',
     padding: '20px',
@@ -589,13 +589,14 @@ const PismoCard = ({ pismo }) => (
           sourceType: 'pismo',
           sourceId: pismo.id
         }}
+        isPremium={preloadedIsPremium}
       />
     </div>
   </div>
 );
 
 // Mała karta pisma (w grid)
-const PismoCardSmall = ({ pismo }) => (
+const PismoCardSmall = ({ pismo, preloadedIsPremium }) => (
   <div style={{
     background: '#f8f9fb',
     padding: '20px',
@@ -677,6 +678,7 @@ const PismoCardSmall = ({ pismo }) => (
           sourceType: 'pismo',
           sourceId: pismo.id
         }}
+        isPremium={preloadedIsPremium}
       />
     </div>
   </div>

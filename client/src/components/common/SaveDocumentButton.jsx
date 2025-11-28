@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import { Save, Loader, CheckCircle } from 'lucide-react';
+import { Save, Loader, CheckCircle, Crown } from 'lucide-react';
 import { useUserDocuments } from '../../hooks/useUserDocuments';
 import { useToast } from '../../contexts/ToastContext';
+import { useAppData } from '../../contexts/AppDataContext';
 
-const SaveDocumentButton = ({ documentData, onSaveSuccess }) => {
+const SaveDocumentButton = ({ documentData, onSaveSuccess, isPremium: preloadedIsPremium }) => {
+  const { isPremium: contextIsPremium } = useAppData();
+  const isPremium = preloadedIsPremium !== null && preloadedIsPremium !== undefined
+    ? preloadedIsPremium
+    : contextIsPremium;
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const { saveFromApp } = useUserDocuments();
@@ -28,6 +33,34 @@ const SaveDocumentButton = ({ documentData, onSaveSuccess }) => {
       setSaving(false);
     }
   };
+
+  // Jeśli użytkownik nie jest premium, pokaż zablokowany przycisk
+  if (!isPremium) {
+    return (
+      <button
+        disabled
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          background: '#f3f4f6',
+          color: '#9ca3af',
+          border: '2px solid #d1d5db',
+          padding: '10px 20px',
+          borderRadius: '8px',
+          fontWeight: '600',
+          fontSize: '14px',
+          cursor: 'not-allowed',
+          opacity: 0.6
+        }}
+      >
+        <Save size={16} />
+        Zapisz dokument
+        <Crown size={16} />
+      </button>
+    );
+  }
 
   if (saved) {
     return (
