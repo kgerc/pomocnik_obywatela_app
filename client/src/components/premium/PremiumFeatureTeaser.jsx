@@ -224,7 +224,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
             {[
               'Dostęp do asystenta AI',
               'Personalizacja świadczeń',
-              'Powiadomienia o nowych świadczeniach',
+              'Powiadomienia o nowych świadczeniach i dotacjach',
               'Historia rozmów z AI',
               'Przesyłanie własnych dokumentów'
             ].map((feature, index) => (

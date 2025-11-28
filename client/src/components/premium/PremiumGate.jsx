@@ -100,7 +100,7 @@ const PremiumGate = ({ children, feature = 'tej funkcji', setLoadingCheckout }) 
         {[
           'Dostęp do asystenta AI',
           'Personalizacja świadczeń',
-          'Powiadomienia o nowych świadczeniach',
+          'Powiadomienia o nowych świadczeniach i dotacjach',
           'Historia i dokumenty',
           'Priorytetowe wsparcie'
         ].map((feature, index) => (
