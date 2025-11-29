@@ -11,7 +11,7 @@ const PremiumFeatureTeaser = ({ children, feature = 'tej funkcji', title = 'Funk
   const [loadingCheckout, setLoadingCheckout] = useState(false);
 
   // Base prices
-  const MONTHLY_PRICE = 39.99;
+  const MONTHLY_PRICE = 25.00;
 
   // Calculated discounted price
   let discountedMonthly = MONTHLY_PRICE;
