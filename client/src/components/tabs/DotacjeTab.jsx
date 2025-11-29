@@ -438,9 +438,11 @@ const DotacjaCard = ({ dotacja }) => {
     // Szukamy drugiej daty (data końcowa) po myślniku lub słowie "do"
     let dateToUse = terminString;
 
-    // Jeśli jest zakres (zawiera " - " lub " do "), weź drugą datę
-    if (terminString.includes(' - ')) {
-      const parts = terminString.split(' - ');
+    // Jeśli jest zakres (zawiera różne typy myślników: -, –, —, lub słowo "do"), weź drugą datę
+    // Regex dopasowuje: spacja + dowolny myślnik/dash + spacja
+    const dashPattern = /\s+[-–—]\s+/;
+    if (dashPattern.test(terminString)) {
+      const parts = terminString.split(dashPattern);
       dateToUse = parts[1]?.trim() || parts[0];
     } else if (terminString.toLowerCase().includes(' do ')) {
       const parts = terminString.toLowerCase().split(' do ');
