@@ -3,7 +3,7 @@ import { Crown, Lock, Check, Sparkles } from 'lucide-react';
 import { useSubscription } from '../../hooks/useSubscription';
 import PromoCodeInput from './PromoCodeInput';
 
-const MONTHLY_PRICE = 25.00;
+const MONTHLY_PRICE = 9.99;
 
 const PremiumGate = ({ children, feature = 'tej funkcji', setLoadingCheckout }) => {
   const { isPremium, loading, createCheckoutSession } = useSubscription();

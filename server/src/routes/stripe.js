@@ -41,7 +41,7 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
     }
 
     // Calculate price with promo code if provided
-    let finalPrice = 2500; // Default: 25.00 zł w groszach
+    let finalPrice = 999; // Default: 9.99 zł w groszach
     let promoCodeData = null;
 
     if (promoCode) {
