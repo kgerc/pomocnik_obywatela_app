@@ -6,6 +6,7 @@ import SaveDocumentButton from '../common/SaveDocumentButton';
 import Pagination from '../common/Pagination';
 import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
 import { saveConversationToHistory } from '../../utils/saveToHistory';
+import ChatPreview from '../chat/ChatPreview';
 
 const ITEMS_PER_PAGE = 12;
 
@@ -215,146 +216,18 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
         Znajdź potrzebny dokument - przeglądaj bazę lub zapytaj AI o konkretne pismo.
       </p>
 
-      {/* AI Search - PREMIUM */}
-      <PremiumFeatureTeaser
-        feature="asystenta AI dla pism"
+      {/* Chat AI Preview - widoczny dla wszystkich, ale tylko premium może używać */}
+      <ChatPreview
+        query={pismaQuery}
+        setQuery={setPismaQuery}
+        onSearch={handlePismaSearch}
+        loading={pismaLoading}
+        result={pismaResult}
+        placeholder="Np. 'Potrzebuję wniosku o zasiłek' lub 'Pismo do ZUS o świadczenie'"
         title="Zapytaj AI o pismo"
-        preloadedIsPremium={preloadedIsPremium}
-      >
-        <div style={{
-          background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
-          padding: '25px',
-          borderRadius: '12px',
-          marginBottom: '30px',
-          border: '2px solid #2c5aa0'
-        }}>
-              <h3 style={{
-              fontSize: '18px',
-              fontWeight: '700',
-              color: '#2c3e50',
-              marginBottom: '15px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}>
-              <Sparkles size={20} color="#2c5aa0" />
-              Zapytaj AI o pismo
-            </h3>
-
-            <textarea
-              value={pismaQuery}
-              onChange={(e) => setPismaQuery(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Np. 'Mam dwójkę dzieci i nie stać mnie na rachunki' lub 'Pomoc dla osób niepełnosprawnych'"
-              style={{
-                width: '100%',
-                minHeight: '80px',
-                padding: '15px',
-                fontSize: '16px',
-                border: '2px solid #2c5aa0',
-                background: 'white',
-                color: 'black',
-                borderRadius: '8px',
-                resize: 'vertical',
-                fontFamily: 'inherit',
-                marginBottom: '15px',
-                boxSizing: 'border-box'
-              }}
-            />
-
-            {/* Kontener przycisków */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between', // Znajdź po lewej, Wyczyść po prawej
-              gap: '10px'
-            }}>
-              <button
-                onClick={handlePismaSearch}
-                disabled={pismaLoading || !pismaQuery.trim()}
-                style={{
-                  background: pismaLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-                  color: 'white',
-                  border: 'none',
-                  padding: '12px 25px',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  cursor: pismaLoading ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  transition: 'transform 0.2s'
-                }}
-                onMouseOver={(e) => !pismaLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
-                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-              >
-                {pismaLoading ? (
-                  <>
-                    <Loader size={18} className="spin" />
-                    Szukam...
-                  </>
-                ) : (
-                  <>
-                    <Search size={18} />
-                    Znajdź pismo
-                  </>
-                )}
-              </button>
-
-              {pismaResult && (
-                <button
-                  onClick={() => setPismaResult('')}
-                  style={{
-                    background: '#d9534f',
-                    color: 'white',
-                    border: 'none',
-                    padding: '12px 25px',
-                    borderRadius: '8px',
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'transform 0.2s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                  }}
-                  onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                  onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-                >
-                  <Eraser size={18} />
-                  Wyczyść
-                </button>
-              )}
-            </div>
-          </div>
-
-        {/* AI Result */}
-        {pismaResult && (
-          <div style={{
-            marginTop: '20px',
-            background: 'white',
-            padding: '20px',
-            borderRadius: '12px'
-          }}>
-            <div style={{
-              color: '#2c3e50',
-              lineHeight: '1.6',
-              marginBottom: '20px',
-              whiteSpace: 'pre-wrap'
-            }}>
-              {pismaResult.content}
-            </div>
-
-            {pismaResult.matches && pismaResult.matches.length > 0 && (
-              <div>
-                {pismaResult.matches.map((pismo, idx) => (
-                  <PismoCard key={idx} pismo={pismo} preloadedIsPremium={preloadedIsPremium} />
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-      </PremiumFeatureTeaser>
+        onClear={() => setPismaResult(null)}
+        renderCard={(pismo, idx) => <PismoCard key={idx} pismo={pismo} preloadedIsPremium={preloadedIsPremium} />}
+      />
 
       {/* Category Filter */}
       <div style={{
@@ -534,7 +407,9 @@ const PismoCard = ({ pismo, preloadedIsPremium }) => (
     padding: '20px',
     borderRadius: '12px',
     marginBottom: '15px',
-    border: '2px solid #e1e8ed'
+    border: '2px solid #e1e8ed',
+    display: 'flex',
+    flexDirection: 'column',
   }}>
     <div style={{
       display: 'flex',
@@ -561,7 +436,8 @@ const PismoCard = ({ pismo, preloadedIsPremium }) => (
       borderRadius: '20px',
       fontSize: '14px',
       fontWeight: '600',
-      marginBottom: '12px'
+      marginBottom: '12px',
+      alignSelf: 'flex-start'
     }}>
       {pismo.kategoria}
     </div>
@@ -569,7 +445,8 @@ const PismoCard = ({ pismo, preloadedIsPremium }) => (
     <p style={{
       color: '#5a6c7d',
       lineHeight: '1.6',
-      marginBottom: '15px'
+      marginBottom: '15px',
+      flex: 1
     }}>
       {pismo.opis}
     </p>
@@ -577,7 +454,8 @@ const PismoCard = ({ pismo, preloadedIsPremium }) => (
     <div style={{
       display: 'flex',
       gap: '10px',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+      marginTop: 'auto'
     }}>
       <PdfDownloadButton pismo={pismo} />
       <SaveDocumentButton

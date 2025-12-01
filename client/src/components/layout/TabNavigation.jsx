@@ -1,10 +1,11 @@
 import React from 'react';
-import { Heart, User, Bell, TrendingUp, Edit, History, Crown, Shield, FolderOpen } from 'lucide-react';
+import { Heart, User, Bell, TrendingUp, Edit, History, Crown, Shield, FolderOpen, Wand2 } from 'lucide-react';
 
 const TabNavigation = ({ activeTab, setActiveTab }) => {
   const tabs = [
     { id: 'swiadczenia', icon: Shield, label: 'Świadczenia', premium: false },
     { id: 'pisma', icon: Edit, label: 'Pisma', premium: false },
+    // { id: 'generator', icon: Wand2, label: 'Generator Pism', premium: true },
     { id: 'dotacje', icon: TrendingUp, label: 'Dotacje', premium: false },
     { id: 'dokumenty', icon: FolderOpen, label: 'Dokumenty', premium: true },
     { id: 'historia', icon: History, label: 'Historia Rozmów', premium: true },

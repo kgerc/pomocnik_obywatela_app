@@ -5,6 +5,7 @@ class User {
     this.id = data.id;
     this.email = data.email;
     this.fullName = data.full_name || data.fullName;
+    this.freeAiChatsUsed = data.free_ai_chats_used || data.freeAiChatsUsed || 0;
     this.createdAt = data.created_at || data.createdAt;
     this.updatedAt = data.updated_at || data.updatedAt;
   }
@@ -160,12 +161,88 @@ class User {
     }
   }
 
+  // Sprawdź czy użytkownik może użyć darmowego czatu AI
+  static async canUseFreeAiChat(userId) {
+    try {
+      const user = await User.findById(userId);
+      if (!user) return false;
+
+      const FREE_AI_CHAT_LIMIT = 3;
+      return user.freeAiChatsUsed < FREE_AI_CHAT_LIMIT;
+    } catch (error) {
+      console.error('Error checking free AI chat availability:', error);
+      throw error;
+    }
+  }
+
+  // Inkrementuj licznik darmowych czatów AI
+  static async incrementFreeAiChatsUsed(userId) {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('free_ai_chats_used')
+        .eq('id', userId)
+        .single();
+
+      if (error) throw error;
+
+      const currentCount = data.free_ai_chats_used || 0;
+
+      const { data: updated, error: updateError } = await supabase
+        .from('profiles')
+        .update({
+          free_ai_chats_used: currentCount + 1,
+          updated_at: new Date()
+        })
+        .eq('id', userId)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+
+      return new User(updated);
+    } catch (error) {
+      console.error('Error incrementing free AI chats:', error);
+      throw error;
+    }
+  }
+
+  // Pobierz informacje o darmowych czatach AI
+  static async getFreeAiChatInfo(userId) {
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        return {
+          used: 0,
+          remaining: 3,
+          limit: 3,
+          canUse: true
+        };
+      }
+
+      const FREE_AI_CHAT_LIMIT = 3;
+      const used = user.freeAiChatsUsed;
+      const remaining = Math.max(0, FREE_AI_CHAT_LIMIT - used);
+
+      return {
+        used,
+        remaining,
+        limit: FREE_AI_CHAT_LIMIT,
+        canUse: used < FREE_AI_CHAT_LIMIT
+      };
+    } catch (error) {
+      console.error('Error getting free AI chat info:', error);
+      throw error;
+    }
+  }
+
   // Instance methods
   toJSON() {
     return {
       id: this.id,
       email: this.email,
       fullName: this.fullName,
+      freeAiChatsUsed: this.freeAiChatsUsed,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     };

@@ -22,18 +22,8 @@ export const register = async (req, res) => {
       });
     }
 
-    // Utwórz profil użytkownika
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .insert({
-        id: data.user.id,
-        email: email,
-        full_name: fullName || ''
-      });
-
-    if (profileError) {
-      console.error('Error creating profile:', profileError);
-    }
+    // Profil użytkownika jest tworzony automatycznie przez trigger w Supabase
+    // (zobacz: server/sql/add_free_ai_chats.sql - KROK 3)
 
     res.status(201).json({
       success: true,

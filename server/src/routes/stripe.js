@@ -41,7 +41,8 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
     }
 
     // Calculate price with promo code if provided
-    let finalPrice = 999; // Default: 9.99 zł w groszach
+    // Cena bazowa: 9.99 zł (999 groszy) - już uwzględnia domyślny 50% rabat od 19.99 zł
+    let finalPrice = 499; // Default: 4.99 zł w groszach (po 50% rabacie)
     let promoCodeData = null;
 
     if (promoCode) {
@@ -50,7 +51,8 @@ router.post('/create-checkout-session', authenticateUser, async (req, res) => {
         const validation = await promoCodeObj.validate(userId);
         if (validation.valid) {
           const discount = promoCodeObj.discountPercent;
-          finalPrice = Math.round(3999 * (1 - discount / 100));
+          // Stosuj dodatkowy rabat z kodu promocyjnego na cenę po 50% rabacie (499 groszy)
+          finalPrice = Math.round(499 * (1 - discount / 100));
           promoCodeData = promoCodeObj;
           console.log(`Promo code ${promoCode.code} applied: ${discount}% discount, final price: ${finalPrice} groszy`);
         } else {

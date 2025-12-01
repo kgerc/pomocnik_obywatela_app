@@ -6,6 +6,7 @@ import { useAppData } from '../../contexts/AppDataContext';
 import Pagination from '../common/Pagination';
 import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
 import { saveConversationToHistory } from '../../utils/saveToHistory';
+import ChatPreview from '../chat/ChatPreview';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -218,150 +219,18 @@ const DotacjeTab = () => {
         Przeglądaj aktualne programy dotacyjne lub zapytaj AI o najlepsze źródło finansowania dla Twojego projektu.
       </p>
 
-      {/* AI Search */}
-      {subscriptionLoading && !preloadedIsPremium ? (
-        <></>
-      ) : (
-        <PremiumFeatureTeaser
-          feature="asystenta AI dla dotacji"
-          title="Zapytaj AI o dotację"
-          preloadedIsPremium={preloadedIsPremium}
-        >
-          <div style={{
-            background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
-            padding: '25px',
-            borderRadius: '12px',
-            marginBottom: '30px',
-            border: '2px solid #2c5aa0'
-          }}>
-            <h3 style={{
-              fontSize: '18px',
-              fontWeight: '700',
-              color: '#2c3e50',
-              marginBottom: '15px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}>
-              <Sparkles size={20} color="#2c5aa0" />
-              Zapytaj AI o dotację
-            </h3>
-
-            <textarea
-              value={dotacjeQuery}
-              onChange={(e) => setDotacjeQuery(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Np. 'Szukam dotacji na fotowoltaikę dla firmy' lub 'Granty na badania medyczne'"
-              style={{
-                width: '100%',
-                minHeight: '80px',
-                padding: '15px',
-                fontSize: '16px',
-                border: '2px solid #2c5aa0',
-                background: 'white',
-                color: 'black',
-                borderRadius: '8px',
-                resize: 'vertical',
-                fontFamily: 'inherit',
-                marginBottom: '15px',
-                boxSizing: 'border-box'
-              }}
-            />
-
-            {/* Kontener przycisków */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              gap: '10px'
-            }}>
-              <button
-                onClick={handleDotacjeSearch}
-                disabled={dotacjeLoading || !dotacjeQuery.trim()}
-                style={{
-                  background: dotacjeLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-                  color: 'white',
-                  border: 'none',
-                  padding: '12px 25px',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  cursor: dotacjeLoading ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  transition: 'transform 0.2s'
-                }}
-                onMouseOver={(e) => !dotacjeLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
-                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-              >
-                {dotacjeLoading ? (
-                  <>
-                    <Loader size={18} className="spin" />
-                    Szukam...
-                  </>
-                ) : (
-                  <>
-                    <Search size={18} />
-                    Znajdź dotację
-                  </>
-                )}
-              </button>
-
-              {dotacjeResult && (
-                <button
-                  onClick={() => setDotacjeResult('')}
-                  style={{
-                    background: '#d9534f',
-                    color: 'white',
-                    border: 'none',
-                    padding: '12px 25px',
-                    borderRadius: '8px',
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'transform 0.2s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                  }}
-                  onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                  onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-                >
-                  <Eraser size={18} />
-                  Wyczyść
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* AI Result */}
-          {dotacjeResult && (
-            <div style={{
-              marginTop: '20px',
-              background: 'white',
-              padding: '20px',
-              borderRadius: '12px'
-            }}>
-              <div style={{
-                color: '#2c3e50',
-                lineHeight: '1.6',
-                marginBottom: '20px',
-                whiteSpace: 'pre-wrap'
-              }}>
-                {dotacjeResult.content}
-              </div>
-
-              {dotacjeResult.matches && dotacjeResult.matches.length > 0 && (
-                <div>
-                  {dotacjeResult.matches.map((dotacja, idx) => (
-                    <DotacjaCard key={idx} dotacja={dotacja} />
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </PremiumFeatureTeaser>
-      )}
+      {/* Chat AI Preview - widoczny dla wszystkich, ale tylko premium można używać */}
+      <ChatPreview
+        query={dotacjeQuery}
+        setQuery={setDotacjeQuery}
+        onSearch={handleDotacjeSearch}
+        loading={dotacjeLoading}
+        result={dotacjeResult}
+        placeholder="Np. 'Szukam dotacji na fotowoltaikę dla firmy' lub 'Granty na badania medyczne'"
+        title="Zapytaj AI o dotację"
+        onClear={() => setDotacjeResult(null)}
+        renderCard={(dotacja, idx) => <DotacjaCard key={idx} dotacja={dotacja} />}
+      />
 
       {/* Filter by Sektor */}
       <div style={{
@@ -474,7 +343,9 @@ const DotacjaCard = ({ dotacja }) => {
       background: '#f8f9fb',
       padding: '20px',
       borderRadius: '12px',
-      border: '2px solid #e1e8ed'
+      border: '2px solid #e1e8ed',
+      display: 'flex',
+      flexDirection: 'column'
     }}>
       <div style={{
         display: 'flex',
@@ -548,132 +419,135 @@ const DotacjaCard = ({ dotacja }) => {
       <p style={{
         color: '#5a6c7d',
         lineHeight: '1.6',
-        marginBottom: '15px'
+        marginBottom: '15px',
+        flex: 1
       }}>
         {dotacja.opis}
       </p>
 
-      {dotacja.beneficjenci && dotacja.beneficjenci.length > 0 && (
-        <div style={{
-          background: 'white',
-          padding: '15px',
-          borderRadius: '8px',
-          marginBottom: '15px'
-        }}>
-          <h5 style={{
-            fontSize: '14px',
-            fontWeight: '700',
-            color: '#2c3e50',
-            marginBottom: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}>
-            <Building2 size={16} color="#2c5aa0" />
-            Beneficjenci:
-          </h5>
+      <div style={{ marginTop: 'auto' }}>
+        {dotacja.beneficjenci && dotacja.beneficjenci.length > 0 && (
           <div style={{
-            display: 'flex',
-            gap: '8px',
-            flexWrap: 'wrap'
+            background: 'white',
+            padding: '15px',
+            borderRadius: '8px',
+            marginBottom: '15px'
           }}>
-            {dotacja.beneficjenci.map((ben, benIdx) => (
-              <span key={benIdx} style={{
-                background: '#f8f9fb',
-                color: '#5a6c7d',
-                padding: '6px 12px',
-                borderRadius: '6px',
-                fontSize: '13px',
-                border: '1px solid #e1e8ed'
-              }}>
-                {ben}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {dotacja.termin && (
-        <div style={{
-          background: 'white',
-          padding: '15px',
-          borderRadius: '8px',
-          marginBottom: '15px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '15px',
-          flexWrap: 'wrap'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: '200px' }}>
-            <AlertCircle size={20} color="#ff9800" />
-            <div>
-              <strong style={{ color: '#2c3e50' }}>Termin:</strong>{' '}
-              <span style={{ color: '#5a6c7d' }}>{dotacja.termin}</span>
-            </div>
-          </div>
-
-          {daysRemaining !== null && shouldShowDaysRemaining && (
-            <div style={{
-              background: daysRemaining < 7 ? '#fee2e2' : daysRemaining < 30 ? '#fef3c7' : '#d1fae5',
-              color: daysRemaining < 7 ? '#c33' : daysRemaining < 30 ? '#d97706' : '#059669',
-              padding: '8px 16px',
-              borderRadius: '20px',
+            <h5 style={{
               fontSize: '14px',
               fontWeight: '700',
-              textAlign: 'center',
-              whiteSpace: 'nowrap',
+              color: '#2c3e50',
+              marginBottom: '8px',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '8px'
             }}>
-              {daysRemaining > 0 ? (
-                <>
-                  <Clock size={16} />
-                  {daysRemaining >= 365
-                    ? `Pozostało ${Math.floor(daysRemaining / 365)} ${Math.floor(daysRemaining / 365) === 1 ? 'rok' : Math.floor(daysRemaining / 365) < 5 ? 'lata' : 'lat'}`
-                    : `Pozostało ${daysRemaining} ${daysRemaining === 1 ? 'dzień' : daysRemaining < 5 ? 'dni' : 'dni'}`
-                  }
-                </>
-              ) : daysRemaining === 0 ? (
-                <>
-                  <AlertTriangle size={16} />
-                  Ostatni dzień!
-                </>
-              ) : (
-                <>
-                  <XCircle size={16} />
-                  Termin minął
-                </>
-              )}
+              <Building2 size={16} color="#2c5aa0" />
+              Beneficjenci:
+            </h5>
+            <div style={{
+              display: 'flex',
+              gap: '8px',
+              flexWrap: 'wrap'
+            }}>
+              {dotacja.beneficjenci.map((ben, benIdx) => (
+                <span key={benIdx} style={{
+                  background: '#f8f9fb',
+                  color: '#5a6c7d',
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  fontSize: '13px',
+                  border: '1px solid #e1e8ed'
+                }}>
+                  {ben}
+                </span>
+              ))}
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
 
-      <a
-        href={dotacja.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-          color: 'white',
-          padding: '12px 20px',
-          borderRadius: '8px',
-          textDecoration: 'none',
-          fontWeight: '600',
-          fontSize: '14px',
-          transition: 'transform 0.2s'
-        }}
-        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-      >
-        <ExternalLink size={16} />
-        Sprawdź program
-      </a>
+        {dotacja.termin && (
+          <div style={{
+            background: 'white',
+            padding: '15px',
+            borderRadius: '8px',
+            marginBottom: '15px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '15px',
+            flexWrap: 'wrap'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: '200px' }}>
+              <AlertCircle size={20} color="#ff9800" />
+              <div>
+                <strong style={{ color: '#2c3e50' }}>Termin:</strong>{' '}
+                <span style={{ color: '#5a6c7d' }}>{dotacja.termin}</span>
+              </div>
+            </div>
+
+            {daysRemaining !== null && shouldShowDaysRemaining && (
+              <div style={{
+                background: daysRemaining < 7 ? '#fee2e2' : daysRemaining < 30 ? '#fef3c7' : '#d1fae5',
+                color: daysRemaining < 7 ? '#c33' : daysRemaining < 30 ? '#d97706' : '#059669',
+                padding: '8px 16px',
+                borderRadius: '20px',
+                fontSize: '14px',
+                fontWeight: '700',
+                textAlign: 'center',
+                whiteSpace: 'nowrap',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}>
+                {daysRemaining > 0 ? (
+                  <>
+                    <Clock size={16} />
+                    {daysRemaining >= 365
+                      ? `Pozostało ${Math.floor(daysRemaining / 365)} ${Math.floor(daysRemaining / 365) === 1 ? 'rok' : Math.floor(daysRemaining / 365) < 5 ? 'lata' : 'lat'}`
+                      : `Pozostało ${daysRemaining} ${daysRemaining === 1 ? 'dzień' : daysRemaining < 5 ? 'dni' : 'dni'}`
+                    }
+                  </>
+                ) : daysRemaining === 0 ? (
+                  <>
+                    <AlertTriangle size={16} />
+                    Ostatni dzień!
+                  </>
+                ) : (
+                  <>
+                    <XCircle size={16} />
+                    Termin minął
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        <a
+          href={dotacja.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+            color: 'white',
+            padding: '12px 20px',
+            borderRadius: '8px',
+            textDecoration: 'none',
+            fontWeight: '600',
+            fontSize: '14px',
+            transition: 'transform 0.2s'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+          onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+        >
+          <ExternalLink size={16} />
+          Sprawdź program
+        </a>
+      </div>
     </div>
   );
 };

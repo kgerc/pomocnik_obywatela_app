@@ -7,6 +7,7 @@ import FavoritesTab from '../components/tabs/FavoritesTab';
 import NotificationsTab from '../components/tabs/NotificationsTab';
 import DotacjeTab from '../components/tabs/DotacjeTab';
 import PismaTab from '../components/tabs/PismaTab';
+import GeneratorPismTab from '../components/tabs/GeneratorPismTab';
 import SwiadczeniaTab from '../components/tabs/SwiadczeniaTab';
 import HistoriaTab from '../components/tabs/HistoriaTab';
 import TwojeDokumentyTab from '../components/tabs/TwojeDokumentyTab';
@@ -136,6 +137,13 @@ const MainAppContent = () => {
         {/* Pisma Tab - FREE (but AI search inside is premium) */}
         {activeTab === 'pisma' && (
           <PismaTab preloadedIsPremium={isPremium} />
+        )}
+
+        {/* Generator Pism Tab - PREMIUM */}
+        {activeTab === 'generator' && (
+          <PremiumGate feature="Generatora Pism AI" setLoadingCheckout={setLoadingCheckout}>
+            <GeneratorPismTab />
+          </PremiumGate>
         )}
 
         {/* Dotacje Tab - FREE (but AI search inside is premium) */}

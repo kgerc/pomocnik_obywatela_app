@@ -7,6 +7,7 @@ import Pagination from '../common/Pagination';
 import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
 import SwiadczenieDetailsModal from '../swiadczenia/SwiadczenieDetailsModal';
 import { saveConversationToHistory } from '../../utils/saveToHistory';
+import ChatPreview from '../chat/ChatPreview';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -225,157 +226,24 @@ const SwiadczeniaTab = () => {
         Sprawdź dostępne świadczenia społeczne - przeglądaj bazę lub zapytaj AI o konkretną pomoc.
       </p>
 
-      {subscriptionLoading && !preloadedIsPremium ? (
-        <></>
-      ): (
-        <PremiumFeatureTeaser
-          feature="asystenta AI dla świadczeń"
-          title="Zapytaj AI o świadczenie"
-          preloadedIsPremium={preloadedIsPremium}
-        >
-          <div style={{
-            background: 'linear-gradient(135deg, #e8f4f8 0%, #d6ebf5 100%)',
-            padding: '25px',
-            borderRadius: '12px',
-            marginBottom: '30px',
-            border: '2px solid #2c5aa0'
-          }}>
-            <h3 style={{
-              fontSize: '18px',
-              fontWeight: '700',
-              color: '#2c3e50',
-              marginBottom: '15px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}>
-              <Sparkles size={20} color="#2c5aa0" />
-              Zapytaj AI o świadczenie
-            </h3>
-
-            <textarea
-              value={swiadczeniaQuery}
-              onChange={(e) => setSwiadczeniaQuery(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Np. 'Mam dwójkę dzieci i nie stać mnie na rachunki' lub 'Pomoc dla osób niepełnosprawnych'"
-              style={{
-                width: '100%',
-                minHeight: '80px',
-                padding: '15px',
-                fontSize: '16px',
-                border: '2px solid #2c5aa0',
-                background: 'white',
-                color: 'black',
-                borderRadius: '8px',
-                resize: 'vertical',
-                fontFamily: 'inherit',
-                marginBottom: '15px',
-                boxSizing: 'border-box'
-              }}
-            />
-
-            {/* Kontener przycisków */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between', // Znajdź po lewej, Wyczyść po prawej
-              gap: '10px'
-            }}>
-              <button
-                onClick={handleSwiadczeniaSearch}
-                disabled={swiadczeniaLoading || !swiadczeniaQuery.trim()}
-                style={{
-                  background: swiadczeniaLoading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-                  color: 'white',
-                  border: 'none',
-                  padding: '12px 25px',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  cursor: swiadczeniaLoading ? 'not-allowed' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  transition: 'transform 0.2s'
-                }}
-                onMouseOver={(e) => !swiadczeniaLoading && (e.currentTarget.style.transform = 'translateY(-2px)')}
-                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-              >
-                {swiadczeniaLoading ? (
-                  <>
-                    <Loader size={18} className="spin" />
-                    Szukam...
-                  </>
-                ) : (
-                  <>
-                    <Search size={18} />
-                    Znajdź świadczenie
-                  </>
-                )}
-              </button>
-
-              {swiadczeniaResult && (
-                <button
-                  onClick={() => setSwiadczeniaResult('')}
-                  style={{
-                    background: '#d9534f',
-                    color: 'white',
-                    border: 'none',
-                    padding: '12px 25px',
-                    borderRadius: '8px',
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'transform 0.2s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                  }}
-                  onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                  onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-                >
-                  <Eraser size={18} />
-                  Wyczyść
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* AI Result */}
-          {swiadczeniaResult && (
-            <div style={{
-              marginTop: '20px',
-              background: 'white',
-              padding: '20px',
-              borderRadius: '12px'
-            }}>
-              <div style={{
-                color: '#2c3e50',
-                lineHeight: '1.6',
-                marginBottom: '20px',
-                whiteSpace: 'pre-wrap'
-              }}>
-                {swiadczeniaResult.content}
-              </div>
-
-              {swiadczeniaResult.matches && swiadczeniaResult.matches.length > 0 && (
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                  gap: '20px'
-                }}>
-                  {swiadczeniaResult.matches.map((swiadczenie, idx) => (
-                    <SwiadczenieCard
-                      key={idx}
-                      swiadczenie={swiadczenie}
-                      onClick={() => setSelectedSwiadczenie(swiadczenie)}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </PremiumFeatureTeaser>
-      )}
+      {/* Chat AI Preview - widoczny dla wszystkich, ale tylko premium może używać */}
+      <ChatPreview
+        query={swiadczeniaQuery}
+        setQuery={setSwiadczeniaQuery}
+        onSearch={handleSwiadczeniaSearch}
+        loading={swiadczeniaLoading}
+        result={swiadczeniaResult}
+        placeholder="Np. 'Mam dwójkę dzieci i nie stać mnie na rachunki' lub 'Pomoc dla osób niepełnosprawnych'"
+        title="Zapytaj AI o świadczenie"
+        onClear={() => setSwiadczeniaResult(null)}
+        renderCard={(swiadczenie, idx) => (
+          <SwiadczenieCard
+            key={idx}
+            swiadczenie={swiadczenie}
+            onClick={() => setSelectedSwiadczenie(swiadczenie)}
+          />
+        )}
+      />
 
 
       {/* Category Filter */}
