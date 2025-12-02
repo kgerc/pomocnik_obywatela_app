@@ -129,14 +129,8 @@ const GeneratorPismTab = () => {
             }
 
             // Odblokuj dokument i pokaż toast TYLKO RAZ po zakończeniu wszystkich prób
-            setDocumentUnlocked(true);
-            setVerifyingPayment(false); // Stop loading indicator
-
-            if (purchased) {
-              showSuccess('Płatność zakończona sukcesem! Dokument został odblokowany.');
-            } else {
+            if (!purchased) {
               console.warn('Payment confirmed by Stripe but not yet in database. Unlocking document anyway.');
-              showSuccess('Płatność zakończona sukcesem! Dokument został odblokowany.');
             }
 
             return true;
@@ -144,10 +138,12 @@ const GeneratorPismTab = () => {
           } catch (error) {
             console.error('Error checking document purchase:', error);
             // W razie błędu też odblokuj - użytkownik zapłacił
-            setDocumentUnlocked(true);
-            setVerifyingPayment(false); // Stop loading indicator
-            showSuccess('Płatność zakończona sukcesem! Dokument został odblokowany.');
             return false;
+          } finally {
+            // Zawsze odblokuj dokument i pokaż toast - niezależnie od wyniku retry
+            setDocumentUnlocked(true);
+            setVerifyingPayment(false);
+            showSuccess('Płatność zakończona sukcesem! Dokument został odblokowany.');
           }
         };
 
