@@ -199,19 +199,31 @@ router.post('/create-document-payment', authenticateUser, async (req, res) => {
       customerId = customer.id;
     }
 
-    // Create payment session (2 PLN) - using STRIPE_DOCUMENT_PRICE_ID
+    // Create payment session (2 PLN) - using STRIPE_DOCUMENT_PRICE_ID or fallback to price_data
+    const lineItem = process.env.STRIPE_DOCUMENT_PRICE_ID
+      ? {
+          price: process.env.STRIPE_DOCUMENT_PRICE_ID,
+          quantity: 1,
+        }
+      : {
+          price_data: {
+            currency: 'pln',
+            product_data: {
+              name: 'Dokument z Generatora Pism',
+              description: 'Jednorazowy dostęp do wygenerowanego dokumentu'
+            },
+            unit_amount: 200 // 2 PLN in grosze
+          },
+          quantity: 1,
+        };
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ['blik', 'card'],
-      line_items: [
-        {
-          price: process.env.STRIPE_DOCUMENT_PRICE_ID,
-          quantity: 1,
-        },
-      ],
+      line_items: [lineItem],
       mode: 'payment',
-      success_url: `${process.env.FRONTEND_URL}/app?success=true&payment=document&documentId=${documentId}&tab=generator`,
-      cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true&tab=generator`,
+      success_url: `${process.env.FRONTEND_URL}/app?success=true&payment=document&documentId=${documentId}&returnToGenerator=true`,
+      cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true&returnToGenerator=true`,
       metadata: {
         userId: userId,
         paymentType: 'single_document',
@@ -219,17 +231,8 @@ router.post('/create-document-payment', authenticateUser, async (req, res) => {
       }
     });
 
-    // Create pending purchase record
-    await PurchasedDocument.create({
-      userId: userId,
-      documentId: documentId,
-      documentType: 'generator_pism',
-      stripePaymentIntentId: session.payment_intent,
-      stripeCustomerId: customerId,
-      amountPaid: 200,
-      status: 'pending',
-      documentData: null
-    });
+    // Don't create pending purchase here - payment_intent is null at this point
+    // It will be created in the webhook when payment_intent.succeeded event fires
 
     console.log(`Document payment session created for user ${userId}, document ${documentId}`);
 
@@ -268,17 +271,29 @@ router.post('/create-guest-document-payment', async (req, res) => {
       }
     });
 
-    // Create payment session (2 PLN) using STRIPE_DOCUMENT_PRICE_ID
+    // Create payment session (2 PLN) using STRIPE_DOCUMENT_PRICE_ID or fallback to price_data
+    const guestLineItem = process.env.STRIPE_DOCUMENT_PRICE_ID
+      ? {
+          price: process.env.STRIPE_DOCUMENT_PRICE_ID,
+          quantity: 1,
+        }
+      : {
+          price_data: {
+            currency: 'pln',
+            product_data: {
+              name: 'Dokument z Generatora Pism',
+              description: 'Jednorazowy dostęp do wygenerowanego dokumentu'
+            },
+            unit_amount: 200 // 2 PLN in grosze
+          },
+          quantity: 1,
+        };
+
     const session = await stripe.checkout.sessions.create({
       customer: customer.id,
       customer_email: email,
       payment_method_types: ['blik', 'card'],
-      line_items: [
-        {
-          price: process.env.STRIPE_DOCUMENT_PRICE_ID,
-          quantity: 1,
-        },
-      ],
+      line_items: [guestLineItem],
       mode: 'payment',
       success_url: `${process.env.PISMA_APP_URL || 'https://pisma.pomocnikobywatela.pl'}?success=true&payment=document&documentId=${documentId}&email=${encodeURIComponent(email)}`,
       cancel_url: `${process.env.PISMA_APP_URL || 'https://pisma.pomocnikobywatela.pl'}?canceled=true`,
@@ -645,11 +660,31 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           if (session.metadata.paymentType === 'single_document') {
             const userId = session.metadata.userId;
             const documentId = session.metadata.documentId;
+            const customerId = session.customer;
 
             console.log('Processing single document payment for user:', userId, 'document:', documentId);
 
-            // Update purchase status to paid
-            await PurchasedDocument.updateStatus(paymentIntent.id, 'paid');
+            // Check if record exists
+            const existingPurchase = await PurchasedDocument.findByPaymentIntentId(paymentIntent.id);
+
+            if (existingPurchase) {
+              // Update existing
+              await PurchasedDocument.updateStatus(paymentIntent.id, 'paid');
+              console.log('✔ Updated existing purchase record');
+            } else {
+              // Create new purchase record (since we don't create pending anymore)
+              await PurchasedDocument.create({
+                userId: userId,
+                documentId: documentId,
+                documentType: 'generator_pism',
+                stripePaymentIntentId: paymentIntent.id,
+                stripeCustomerId: customerId,
+                amountPaid: 200,
+                status: 'paid',
+                documentData: null
+              });
+              console.log('✔ Created new purchase record');
+            }
 
             console.log('✔ Document purchase confirmed for user:', userId, 'document:', documentId);
           }

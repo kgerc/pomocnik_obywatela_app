@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Loader } from 'lucide-react';
 import Header from '../components/layout/Header';
 import TabNavigation from '../components/layout/TabNavigation';
@@ -19,6 +19,17 @@ const MainAppContent = () => {
   const [activeTab, setActiveTab] = useState('swiadczenia');
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const { isPremium } = useAppData();
+
+  // Check if user returned from payment and should go to generator tab
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('returnToGenerator') === 'true') {
+      setActiveTab('generator');
+      // Clean up URL
+      const newUrl = window.location.pathname + window.location.search.replace(/&?returnToGenerator=true/, '');
+      window.history.replaceState({}, document.title, newUrl);
+    }
+  }, []);
 
   return (
     <>

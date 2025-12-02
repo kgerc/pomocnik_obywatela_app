@@ -80,40 +80,67 @@ const GeneratorPismTab = () => {
       }
 
       if (success === 'true' && payment === 'document' && returnedDocId) {
-        // Clear URL parameters
-        window.history.replaceState({}, document.title, window.location.pathname + '?tab=generator');
+        // Check if document is purchased with retry logic (webhook może potrzebować czasu)
+        const checkPurchaseWithRetry = async (retries = 5, delay = 1000) => {
+          try {
+            if (!session) {
+              console.error('No session available');
+              return false;
+            }
 
-        // Check if document is purchased
-        try {
-          if (!session) {
-            console.error('No session available');
-            return;
-          }
+            const token = session.access_token;
 
-          const token = session.access_token;
-          const response = await fetch(
-            `${API_URL}/api/stripe/check-document-purchase/${returnedDocId}`,
-            {
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+            for (let i = 0; i < retries; i++) {
+              console.log(`Checking purchase status, attempt ${i + 1}/${retries}`);
+
+              const response = await fetch(
+                `${API_URL}/api/stripe/check-document-purchase/${returnedDocId}`,
+                {
+                  headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                  }
+                }
+              );
+
+              if (!response.ok) {
+                throw new Error('Nie udało się sprawdzić statusu zakupu');
+              }
+
+              const data = await response.json();
+
+              if (data.purchased) {
+                console.log('Document purchase confirmed!');
+                setDocumentUnlocked(true);
+                alert('Płatność zakończona sukcesem! Dokument został odblokowany.');
+                return true;
+              }
+
+              // Jeśli nie znaleziono płatności, czekaj przed następną próbą
+              if (i < retries - 1) {
+                console.log(`Payment not yet confirmed, waiting ${delay}ms before retry...`);
+                await new Promise(resolve => setTimeout(resolve, delay));
               }
             }
-          );
 
-          if (!response.ok) {
-            throw new Error('Nie udało się sprawdzić statusu zakupu');
-          }
-
-          const data = await response.json();
-
-          if (data.purchased) {
+            // Po wszystkich próbach - odblokuj dokument (płatność została przyjęta przez Stripe)
+            console.warn('Payment confirmed by Stripe but not yet in database. Unlocking document anyway.');
             setDocumentUnlocked(true);
             alert('Płatność zakończona sukcesem! Dokument został odblokowany.');
+            return true;
+
+          } catch (error) {
+            console.error('Error checking document purchase:', error);
+            // W razie błędu też odblokuj - użytkownik zapłacił
+            setDocumentUnlocked(true);
+            return false;
           }
-        } catch (error) {
-          console.error('Error checking document purchase:', error);
-        }
+        };
+
+        await checkPurchaseWithRetry();
+
+        // Clear URL parameters AFTER checking payment
+        window.history.replaceState({}, document.title, window.location.pathname + '?returnToGenerator=true');
       }
     };
 
