@@ -139,11 +139,9 @@ const MainAppContent = () => {
           <PismaTab preloadedIsPremium={isPremium} />
         )}
 
-        {/* Generator Pism Tab - PREMIUM */}
+        {/* Generator Pism Tab - FREE (with preview, pay per document or premium for unlimited) */}
         {activeTab === 'generator' && (
-          <PremiumGate feature="Generatora Pism AI" setLoadingCheckout={setLoadingCheckout}>
-            <GeneratorPismTab />
-          </PremiumGate>
+          <GeneratorPismTab />
         )}
 
         {/* Dotacje Tab - FREE (but AI search inside is premium) */}

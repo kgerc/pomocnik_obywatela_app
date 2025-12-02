@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Check, Sparkles, Shield, Zap } from 'lucide-react';
+import { ArrowRight, Check, Sparkles, Shield, Zap, Wand2 } from 'lucide-react';
 import PrivacyPolicy from '../components/PrivacyPolicy';
 
 const LandingPage = () => {
@@ -131,14 +131,14 @@ const LandingPage = () => {
               description: 'Inteligentny asystent pomoże Ci znaleźć świadczenia dopasowane do Twojej sytuacji'
             },
             {
+              icon: <Wand2 size={32} />,
+              title: 'Generator pism',
+              description: 'Twórz profesjonalne dokumenty i wnioski, gotowe do wysłania do urzędów'
+            },
+            {
               icon: <Shield size={32} />,
               title: 'Bezpieczne i Prywatne',
               description: 'Twoje dane są chronione. Pełna zgodność z RODO i najwyższe standardy bezpieczeństwa'
-            },
-            {
-              icon: <Zap size={32} />,
-              title: 'Szybkie Odpowiedzi',
-              description: 'Natychmiastowe informacje o świadczeniach, dokumentach i dotacjach w jednym miejscu'
             }
           ].map((feature, idx) => (
             <div key={idx} style={{

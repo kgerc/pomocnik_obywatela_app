@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Wand2, FileText, Loader, AlertCircle, Download, Sparkles, Check, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Wand2, FileText, Loader, AlertCircle, Download, Sparkles, Check, ChevronRight, Lock } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useAppData } from '../../contexts/AppDataContext';
 import { useAuth } from '../../contexts/AuthContext';
-import { useFreeAiChat } from '../../hooks/useFreeAiChat';
-import ChatPremiumModal from '../premium/ChatPremiumModal';
+import DocumentPaymentModal from '../generator/DocumentPaymentModal';
+import { DOSTEPNE_PISMA } from '../../data/pisma';
+import html2canvas from "html2canvas";
+import { PDFDocument } from "pdf-lib";
+
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
 // Wspólne pola osobowe dla wszystkich pism
 const DANE_OSOBOWE = [
@@ -15,92 +19,20 @@ const DANE_OSOBOWE = [
   { id: 'email', label: 'Adres email', placeholder: 'np. jan.kowalski@example.com', type: 'text', required: false }
 ];
 
-// Dostępne typy pism do generowania
-const DOSTEPNE_PISMA = [
-  {
-    id: 'wniosek_o_raty',
-    nazwa: 'Wniosek o rozłożenie zadłużenia na raty',
-    opis: 'Wygeneruj gotowy wniosek o rozłożenie należności na raty',
-    kategoria: 'Finanse',
-    pytania: [
-      { id: 'nazwa_organu', label: 'Nazwa organu', placeholder: 'np. Urząd Skarbowy w Warszawie', type: 'text' },
-      { id: 'ulica_organu', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Marszałkowska 1/3', type: 'text' },
-      { id: 'kod_miasto_organu', label: 'Kod pocztowy i miasto urzędu', placeholder: 'np. 00-624 Warszawa', type: 'text' },
-      { id: 'kwota', label: 'Jaka jest kwota zadłużenia?', placeholder: 'np. 5000 zł', type: 'text' },
-      { id: 'raty', label: 'Na ile rat chcesz rozłożyć zadłużenie?', placeholder: 'np. 12 miesięcy', type: 'text' },
-      { id: 'powod', label: 'Jaki jest powód Twojej trudnej sytuacji?', placeholder: 'np. utrata pracy, choroba', type: 'textarea' }
-    ]
-  },
-  {
-    id: 'odwolanie_decyzja',
-    nazwa: 'Odwołanie od decyzji administracyjnej',
-    opis: 'Złóż odwołanie od niekorzystnej decyzji urzędu',
-    kategoria: 'Administracja',
-    pytania: [
-      { id: 'nazwa_organu', label: 'Jaki organ wydał decyzję?', placeholder: 'np. Zakład Ubezpieczeń Społecznych Oddział w Warszawie', type: 'text' },
-      { id: 'ulica_organu', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Szamocka 3/5', type: 'text' },
-      { id: 'kod_miasto_organu', label: 'Kod pocztowy i miasto urzędu', placeholder: 'np. 01-748 Warszawa', type: 'text' },
-      { id: 'data_decyzji', label: 'Data wydania decyzji', placeholder: 'np. 15.01.2025', type: 'text' },
-      { id: 'numer_decyzji', label: 'Numer decyzji (jeśli jest)', placeholder: 'np. ZUS/DEC/123/2025', type: 'text' },
-      { id: 'powod_odwolania', label: 'Dlaczego nie zgadzasz się z decyzją?', placeholder: 'Opisz szczegółowo powody odwołania', type: 'textarea' }
-    ]
-  },
-  {
-    id: 'wniosek_zasilek',
-    nazwa: 'Wniosek o zasiłek dla bezrobotnych',
-    opis: 'Złóż wniosek o zasiłek dla osób bezrobotnych',
-    kategoria: 'Świadczenia',
-    pytania: [
-      { id: 'nazwa_organu', label: 'Do którego Urzędu Pracy kierujesz wniosek?', placeholder: 'np. Powiatowy Urząd Pracy w Krakowie', type: 'text' },
-      { id: 'ulica_organu', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Lipowa 1', type: 'text' },
-      { id: 'kod_miasto_organu', label: 'Kod pocztowy i miasto urzędu', placeholder: 'np. 30-702 Kraków', type: 'text' },
-      { id: 'data_utraty', label: 'Kiedy straciłeś/aś pracę?', placeholder: 'np. 01.12.2024', type: 'text' },
-      { id: 'ostatnie_miejsce', label: 'Gdzie ostatnio pracowałeś/aś?', placeholder: 'np. nazwa firmy i stanowisko', type: 'text' },
-      { id: 'wyksztalcenie', label: 'Jakie masz wykształcenie?', placeholder: 'np. wyższe, średnie', type: 'text' }
-    ]
-  },
-  {
-    id: 'skarga_urząd',
-    nazwa: 'Skarga na bezczynność urzędu',
-    opis: 'Złóż skargę gdy urząd nie załatwia Twojej sprawy',
-    kategoria: 'Administracja',
-    pytania: [
-      { id: 'nazwa_organu', label: 'Jaki urząd nie załatwia sprawy?', placeholder: 'np. Urząd Miasta Warszawa', type: 'text' },
-      { id: 'ulica_organu', label: 'Ulica i numer urzędu', placeholder: 'np. pl. Bankowy 3/5', type: 'text' },
-      { id: 'kod_miasto_organu', label: 'Kod pocztowy i miasto urzędu', placeholder: 'np. 00-950 Warszawa', type: 'text' },
-      { id: 'sprawa', label: 'Jakiej sprawy dotyczy?', placeholder: 'np. wniosek o świadczenie, pozwolenie', type: 'text' },
-      { id: 'data_zlozenia', label: 'Kiedy złożyłeś/aś wniosek?', placeholder: 'np. 15.10.2024', type: 'text' },
-      { id: 'numer_sprawy', label: 'Numer sprawy (jeśli znasz)', placeholder: 'np. WM/123/2024', type: 'text' }
-    ]
-  },
-  {
-    id: 'zwrot_podatku',
-    nazwa: 'Wniosek o zwrot nadpłaconego podatku',
-    opis: 'Odzyskaj nadpłacony podatek',
-    kategoria: 'Finanse',
-    pytania: [
-      { id: 'nazwa_organu', label: 'Jaki Urząd Skarbowy?', placeholder: 'np. Urząd Skarbowy Warszawa-Śródmieście', type: 'text' },
-      { id: 'ulica_organu', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Marszałkowska 1/3', type: 'text' },
-      { id: 'kod_miasto_organu', label: 'Kod pocztowy i miasto urzędu', placeholder: 'np. 00-624 Warszawa', type: 'text' },
-      { id: 'kwota', label: 'Kwota nadpłaty', placeholder: 'np. 1500 zł', type: 'text' },
-      { id: 'okres', label: 'Którego okresu dotyczy?', placeholder: 'np. rok 2024', type: 'text' },
-      { id: 'uzasadnienie', label: 'Dlaczego powstała nadpłata?', placeholder: 'Opisz przyczynę nadpłaty', type: 'textarea' }
-    ]
-  }
-];
-
 const GeneratorPismTab = () => {
   const { isPremium } = useAppData();
-  const { user } = useAuth();
-  const { canUseChat, freeChatsInfo, useFreeChat } = useFreeAiChat();
+  const { user, session } = useAuth();
   const [selectedPismo, setSelectedPismo] = useState(null);
   const [currentStep, setCurrentStep] = useState(1); // 1 = wybór pisma, 2 = formularz, 3 = generowanie
   const [formData, setFormData] = useState({});
   const [generating, setGenerating] = useState(false);
   const [generatedDocument, setGeneratedDocument] = useState(null);
+  const documentRef = useRef(null);
+  const [documentId, setDocumentId] = useState(null); // unique ID for this generated document
+  const [documentUnlocked, setDocumentUnlocked] = useState(false); // whether user has access to full document
   const [selectedCategory, setSelectedCategory] = useState('wszystkie');
   const [isVisible, setIsVisible] = useState(false);
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const categories = ['wszystkie', ...new Set(DOSTEPNE_PISMA.map(p => p.kategoria))];
 
@@ -113,15 +45,86 @@ const GeneratorPismTab = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Check if user returned from successful payment and restore document state
+  useEffect(() => {
+    const checkPaymentSuccess = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const success = urlParams.get('success');
+      const payment = urlParams.get('payment');
+      const returnedDocId = urlParams.get('documentId');
+
+      // Przywróć stan dokumentu z localStorage
+      try {
+        const savedStateStr = localStorage.getItem('generatorPismState');
+        if (savedStateStr) {
+          const savedState = JSON.parse(savedStateStr);
+
+          // Sprawdź czy stan nie jest zbyt stary (max 1 godzina)
+          const oneHour = 60 * 60 * 1000;
+          if (Date.now() - savedState.timestamp < oneHour) {
+            // Przywróć stan tylko jeśli wracamy z płatności lub dokument był wygenerowany
+            if ((success === 'true' && payment === 'document') || savedState.generatedDocument) {
+              setSelectedPismo(savedState.selectedPismo);
+              setFormData(savedState.formData);
+              setDocumentId(savedState.documentId);
+
+              if (savedState.generatedDocument) {
+                setGeneratedDocument(savedState.generatedDocument);
+                setCurrentStep(3);
+              }
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Failed to restore state from localStorage:', e);
+      }
+
+      if (success === 'true' && payment === 'document' && returnedDocId) {
+        // Clear URL parameters
+        window.history.replaceState({}, document.title, window.location.pathname + '?tab=generator');
+
+        // Check if document is purchased
+        try {
+          if (!session) {
+            console.error('No session available');
+            return;
+          }
+
+          const token = session.access_token;
+          const response = await fetch(
+            `${API_URL}/api/stripe/check-document-purchase/${returnedDocId}`,
+            {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error('Nie udało się sprawdzić statusu zakupu');
+          }
+
+          const data = await response.json();
+
+          if (data.purchased) {
+            setDocumentUnlocked(true);
+            alert('Płatność zakończona sukcesem! Dokument został odblokowany.');
+          }
+        } catch (error) {
+          console.error('Error checking document purchase:', error);
+        }
+      }
+    };
+
+    if (user && session) {
+      checkPaymentSuccess();
+    }
+  }, [user, session]);
+
   const handlePismoSelect = (pismo) => {
     if (!user) {
       alert('Musisz być zalogowany, aby generować dokumenty');
-      return;
-    }
-
-    // Sprawdź czy może używać generatora
-    if (!isPremium && !canUseChat) {
-      setShowPremiumModal(true);
       return;
     }
 
@@ -129,6 +132,8 @@ const GeneratorPismTab = () => {
     setFormData({});
     setCurrentStep(2);
     setGeneratedDocument(null);
+    setDocumentId(null);
+    setDocumentUnlocked(false);
   };
 
   const handleInputChange = (questionId, value) => {
@@ -144,24 +149,32 @@ const GeneratorPismTab = () => {
       return;
     }
 
-    // Sprawdź czy użytkownik ma premium lub darmowe użycia
-    if (!isPremium) {
-      if (!canUseChat) {
-        setShowPremiumModal(true);
-        return;
-      }
-    }
-
-    // Rozpocznij generowanie NATYCHMIAST (bez czekania)
+    // Rozpocznij generowanie NATYCHMIAST
     setGenerating(true);
     setCurrentStep(3);
 
-    // Inkrementuj licznik w tle (tylko dla użytkowników bez premium)
-    if (!isPremium) {
-      useFreeChat().catch(error => {
-        console.error('Error incrementing free chat counter:', error);
-        // Jeśli błąd, nie przerywaj - użytkownik już dostał wynik
-      });
+    // Generuj unikalny ID dla dokumentu
+    const newDocumentId = `doc_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    setDocumentId(newDocumentId);
+
+    // Użytkownicy premium mają od razu pełny dostęp
+    if (isPremium) {
+      setDocumentUnlocked(true);
+    } else {
+      // Użytkownicy bez premium widzą tylko podgląd (połowę dokumentu)
+      setDocumentUnlocked(false);
+    }
+
+    // Zapisz stan formularza i dokumentu w localStorage (do przywrócenia po powrocie z checkout)
+    try {
+      localStorage.setItem('generatorPismState', JSON.stringify({
+        selectedPismo: selectedPismo,
+        formData: formData,
+        documentId: newDocumentId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      console.error('Failed to save state to localStorage:', e);
     }
 
     try {
@@ -207,7 +220,7 @@ const GeneratorPismTab = () => {
         ${daneOsobowe.telefon ? 'Tel: ' + daneOsobowe.telefon : ''}
         ${daneOsobowe.email ? 'Email: ' + daneOsobowe.email : ''}
 
-        ## DANE ADRESATA (WYRÓWNANE DO PRAWEJ STRONY!)
+        ## DANE ADRESATA
         ${daneAdresata.nazwa_organu}
         ${daneAdresata.ulica_organu}
         ${daneAdresata.kod_miasto_organu}
@@ -218,53 +231,76 @@ const GeneratorPismTab = () => {
         ## DODATKOWE INFORMACJE
         ${dodatkoweDane}
 
-        ## INSTRUKCJE FORMATOWANIA - BARDZO WAŻNE!
+        ## INSTRUKCJE FORMATOWANIA - UŻYWAJ ZNACZNIKÓW!
 
-        1. **NAGŁÓWEK** (po lewej stronie):
-           ${dataFormatted}
+        Wygeneruj pismo według DOKŁADNIE tej struktury:
 
-           ${daneOsobowe.imie_nazwisko}
-           ${daneOsobowe.ulica_numer}
-           ${daneOsobowe.kod_miasto}
-           ${daneOsobowe.telefon ? 'Tel: ' + daneOsobowe.telefon : ''}
-           ${daneOsobowe.email ? 'Email: ' + daneOsobowe.email : ''}
+        [LEFT]
+        ${dataFormatted}
 
-        2. **ADRESAT** (wyrównany DO PRAWEJ STRONY - użyj odpowiedniej liczby spacji przed każdą linią!):
-                                                                    ${daneAdresata.nazwa_organu}
-                                                                    ${daneAdresata.ulica_organu}
-                                                                    ${daneAdresata.kod_miasto_organu}
+        ${daneOsobowe.imie_nazwisko}
+        ${daneOsobowe.ulica_numer}
+        ${daneOsobowe.kod_miasto}
+        ${daneOsobowe.telefon ? 'Tel: ' + daneOsobowe.telefon : ''}
+        ${daneOsobowe.email ? 'Email: ' + daneOsobowe.email : ''}
+        [/LEFT]
 
-        3. **TYTUŁ PISMA** (wycentrowany, pogrubiony WIELKIMI LITERAMI)
+        [RIGHT]
+        ${daneAdresata.nazwa_organu}
+        ${daneAdresata.ulica_organu}
+        ${daneAdresata.kod_miasto_organu}
+        [/RIGHT]
 
-        4. **TREŚĆ MERYTORYCZNA**:
-           - Zwrot grzecznościowy
-           - Uzasadnienie wniosku/skargi z odniesieniem do faktów
-           - Powołanie się na podstawę prawną (jeśli dotyczy)
-           - Prośba o rozpatrzenie sprawy
+        [CENTER]
+        TYTUŁ PISMA - WIELKIMI LITERAMI (SPRAWDŹ ORTOGRAFIĘ - np. "WNIOSEK" NIE "WNIENIOSEK")
+        [/CENTER]
 
-        5. **ZAKOŃCZENIE**:
-           - Zwrot uprzejmości
-           - Podpis:
+        Szanowni Państwo,
 
-           ....................................
-           ${daneOsobowe.imie_nazwisko}
+        [Treść merytoryczna pisma - formalna, z odwołaniem do przepisów jeśli dotyczy]
+
+        [RIGHT]
+        Z poważaniem,
+        [/RIGHT]
+
+        [RIGHT]
+        ....................................
+        ${daneOsobowe.imie_nazwisko}
+        [/RIGHT]
 
         ## WAŻNE WYMOGI:
+        - MUSISZ użyć znaczników [LEFT], [RIGHT], [CENTER] do formatowania
+        - Tytuł pisma w [CENTER] wielkimi literami - ZWRÓĆ UWAGĘ NA ORTOGRAFIĘ (np. "WNIOSEK" a nie "WNIENIOSEK")
+        - Podpis w [RIGHT] - wyrównany do prawej strony
         - Używaj formalnego języka urzędowego
-        - Wyrównaj adresat DO PRAWEJ (dodaj spacje przed każdą linią adresata!)
-        - NIE używaj Markdown (**, ##, itp.)
-        - Użyj TYLKO czystego tekstu
-        - Zachowaj poprawne odstępy między sekcjami
-        - Tytuł pisma pisz WIELKIMI LITERAMI
+        - NIE używaj Markdown (**, ##, itp.) - tylko znaczniki [LEFT], [RIGHT], [CENTER]
         - Stosuj polskie przepisy prawne gdzie to właściwe
 
-        Wygeneruj TYLKO treść pisma, bez żadnych komentarzy.
+        Wygeneruj TYLKO treść pisma ze znacznikami.
       `;
 
       const result = await model.generateContent(prompt);
-      const documentText = result.response.text();
+      let documentText = result.response.text();
+
+      // Przetwórz znaczniki formatowania na HTML
+      documentText = documentText
+        .replace(/\[LEFT\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/LEFT\]/g, '<div style="text-align: left; display: block; width: 100%;">$1</div>')
+        .replace(/\[RIGHT\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/RIGHT\]/g, '<div style="text-align: right; display: block; width: 100%;">$1</div>')
+        .replace(/\[CENTER\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/CENTER\]/g, '<div style="text-align: center; font-weight: bold; display: block; width: 100%;">$1</div>');
 
       setGeneratedDocument(documentText);
+
+      // Zapisz wygenerowany dokument w localStorage
+      try {
+        const savedState = JSON.parse(localStorage.getItem('generatorPismState') || '{}');
+        localStorage.setItem('generatorPismState', JSON.stringify({
+          ...savedState,
+          generatedDocument: documentText,
+          documentUnlocked: isPremium
+        }));
+      } catch (e) {
+        console.error('Failed to save generated document to localStorage:', e);
+      }
 
     } catch (error) {
       console.error('Błąd generowania dokumentu:', error);
@@ -275,72 +311,97 @@ const GeneratorPismTab = () => {
     }
   };
 
-  const handleDownloadPDF = () => {
-    if (!generatedDocument) return;
+const handleDownloadPDF = async () => {
+  if (!generatedDocument) return;
 
-    // Utwórz Blob z HTML
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="UTF-8">
-          <title>${selectedPismo.nazwa}</title>
-          <style>
-            @page {
-              size: A4;
-              margin: 2.5cm;
-            }
-            body {
-              font-family: 'Times New Roman', Times, serif;
-              font-size: 12pt;
-              line-height: 1.6;
-              color: #000;
-              max-width: 21cm;
-              margin: 0 auto;
-              padding: 2.5cm;
-            }
-            .document {
-              white-space: pre-wrap;
-              word-wrap: break-word;
-            }
-            @media print {
-              body {
-                padding: 0;
-              }
-            }
-          </style>
-        </head>
-        <body>
-          <div class="document">${generatedDocument.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
-          <script>
-            window.onload = function() {
-              setTimeout(function() {
-                window.print();
-                setTimeout(function() {
-                  window.close();
-                }, 100);
-              }, 250);
-            };
-          </script>
-        </body>
-      </html>
-    `;
+  if (!documentUnlocked) {
+    setShowPaymentModal(true);
+    return;
+  }
 
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const printWindow = window.open(url, '_blank');
+  const element = documentRef.current;
+  if (!element) return;
 
-    // Zwolnij URL po otwarciu okna
-    if (printWindow) {
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const scale = 2;
+  const canvas = await html2canvas(element, {
+    scale,
+    useCORS: true,
+    allowTaint: true,
+    backgroundColor: "#ffffff"
+  });
+
+  const imgWidth = canvas.width;
+  const imgHeight = canvas.height;
+
+  const pdfDoc = await PDFDocument.create();
+  const pageWidth = 595.28;
+  const pageHeight = 841.89;
+  const pxPerPage = pageHeight * (imgWidth / pageWidth);
+
+  let yOffset = 0;
+
+  while (yOffset < imgHeight) {
+    const sliceHeight = Math.min(pxPerPage, imgHeight - yOffset);
+
+    if (sliceHeight <= 0) break; // <- zabezpieczenie
+
+    const sliceCanvas = document.createElement("canvas");
+    sliceCanvas.width = imgWidth;
+    sliceCanvas.height = sliceHeight;
+
+    const sliceCtx = sliceCanvas.getContext("2d");
+    sliceCtx.drawImage(canvas, 0, -yOffset);
+
+    const png = sliceCanvas.toDataURL("image/png");
+    if (!png.startsWith("data:image/png")) {
+      console.error("Niepoprawny slice PNG, pomijam stronę", yOffset, sliceHeight);
+      yOffset += pxPerPage;
+      continue;
     }
-  };
+
+    const pngImage = await pdfDoc.embedPng(png);
+    const pngDims = pngImage.scale(pageWidth / imgWidth);
+
+    const page = pdfDoc.addPage([pageWidth, pageHeight]);
+    page.drawImage(pngImage, {
+      x: 0,
+      y: pageHeight - pngDims.height,
+      width: pngDims.width,
+      height: pngDims.height
+    });
+
+    yOffset += pxPerPage;
+  }
+
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${selectedPismo.nazwa || "dokument"}.pdf`;
+  link.click();
+
+  URL.revokeObjectURL(url);
+};
+
+
 
   const handleStartOver = () => {
     setSelectedPismo(null);
     setFormData({});
     setCurrentStep(1);
     setGeneratedDocument(null);
+    setDocumentId(null);
+    setDocumentUnlocked(false);
+    setShowPaymentModal(false);
+
+    // Wyczyść zapisany stan z localStorage
+    try {
+      localStorage.removeItem('generatorPismState');
+    } catch (e) {
+      console.error('Failed to clear localStorage:', e);
+    }
   };
 
   // Sprawdź czy wszystkie wymagane pola są wypełnione
@@ -350,10 +411,14 @@ const GeneratorPismTab = () => {
 
   return (
     <>
-      <ChatPremiumModal
-        isOpen={showPremiumModal}
-        onClose={() => setShowPremiumModal(false)}
-        freeChatsInfo={freeChatsInfo}
+      <DocumentPaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        documentId={documentId}
+        onPaymentSuccess={() => {
+          setDocumentUnlocked(true);
+          setShowPaymentModal(false);
+        }}
       />
 
       <div
@@ -379,7 +444,7 @@ const GeneratorPismTab = () => {
         }}>
           <Wand2 size={24} color="#2c5aa0" />
           Generator Pism AI
-          {isPremium ? (
+          {isPremium && (
             <span style={{
               background: 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)',
               color: '#2c3e50',
@@ -392,26 +457,8 @@ const GeneratorPismTab = () => {
               gap: '4px'
             }}>
               <Sparkles size={14} />
-              PREMIUM
+              PREMIUM - Nielimitowany dostęp
             </span>
-          ) : (
-            freeChatsInfo && user && (
-              <span style={{
-                fontSize: '13px',
-                fontWeight: '600',
-                color: freeChatsInfo.remaining > 0 ? '#10b981' : '#e74c3c',
-                background: freeChatsInfo.remaining > 0 ? '#d1fae5' : '#fee',
-                padding: '4px 12px',
-                borderRadius: '20px',
-                marginLeft: 'auto'
-              }}>
-                {freeChatsInfo.remaining > 0
-                  ? freeChatsInfo.remaining === 1
-                    ? '1 darmowe użycie'
-                    : `${freeChatsInfo.remaining} darmowe użycia`
-                  : 'Brak darmowych użyć'}
-              </span>
-            )
           )}
         </h2>
         <p style={{
@@ -527,36 +574,29 @@ const GeneratorPismTab = () => {
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
             gap: '20px'
           }}>
-            {filteredPisma.map(pismo => {
-              const canGenerate = isPremium || canUseChat;
-              return (
-                <div
-                  key={pismo.id}
-                  onClick={() => handlePismoSelect(pismo)}
-                  style={{
-                    background: '#f8f9fb',
-                    padding: '20px',
-                    borderRadius: '12px',
-                    border: '2px solid #e1e8ed',
-                    cursor: canGenerate ? 'pointer' : 'not-allowed',
-                    transition: 'all 0.3s ease',
-                    opacity: canGenerate ? 1 : 0.6
-                  }}
-                  onMouseOver={(e) => {
-                    if (canGenerate) {
-                      e.currentTarget.style.transform = 'translateY(-5px)';
-                      e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
-                      e.currentTarget.style.borderColor = '#2c5aa0';
-                    }
-                  }}
-                  onMouseOut={(e) => {
-                    if (canGenerate) {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = 'none';
-                      e.currentTarget.style.borderColor = '#e1e8ed';
-                    }
-                  }}
-                >
+            {filteredPisma.map(pismo => (
+              <div
+                key={pismo.id}
+                onClick={() => handlePismoSelect(pismo)}
+                style={{
+                  background: '#f8f9fb',
+                  padding: '20px',
+                  borderRadius: '12px',
+                  border: '2px solid #e1e8ed',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
+                  e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+                  e.currentTarget.style.borderColor = '#2c5aa0';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = '#e1e8ed';
+                }}
+              >
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -594,23 +634,8 @@ const GeneratorPismTab = () => {
                 }}>
                   {pismo.opis}
                 </p>
-
-                {!canGenerate && (
-                  <div style={{
-                    background: '#fff3cd',
-                    border: '1px solid #ffc107',
-                    borderRadius: '8px',
-                    padding: '10px',
-                    fontSize: '12px',
-                    color: '#856404',
-                    fontWeight: '600'
-                  }}>
-                    {isPremium ? 'Wymaga Premium' : 'Brak darmowych użyć - przejdź na Premium'}
-                  </div>
-                )}
               </div>
-            );
-            })}
+            ))}
           </div>
         </>
       )}
@@ -731,6 +756,8 @@ const GeneratorPismTab = () => {
                         style={{
                           width: '100%',
                           padding: '12px',
+                          background: 'white',
+                          color: 'black',
                           fontSize: '14px',
                           border: '2px solid #e1e8ed',
                           borderRadius: '8px',
@@ -876,29 +903,116 @@ const GeneratorPismTab = () => {
                 </div>
               </div>
 
-              {/* Podgląd dokumentu */}
               <div style={{
-                background: 'white',
-                border: '2px solid #e1e8ed',
-                borderRadius: '12px',
-                padding: '40px',
-                marginBottom: '25px',
-                fontFamily: '"Times New Roman", Times, serif',
-                fontSize: '12pt',
-                lineHeight: '1.6',
-                whiteSpace: 'pre-wrap',
-                wordWrap: 'break-word',
-                maxHeight: '600px',
-                overflowY: 'auto',
-                color: '#000'
+                position: 'relative',
+                marginBottom: '25px'
               }}>
-                {generatedDocument}
+                <div style={{
+                  background: 'white',
+                  border: '2px solid #e1e8ed',
+                  borderRadius: '12px',
+                  padding: '40px',
+                  lineHeight: '1.6',
+                  whiteSpace: 'pre-wrap',
+                  wordWrap: 'break-word',
+                  maxHeight: '600px',
+                  overflow: documentUnlocked || isPremium ? 'auto' : 'hidden',
+                  color: '#000',
+                  position: 'relative'
+                }}>
+                  
+                  {/* Jeśli nie odblokowany – pokazujemy całość, ale ucinamy scroll i dodajemy maskę */}
+                  {!documentUnlocked && !isPremium ? (
+                    <>
+                      <div
+                        style={{
+                          maxHeight: '50%',
+                          overflow: 'hidden'
+                        }}
+                      >
+                        <div  
+                          ref={documentRef}
+                          id="document-preview"
+                          style={{
+                            width: "794px",     // A4 width in px @ 96DPI
+                            minHeight: "1123px", // A4 height in px
+                            margin: "0 auto",
+                            overflow: "hidden", // blokada scrolli
+                            padding: "40px",
+                            boxSizing: "border-box",
+                            background: "white",
+                            fontFamily: "'Times New Roman', Times, serif",
+                            fontSize: "12pt",
+                            lineHeight: 1.5,
+                            color: "#000000"
+                          }}
+                          dangerouslySetInnerHTML={{ __html: generatedDocument }} />
+                      </div>
+
+                      {/* Maska + przycisk */}
+                      <div style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: '50%',
+                        background: 'linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)',
+                        display: 'flex',
+                        alignItems: 'flex-end',
+                        justifyContent: 'center',
+                        pointerEvents: 'none'
+                      }}>
+                        <div style={{
+                          background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+                          color: 'white',
+                          padding: '16px 32px',
+                          borderRadius: '12px',
+                          fontSize: '16px',
+                          fontWeight: '700',
+                          boxShadow: '0 8px 24px rgba(44, 90, 160, 0.3)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: '8px',
+                          textAlign: 'center',
+                          maxWidth: '400px',
+                          pointerEvents: 'auto',
+                          marginBottom: '15px'
+                        }}>
+                          <Lock size={32} />
+                          <div>Odblokuj pełny dokument</div>
+                          <div style={{ fontSize: '13px', fontWeight: '500', opacity: 0.9 }}>
+                            Zapłać 2 zł za ten dokument lub wykup Premium za 4,99 zł/mies.
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div     
+                    style={{
+                      width: "794px",     // A4 width in px @ 96DPI
+                      minHeight: "1123px", // A4 height in px
+                      margin: "0 auto",
+                      overflow: "hidden", // blokada scrolli
+                      padding: "40px",
+                      boxSizing: "border-box",
+                      background: "white",
+                      fontFamily: "'Times New Roman', Times, serif",
+                      fontSize: "12pt",
+                      lineHeight: 1.5,
+                      color: "#000000"
+                    }}
+                    ref={documentRef} dangerouslySetInnerHTML={{ __html: generatedDocument }} />
+                  )}
+
+                </div>
               </div>
 
               <div style={{
                 display: 'flex',
                 gap: '10px',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                flexWrap: 'wrap'
               }}>
                 <button
                   onClick={handleStartOver}
@@ -916,25 +1030,52 @@ const GeneratorPismTab = () => {
                   Generuj kolejne pismo
                 </button>
 
-                <button
-                  onClick={handleDownloadPDF}
-                  style={{
-                    padding: '12px 24px',
-                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontWeight: '600',
-                    fontSize: '14px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                  }}
-                >
-                  <Download size={16} />
-                  Drukuj / Zapisz PDF
-                </button>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  {!documentUnlocked && !isPremium && (
+                    <button
+                      onClick={() => setShowPaymentModal(true)}
+                      style={{
+                        padding: '12px 24px',
+                        background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontWeight: '600',
+                        fontSize: '14px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}
+                    >
+                      <Lock size={16} />
+                      Odblokuj dokument
+                    </button>
+                  )}
+
+                  <button
+                    onClick={handleDownloadPDF}
+                    style={{
+                      padding: '12px 24px',
+                      background: (documentUnlocked || isPremium)
+                        ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+                        : '#ccc',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontWeight: '600',
+                      fontSize: '14px',
+                      cursor: (documentUnlocked || isPremium) ? 'pointer' : 'not-allowed',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      opacity: (documentUnlocked || isPremium) ? 1 : 0.6
+                    }}
+                  >
+                    <Download size={16} />
+                    Zapisz PDF
+                  </button>
+                </div>
               </div>
             </div>
           ) : null}

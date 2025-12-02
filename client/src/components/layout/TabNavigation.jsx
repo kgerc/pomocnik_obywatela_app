@@ -5,8 +5,8 @@ const TabNavigation = ({ activeTab, setActiveTab }) => {
   const tabs = [
     { id: 'swiadczenia', icon: Shield, label: 'Świadczenia', premium: false },
     { id: 'pisma', icon: Edit, label: 'Pisma', premium: false },
-    // { id: 'generator', icon: Wand2, label: 'Generator Pism', premium: true },
     { id: 'dotacje', icon: TrendingUp, label: 'Dotacje', premium: false },
+    { id: 'generator', icon: Wand2, label: 'Generator Pism', premium: false },
     { id: 'dokumenty', icon: FolderOpen, label: 'Dokumenty', premium: true },
     { id: 'historia', icon: History, label: 'Historia Rozmów', premium: true },
     { id: 'favorites', icon: Heart, label: `Ulubione`, premium: true },

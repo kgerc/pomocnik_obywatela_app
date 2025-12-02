@@ -2,6 +2,7 @@ import express from 'express';
 import Stripe from 'stripe';
 import Subscription from '../models/Subscription.js';
 import PromoCode from '../models/PromoCode.js';
+import PurchasedDocument from '../models/PurchasedDocument.js';
 import { authenticateUser } from '../middleware/auth.js';
 import { deliverPremiumNotificationsToUser } from '../controllers/notificationsController.js';
 
@@ -157,6 +158,102 @@ router.post('/create-portal-session', authenticateUser, async (req, res) => {
     res.json({ url: session.url });
   } catch (error) {
     console.error('Error creating portal session:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint do tworzenia płatności za pojedynczy dokument (2 PLN)
+router.post('/create-document-payment', authenticateUser, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const userEmail = req.user.email;
+    const { documentId } = req.body;
+
+    console.log('Create document payment - userId:', userId, 'documentId:', documentId);
+
+    if (!documentId) {
+      return res.status(400).json({
+        error: 'Document ID is required'
+      });
+    }
+
+    // Check if user already purchased this document
+    const existingPurchase = await PurchasedDocument.findByUserAndDocumentId(userId, documentId);
+    if (existingPurchase && existingPurchase.isPaid()) {
+      return res.status(400).json({
+        error: 'Ten dokument został już zakupiony'
+      });
+    }
+
+    // Get or create Stripe Customer (same pattern as BLIK payment)
+    const existingSub = await Subscription.findByUserId(userId);
+    let customerId = existingSub?.stripeCustomerId;
+
+    if (!customerId || customerId.startsWith('promo_')) {
+      const customer = await stripe.customers.create({
+        email: userEmail,
+        metadata: {
+          userId: userId
+        }
+      });
+      customerId = customer.id;
+    }
+
+    // Create payment session (2 PLN) - using STRIPE_DOCUMENT_PRICE_ID
+    const session = await stripe.checkout.sessions.create({
+      customer: customerId,
+      payment_method_types: ['blik', 'card'],
+      line_items: [
+        {
+          price: process.env.STRIPE_DOCUMENT_PRICE_ID,
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${process.env.FRONTEND_URL}/app?success=true&payment=document&documentId=${documentId}&tab=generator`,
+      cancel_url: `${process.env.FRONTEND_URL}/app?canceled=true&tab=generator`,
+      metadata: {
+        userId: userId,
+        paymentType: 'single_document',
+        documentId: documentId
+      }
+    });
+
+    // Create pending purchase record
+    await PurchasedDocument.create({
+      userId: userId,
+      documentId: documentId,
+      documentType: 'generator_pism',
+      stripePaymentIntentId: session.payment_intent,
+      stripeCustomerId: customerId,
+      amountPaid: 200,
+      status: 'pending',
+      documentData: null
+    });
+
+    console.log(`Document payment session created for user ${userId}, document ${documentId}`);
+
+    res.json({ sessionId: session.id, url: session.url });
+  } catch (error) {
+    console.error('Error creating document payment session:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Check if user has purchased a document
+router.get('/check-document-purchase/:documentId', authenticateUser, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { documentId } = req.params;
+
+    const purchase = await PurchasedDocument.findByUserAndDocumentId(userId, documentId);
+
+    res.json({
+      purchased: purchase !== null && purchase.isPaid(),
+      purchase: purchase ? purchase.toJSON() : null
+    });
+  } catch (error) {
+    console.error('Error checking document purchase:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -485,8 +582,20 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         if (sessions.data.length > 0) {
           const session = sessions.data[0];
 
+          // Sprawdź czy to płatność za pojedynczy dokument
+          if (session.metadata.paymentType === 'single_document') {
+            const userId = session.metadata.userId;
+            const documentId = session.metadata.documentId;
+
+            console.log('Processing single document payment for user:', userId, 'document:', documentId);
+
+            // Update purchase status to paid
+            await PurchasedDocument.updateStatus(paymentIntent.id, 'paid');
+
+            console.log('✔ Document purchase confirmed for user:', userId, 'document:', documentId);
+          }
           // Sprawdź czy to płatność BLIK monthly
-          if (session.metadata.paymentType === 'blik_monthly') {
+          else if (session.metadata.paymentType === 'blik_monthly') {
             const userId = session.metadata.userId;
             const customerId = session.customer;
 
