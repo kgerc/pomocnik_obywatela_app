@@ -240,6 +240,65 @@ router.post('/create-document-payment', authenticateUser, async (req, res) => {
   }
 });
 
+// Endpoint do tworzenia płatności za pojedynczy dokument dla gości (bez autoryzacji)
+router.post('/create-guest-document-payment', async (req, res) => {
+  try {
+    const { documentId, email } = req.body;
+
+    console.log('Create guest document payment - documentId:', documentId, 'email:', email);
+
+    if (!documentId) {
+      return res.status(400).json({
+        error: 'Document ID is required'
+      });
+    }
+
+    if (!email || !email.includes('@')) {
+      return res.status(400).json({
+        error: 'Valid email is required'
+      });
+    }
+
+    // Create or get Stripe Customer for guest
+    const customer = await stripe.customers.create({
+      email: email,
+      metadata: {
+        documentId: documentId,
+        guest: 'true'
+      }
+    });
+
+    // Create payment session (2 PLN) using STRIPE_DOCUMENT_PRICE_ID
+    const session = await stripe.checkout.sessions.create({
+      customer: customer.id,
+      customer_email: email,
+      payment_method_types: ['blik', 'card'],
+      line_items: [
+        {
+          price: process.env.STRIPE_DOCUMENT_PRICE_ID,
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${process.env.PISMA_APP_URL || 'https://pisma.pomocnikobywatela.pl'}?success=true&payment=document&documentId=${documentId}&email=${encodeURIComponent(email)}`,
+      cancel_url: `${process.env.PISMA_APP_URL || 'https://pisma.pomocnikobywatela.pl'}?canceled=true`,
+      metadata: {
+        email: email,
+        paymentType: 'guest_document',
+        documentId: documentId,
+        guest: 'true'
+      }
+    });
+
+    console.log(`Guest document payment session created for email ${email}, document ${documentId}`);
+
+    res.json({ sessionId: session.id, url: session.url });
+  } catch (error) {
+    console.error('Error creating guest document payment session:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Check if user has purchased a document
 router.get('/check-document-purchase/:documentId', authenticateUser, async (req, res) => {
   try {
@@ -593,6 +652,18 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
             await PurchasedDocument.updateStatus(paymentIntent.id, 'paid');
 
             console.log('✔ Document purchase confirmed for user:', userId, 'document:', documentId);
+          }
+          // Sprawdź czy to płatność za dokument dla gościa (bez konta)
+          else if (session.metadata.paymentType === 'guest_document') {
+            const email = session.metadata.email;
+            const documentId = session.metadata.documentId;
+
+            console.log('Processing guest document payment for email:', email, 'document:', documentId);
+
+            // Można tutaj zapisać płatność gościa w bazie, jeśli chcesz trackować
+            // Na razie po prostu logujemy - dokument będzie odblokowany po powrocie z checkout
+
+            console.log('✔ Guest document purchase confirmed for email:', email, 'document:', documentId);
           }
           // Sprawdź czy to płatność BLIK monthly
           else if (session.metadata.paymentType === 'blik_monthly') {
