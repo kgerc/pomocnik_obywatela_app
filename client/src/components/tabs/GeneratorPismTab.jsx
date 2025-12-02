@@ -3,6 +3,7 @@ import { Wand2, FileText, Loader, AlertCircle, Download, Sparkles, Check, Chevro
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useAppData } from '../../contexts/AppDataContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 import DocumentPaymentModal from '../generator/DocumentPaymentModal';
 import { DOSTEPNE_PISMA } from '../../data/pisma';
 import html2canvas from "html2canvas";
@@ -22,6 +23,7 @@ const DANE_OSOBOWE = [
 const GeneratorPismTab = () => {
   const { isPremium } = useAppData();
   const { user, session } = useAuth();
+  const { showSuccess, showError } = useToast();
   const [selectedPismo, setSelectedPismo] = useState(null);
   const [currentStep, setCurrentStep] = useState(1); // 1 = wybór pisma, 2 = formularz, 3 = generowanie
   const [formData, setFormData] = useState({});
@@ -33,6 +35,7 @@ const GeneratorPismTab = () => {
   const [selectedCategory, setSelectedCategory] = useState('wszystkie');
   const [isVisible, setIsVisible] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [verifyingPayment, setVerifyingPayment] = useState(false); // loading state for payment verification
 
   const categories = ['wszystkie', ...new Set(DOSTEPNE_PISMA.map(p => p.kategoria))];
 
@@ -83,12 +86,15 @@ const GeneratorPismTab = () => {
         // Check if document is purchased with retry logic (webhook może potrzebować czasu)
         const checkPurchaseWithRetry = async (retries = 5, delay = 1000) => {
           try {
+            setVerifyingPayment(true); // Start loading indicator
+
             if (!session) {
               console.error('No session available');
               return false;
             }
 
             const token = session.access_token;
+            let purchased = false;
 
             for (let i = 0; i < retries; i++) {
               console.log(`Checking purchase status, attempt ${i + 1}/${retries}`);
@@ -111,9 +117,8 @@ const GeneratorPismTab = () => {
 
               if (data.purchased) {
                 console.log('Document purchase confirmed!');
-                setDocumentUnlocked(true);
-                alert('Płatność zakończona sukcesem! Dokument został odblokowany.');
-                return true;
+                purchased = true;
+                break;
               }
 
               // Jeśli nie znaleziono płatności, czekaj przed następną próbą
@@ -123,16 +128,25 @@ const GeneratorPismTab = () => {
               }
             }
 
-            // Po wszystkich próbach - odblokuj dokument (płatność została przyjęta przez Stripe)
-            console.warn('Payment confirmed by Stripe but not yet in database. Unlocking document anyway.');
+            // Odblokuj dokument i pokaż toast TYLKO RAZ po zakończeniu wszystkich prób
             setDocumentUnlocked(true);
-            alert('Płatność zakończona sukcesem! Dokument został odblokowany.');
+            setVerifyingPayment(false); // Stop loading indicator
+
+            if (purchased) {
+              showSuccess('Płatność zakończona sukcesem! Dokument został odblokowany.');
+            } else {
+              console.warn('Payment confirmed by Stripe but not yet in database. Unlocking document anyway.');
+              showSuccess('Płatność zakończona sukcesem! Dokument został odblokowany.');
+            }
+
             return true;
 
           } catch (error) {
             console.error('Error checking document purchase:', error);
             // W razie błędu też odblokuj - użytkownik zapłacił
             setDocumentUnlocked(true);
+            setVerifyingPayment(false); // Stop loading indicator
+            showSuccess('Płatność zakończona sukcesem! Dokument został odblokowany.');
             return false;
           }
         };
@@ -422,6 +436,7 @@ const handleDownloadPDF = async () => {
     setDocumentId(null);
     setDocumentUnlocked(false);
     setShowPaymentModal(false);
+    setVerifyingPayment(false);
 
     // Wyczyść zapisany stan z localStorage
     try {
@@ -896,6 +911,39 @@ const handleDownloadPDF = async () => {
                 fontSize: '15px'
               }}>
                 To może potrwać kilka sekund
+              </p>
+            </div>
+          ) : verifyingPayment ? (
+            <div style={{
+              textAlign: 'center',
+              padding: '60px 20px'
+            }}>
+              <div style={{
+                width: '80px',
+                height: '80px',
+                margin: '0 auto 24px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                animation: 'pulse 1.5s ease-in-out infinite'
+              }}>
+                <Loader size={40} color="white" className="spin" />
+              </div>
+              <h3 style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#2c3e50',
+                marginBottom: '10px'
+              }}>
+                Weryfikacja płatności...
+              </h3>
+              <p style={{
+                color: '#5a6c7d',
+                fontSize: '15px'
+              }}>
+                Sprawdzamy status Twojej płatności
               </p>
             </div>
           ) : generatedDocument ? (
