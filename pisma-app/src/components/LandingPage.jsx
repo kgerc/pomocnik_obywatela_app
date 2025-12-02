@@ -1,0 +1,466 @@
+import React from 'react';
+import { Wand2, FileText, Clock, Shield, Check, Star, ArrowRight, Sparkles } from 'lucide-react';
+
+const LandingPage = ({ onStartGenerator }) => {
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%)'
+    }}>
+      {/* Hero Section */}
+      <div style={{
+        background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+        color: 'white',
+        padding: '80px 20px',
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'rgba(255, 255, 255, 0.2)',
+            padding: '8px 16px',
+            borderRadius: '20px',
+            marginBottom: '20px',
+            fontSize: '14px',
+            fontWeight: '600'
+          }}>
+            <Sparkles size={16} />
+            Powered by AI
+          </div>
+
+          <h1 style={{
+            fontSize: '56px',
+            fontWeight: '700',
+            marginBottom: '20px',
+            lineHeight: '1.2'
+          }}>
+            Generator Pism AI
+          </h1>
+
+          <p style={{
+            fontSize: '24px',
+            marginBottom: '40px',
+            opacity: 0.95,
+            lineHeight: '1.5',
+            maxWidth: '700px',
+            margin: '0 auto 40px'
+          }}>
+            Wygeneruj profesjonalne pisma urzędowe w 3 minuty. Wnioski, odwołania, reklamacje i więcej.
+          </p>
+
+          <button
+            onClick={onStartGenerator}
+            style={{
+              background: 'white',
+              color: '#2c5aa0',
+              padding: '18px 48px',
+              fontSize: '18px',
+              fontWeight: '700',
+              border: 'none',
+              borderRadius: '12px',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              transition: 'transform 0.2s, box-shadow 0.2s',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.3)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.2)';
+            }}
+          >
+            <Wand2 size={24} />
+            Wygeneruj dokument za darmo
+            <ArrowRight size={24} />
+          </button>
+
+          <div style={{
+            marginTop: '30px',
+            fontSize: '14px',
+            opacity: 0.9
+          }}>
+            ✓ Bez rejestracji  •  ✓ Płatność tylko 2 zł za dokument  •  ✓ Natychmiastowy dostęp
+          </div>
+        </div>
+      </div>
+
+      {/* Features Section */}
+      <div style={{
+        padding: '80px 20px',
+        maxWidth: '1200px',
+        margin: '0 auto'
+      }}>
+        <h2 style={{
+          fontSize: '40px',
+          fontWeight: '700',
+          textAlign: 'center',
+          color: '#2c3e50',
+          marginBottom: '60px'
+        }}>
+          Dlaczego Generator Pism AI?
+        </h2>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '30px'
+        }}>
+          {[
+            {
+              icon: <Clock size={40} />,
+              title: 'Oszczędność czasu',
+              description: 'Wygeneruj profesjonalne pismo w 3 minuty zamiast godzin pisania i szukania wzorów.'
+            },
+            {
+              icon: <Shield size={40} />,
+              title: 'Zgodność prawna',
+              description: 'AI zna aktualne przepisy i generuje pisma zgodne z polskim prawem.'
+            },
+            {
+              icon: <FileText size={40} />,
+              title: 'Ponad 50 typów pism',
+              description: 'Wnioski, odwołania, reklamacje, zgłoszenia – wszystko w jednym miejscu.'
+            }
+          ].map((feature, idx) => (
+            <div
+              key={idx}
+              style={{
+                background: 'white',
+                padding: '30px',
+                borderRadius: '16px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                transition: 'transform 0.2s, box-shadow 0.2s'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px)';
+                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+              }}
+            >
+              <div style={{
+                color: '#2c5aa0',
+                marginBottom: '20px'
+              }}>
+                {feature.icon}
+              </div>
+              <h3 style={{
+                fontSize: '22px',
+                fontWeight: '700',
+                color: '#2c3e50',
+                marginBottom: '12px'
+              }}>
+                {feature.title}
+              </h3>
+              <p style={{
+                color: '#5a6c7d',
+                fontSize: '15px',
+                lineHeight: '1.6'
+              }}>
+                {feature.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* How It Works Section */}
+      <div style={{
+        background: 'white',
+        padding: '80px 20px'
+      }}>
+        <div style={{
+          maxWidth: '1000px',
+          margin: '0 auto'
+        }}>
+          <h2 style={{
+            fontSize: '40px',
+            fontWeight: '700',
+            textAlign: 'center',
+            color: '#2c3e50',
+            marginBottom: '60px'
+          }}>
+            Jak to działa?
+          </h2>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '40px'
+          }}>
+            {[
+              {
+                step: '1',
+                title: 'Wybierz typ pisma',
+                description: 'Z ponad 50 dostępnych szablonów wybierz ten, który potrzebujesz.'
+              },
+              {
+                step: '2',
+                title: 'Wypełnij formularz',
+                description: 'Odpowiedz na kilka prostych pytań o Twoją sprawę.'
+              },
+              {
+                step: '3',
+                title: 'AI generuje dokument',
+                description: 'Sztuczna inteligencja tworzy profesjonalne pismo w kilka sekund.'
+              }
+            ].map((step, idx) => (
+              <div key={idx} style={{ textAlign: 'center' }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+                  color: 'white',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '32px',
+                  fontWeight: '700',
+                  margin: '0 auto 20px',
+                  boxShadow: '0 8px 24px rgba(44, 90, 160, 0.3)'
+                }}>
+                  {step.step}
+                </div>
+                <h3 style={{
+                  fontSize: '20px',
+                  fontWeight: '700',
+                  color: '#2c3e50',
+                  marginBottom: '12px'
+                }}>
+                  {step.title}
+                </h3>
+                <p style={{
+                  color: '#5a6c7d',
+                  fontSize: '15px',
+                  lineHeight: '1.6'
+                }}>
+                  {step.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Pricing Section */}
+      <div style={{
+        padding: '80px 20px',
+        maxWidth: '1000px',
+        margin: '0 auto'
+      }}>
+        <h2 style={{
+          fontSize: '40px',
+          fontWeight: '700',
+          textAlign: 'center',
+          color: '#2c3e50',
+          marginBottom: '20px'
+        }}>
+          Prosta i przejrzysta cena
+        </h2>
+        <p style={{
+          textAlign: 'center',
+          color: '#5a6c7d',
+          fontSize: '18px',
+          marginBottom: '60px'
+        }}>
+          Bez subskrypcji, bez ukrytych opłat
+        </p>
+
+        <div style={{
+          background: 'white',
+          borderRadius: '24px',
+          padding: '50px',
+          boxShadow: '0 12px 40px rgba(0,0,0,0.1)',
+          maxWidth: '600px',
+          margin: '0 auto',
+          border: '3px solid #2c5aa0'
+        }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '30px'
+          }}>
+            <div style={{
+              fontSize: '64px',
+              fontWeight: '700',
+              color: '#2c5aa0',
+              marginBottom: '10px'
+            }}>
+              2 zł
+            </div>
+            <div style={{
+              fontSize: '18px',
+              color: '#5a6c7d'
+            }}>
+              za jeden dokument
+            </div>
+          </div>
+
+          <div style={{
+            borderTop: '2px solid #e1e8ed',
+            paddingTop: '30px',
+            marginBottom: '30px'
+          }}>
+            {[
+              'Pełny dostęp do wygenerowanego dokumentu',
+              'Format PDF gotowy do druku',
+              'Zgodność z polskim prawem',
+              'Profesjonalne formatowanie',
+              'Natychmiastowy dostęp po płatności',
+              'Płatność BLIK lub kartą'
+            ].map((feature, idx) => (
+              <div
+                key={idx}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  marginBottom: '16px',
+                  fontSize: '16px',
+                  color: '#2c3e50'
+                }}
+              >
+                <div style={{
+                  width: '24px',
+                  height: '24px',
+                  background: '#d1fae5',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  <Check size={16} color="#10b981" />
+                </div>
+                {feature}
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={onStartGenerator}
+            style={{
+              width: '100%',
+              background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+              color: 'white',
+              padding: '18px',
+              fontSize: '18px',
+              fontWeight: '700',
+              border: 'none',
+              borderRadius: '12px',
+              cursor: 'pointer',
+              transition: 'transform 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+          >
+            Rozpocznij generowanie
+            <ArrowRight size={20} />
+          </button>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div style={{
+        background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+        color: 'white',
+        padding: '80px 20px',
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <h2 style={{
+            fontSize: '40px',
+            fontWeight: '700',
+            marginBottom: '20px'
+          }}>
+            Gotowy, aby wygenerować swoje pismo?
+          </h2>
+          <p style={{
+            fontSize: '20px',
+            marginBottom: '40px',
+            opacity: 0.95,
+            lineHeight: '1.6'
+          }}>
+            Dołącz do tysięcy zadowolonych użytkowników, którzy oszczędzają czas na generowaniu pism urzędowych.
+          </p>
+          <button
+            onClick={onStartGenerator}
+            style={{
+              background: 'white',
+              color: '#2c5aa0',
+              padding: '18px 48px',
+              fontSize: '18px',
+              fontWeight: '700',
+              border: 'none',
+              borderRadius: '12px',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              transition: 'transform 0.2s',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+          >
+            <Wand2 size={24} />
+            Zacznij teraz - to darmowe!
+          </button>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{
+        background: '#2c3e50',
+        color: 'white',
+        padding: '40px 20px',
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{
+            fontSize: '24px',
+            fontWeight: '700',
+            marginBottom: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px'
+          }}>
+            <Wand2 size={28} />
+            Generator Pism AI
+          </div>
+          <p style={{
+            opacity: 0.7,
+            fontSize: '14px',
+            marginBottom: '20px'
+          }}>
+            Część ekosystemu Pomocnik Obywatela
+          </p>
+          <div style={{
+            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+            paddingTop: '20px',
+            fontSize: '14px',
+            opacity: 0.7
+          }}>
+            © 2024 Pomocnik Obywatela. Wszystkie prawa zastrzeżone.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LandingPage;
