@@ -32,6 +32,7 @@ const GeneratorPism = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [verifyingPayment, setVerifyingPayment] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 9;
 
@@ -93,6 +94,11 @@ const GeneratorPism = () => {
                 setGeneratedDocument(savedState.generatedDocument);
                 setCurrentStep(3);
               }
+
+              // Restore document unlocked state if exists
+              if (savedState.documentUnlocked) {
+                setDocumentUnlocked(true);
+              }
             }
           }
         }
@@ -101,11 +107,43 @@ const GeneratorPism = () => {
       }
 
       if (success === 'true' && payment === 'document' && returnedDocId) {
-        // Clear URL parameters
-        window.history.replaceState({}, document.title, window.location.pathname);
+        // Simulate payment verification with delay (since we don't have API check for guests)
+        const verifyPayment = async () => {
+          try {
+            setVerifyingPayment(true);
 
-        setDocumentUnlocked(true);
-        alert('Płatność zakończona sukcesem! Dokument został odblokowany.');
+            // Simulate checking payment status (wait 2 seconds)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Unlock document
+            setDocumentUnlocked(true);
+
+            // Update localStorage to persist unlocked state
+            try {
+              const savedState = JSON.parse(localStorage.getItem('generatorPismState') || '{}');
+              localStorage.setItem('generatorPismState', JSON.stringify({
+                ...savedState,
+                documentUnlocked: true
+              }));
+            } catch (e) {
+              console.error('Failed to update documentUnlocked in localStorage:', e);
+            }
+
+            // Clear URL parameters AFTER updating state
+            window.history.replaceState({}, document.title, window.location.pathname);
+
+          } catch (error) {
+            console.error('Error verifying payment:', error);
+          } finally {
+            setVerifyingPayment(false);
+            // Show success notification after loader disappears
+            setTimeout(() => {
+              alert('✅ Płatność zakończona sukcesem! Dokument został odblokowany.');
+            }, 100);
+          }
+        };
+
+        verifyPayment();
       }
     };
 
@@ -1041,6 +1079,39 @@ const GeneratorPism = () => {
                     fontSize: '15px'
                   }}>
                     To może potrwać kilka sekund
+                  </p>
+                </div>
+              ) : verifyingPayment ? (
+                <div style={{
+                  textAlign: 'center',
+                  padding: '60px 20px'
+                }}>
+                  <div style={{
+                    width: '80px',
+                    height: '80px',
+                    margin: '0 auto 24px',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    animation: 'pulse 1.5s ease-in-out infinite'
+                  }}>
+                    <Loader size={40} color="white" style={{ animation: 'spin 1s linear infinite' }} />
+                  </div>
+                  <h3 style={{
+                    fontSize: '20px',
+                    fontWeight: '700',
+                    color: '#2c3e50',
+                    marginBottom: '10px'
+                  }}>
+                    Weryfikacja płatności...
+                  </h3>
+                  <p style={{
+                    color: '#5a6c7d',
+                    fontSize: '15px'
+                  }}>
+                    Sprawdzamy status Twojej płatności
                   </p>
                 </div>
               ) : generatedDocument ? (
