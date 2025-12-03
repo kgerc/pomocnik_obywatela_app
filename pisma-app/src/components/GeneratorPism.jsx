@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Wand2, FileText, Loader, Download, Check, ChevronRight, Lock } from 'lucide-react';
+import { Wand2, FileText, Loader, Download, Check, ChevronRight, Lock, Search } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { DOSTEPNE_PISMA } from '../data/pisma';
 import html2canvas from "html2canvas";
@@ -7,6 +7,8 @@ import { PDFDocument } from "pdf-lib";
 import PaymentModal from './PaymentModal';
 import { Document, Packer, Paragraph, TextRun, AlignmentType } from "docx";
 import { saveAs } from "file-saver";
+import TermsOfService from './TermsOfService';
+import PrivacyPolicy from './PrivacyPolicy';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
@@ -34,13 +36,23 @@ const GeneratorPism = ({ onBackToLanding }) => {
   const [userEmail, setUserEmail] = useState('');
   const [verifyingPayment, setVerifyingPayment] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
   const ITEMS_PER_PAGE = 9;
 
   const categories = ['wszystkie', ...new Set(DOSTEPNE_PISMA.map(p => p.kategoria))];
 
-  const filteredPisma = selectedCategory === 'wszystkie'
-    ? DOSTEPNE_PISMA
-    : DOSTEPNE_PISMA.filter(p => p.kategoria === selectedCategory);
+  // Filtrowanie po kategorii i wyszukiwaniu
+  const filteredPisma = DOSTEPNE_PISMA
+    .filter(p => selectedCategory === 'wszystkie' || p.kategoria === selectedCategory)
+    .filter(p => {
+      if (!searchQuery.trim()) return true;
+      const query = searchQuery.toLowerCase();
+      return p.nazwa.toLowerCase().includes(query) ||
+             p.opis.toLowerCase().includes(query) ||
+             p.kategoria.toLowerCase().includes(query);
+    });
 
   // Pagination
   const totalPages = Math.ceil(filteredPisma.length / ITEMS_PER_PAGE);
@@ -48,10 +60,10 @@ const GeneratorPism = ({ onBackToLanding }) => {
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentPisma = filteredPisma.slice(startIndex, endIndex);
 
-  // Reset page when category changes
+  // Reset page when category or search query changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedCategory]);
+  }, [selectedCategory, searchQuery]);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
@@ -650,7 +662,7 @@ const GeneratorPism = ({ onBackToLanding }) => {
               lineHeight: '1.6',
               fontSize: '16px'
             }}>
-              Wybierz typ pisma, odpowiedz na kilka pytań, a AI wygeneruje gotowy dokument do podpisu i wysłania do urzędu.
+              Wybierz typ pisma, odpowiedz na kilka pytań, a AI wygeneruje gotowy dokument do podpisu i wysłania.
             </p>
           </div>
 
@@ -712,6 +724,49 @@ const GeneratorPism = ({ onBackToLanding }) => {
           {/* KROK 1: Wybór pisma */}
           {currentStep === 1 && (
             <>
+              {/* Search Bar */}
+              <div style={{ marginBottom: '25px' }}>
+                <h3 style={{
+                  fontSize: '18px',
+                  fontWeight: '700',
+                  color: '#2c3e50',
+                  marginBottom: '15px'
+                }}>
+                  Wyszukaj pismo
+                </h3>
+                <div style={{ position: 'relative' }}>
+                  <Search
+                    size={20}
+                    color="#5a6c7d"
+                    style={{
+                      position: 'absolute',
+                      left: '15px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      pointerEvents: 'none'
+                    }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Szukaj po nazwie, opisie lub kategorii..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '12px 12px 12px 45px',
+                      fontSize: '14px',
+                      border: '2px solid #e1e8ed',
+                      borderRadius: '8px',
+                      boxSizing: 'border-box',
+                      fontFamily: 'inherit',
+                      transition: 'border-color 0.2s'
+                    }}
+                    onFocus={(e) => e.currentTarget.style.borderColor = '#2c5aa0'}
+                    onBlur={(e) => e.currentTarget.style.borderColor = '#e1e8ed'}
+                  />
+                </div>
+              </div>
+
               {/* Category Filter */}
               <div style={{ marginBottom: '25px' }}>
                 <h3 style={{
@@ -905,7 +960,18 @@ const GeneratorPism = ({ onBackToLanding }) => {
                 color: '#5a6c7d',
                 fontSize: '14px'
               }}>
-                Pokazuję {startIndex + 1}-{Math.min(endIndex, filteredPisma.length)} z {filteredPisma.length} pism
+                {filteredPisma.length > 0 ? (
+                  <>Pokazuję {startIndex + 1}-{Math.min(endIndex, filteredPisma.length)} z {filteredPisma.length} pism</>
+                ) : (
+                  <div style={{ padding: '40px 20px' }}>
+                    <p style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px' }}>
+                      Nie znaleziono pism
+                    </p>
+                    <p style={{ fontSize: '14px' }}>
+                      Spróbuj zmienić kategorię lub zapytanie wyszukiwania
+                    </p>
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -1409,6 +1475,73 @@ const GeneratorPism = ({ onBackToLanding }) => {
           )}
         </div>
       </div>
+      {/* Footer */}
+        <div style={{
+          background: '#f8f9fb',
+          borderTop: '2px solid #e1e8ed',
+          padding: '30px 20px',
+          width: '100%'
+        }}>
+          <div style={{
+            margin: '0 auto',
+            textAlign: 'center'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '20px',
+              marginBottom: '15px',
+              flexWrap: 'wrap'
+            }}>
+              <button
+                onClick={() => setShowTerms(true)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#2c5aa0',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  transition: 'color 0.2s',
+                  fontWeight: '500'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.color = '#4a7dc9'}
+                onMouseOut={(e) => e.currentTarget.style.color = '#2c5aa0'}
+              >
+                Regulamin
+              </button>
+              <span style={{ color: '#5a6c7d' }}>•</span>
+              <button
+                onClick={() => setShowPrivacy(true)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#2c5aa0',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  transition: 'color 0.2s',
+                  fontWeight: '500'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.color = '#4a7dc9'}
+                onMouseOut={(e) => e.currentTarget.style.color = '#2c5aa0'}
+              >
+                Polityka Prywatności
+              </button>
+            </div>
+            <p style={{
+              fontSize: '13px',
+              color: '#5a6c7d',
+              margin: 0
+            }}>
+              © 2024 Pomocnik Obywatela. Wszystkie prawa zastrzeżone.
+            </p>
+          </div>
+        </div>
+
+      {/* Modals */}
+      {showTerms && <TermsOfService onClose={() => setShowTerms(false)} />}
+      {showPrivacy && <PrivacyPolicy onClose={() => setShowPrivacy(false)} />}
     </>
   );
 };

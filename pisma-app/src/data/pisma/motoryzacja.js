@@ -96,5 +96,133 @@ export const pismaMotoryzacja = [
       { id: 'ubezpieczyciel', label: 'Twój ubezpieczyciel OC', placeholder: 'np. PZU', type: 'text' },
       { id: 'numer_polisy', label: 'Numer Twojej polisy OC', placeholder: 'np. OC/2025/987654', type: 'text' }
     ]
+  },
+  {
+    id: 'umowa_kupna_sprzedazy_auto_pl',
+    nazwa: 'Umowa kupna-sprzedaży pojazdu (PL)',
+    kategoria: 'Motoryzacja',
+    opis: 'Umowa kupna-sprzedaży pojazdu używanego zakupionego w Polsce',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Miejsce zawarcia umowy', placeholder: 'np. Warszawa', type: 'text' },
+      { id: 'data_zawarcia', label: 'Data zawarcia umowy', placeholder: 'np. 15.01.2025', type: 'text' },
+      { id: 'dane_sprzedajacego', label: 'Dane sprzedającego (PESEL)', placeholder: 'Imię, nazwisko, adres, PESEL', type: 'textarea' },
+      { id: 'dane_kupujacego', label: 'Dane kupującego (PESEL)', placeholder: 'Imię, nazwisko, adres, PESEL', type: 'textarea' },
+      { id: 'marka_model', label: 'Marka i model pojazdu', placeholder: 'np. Volkswagen Golf VII', type: 'text' },
+      { id: 'rok_produkcji', label: 'Rok produkcji', placeholder: 'np. 2015', type: 'text' },
+      { id: 'numer_vin', label: 'Numer VIN', placeholder: 'np. WVWZZZ1KZBW123456', type: 'text' },
+      { id: 'numer_rejestracyjny', label: 'Numer rejestracyjny', placeholder: 'np. WA 12345', type: 'text' },
+      { id: 'przebieg', label: 'Przebieg (km)', placeholder: 'np. 120000', type: 'text' },
+      { id: 'pojemnosc', label: 'Pojemność silnika (cm³)', placeholder: 'np. 1598', type: 'text' },
+      { id: 'rodzaj_paliwa', label: 'Rodzaj paliwa', placeholder: 'np. benzyna, diesel, LPG', type: 'text' },
+      { id: 'numer_dowodu', label: 'Numer dowodu rejestracyjnego', placeholder: 'np. ABC123456', type: 'text' },
+      { id: 'cena_slownie', label: 'Cena (zł)', placeholder: 'np. 35000', type: 'text' },
+      { id: 'dodatkowe_informacje', label: 'Dodatkowe informacje o stanie pojazdu', placeholder: 'np. wyposażenie dodatkowe, wady, naprawy', type: 'textarea' }
+    ]
+  },
+  {
+    id: 'umowa_kupna_sprzedazy_auto_zagranica',
+    nazwa: 'Umowa kupna-sprzedaży pojazdu (z zagranicy)',
+    kategoria: 'Motoryzacja',
+    opis: 'Umowa kupna-sprzedaży pojazdu sprowadzonego z zagranicy',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Miejsce zawarcia umowy', placeholder: 'np. Berlin, Niemcy', type: 'text' },
+      { id: 'data_zawarcia', label: 'Data zawarcia umowy', placeholder: 'np. 15.01.2025', type: 'text' },
+      { id: 'dane_sprzedajacego', label: 'Dane sprzedającego (zagraniczne)', placeholder: 'Imię, nazwisko/firma, adres, dane identyfikacyjne', type: 'textarea' },
+      { id: 'dane_kupujacego', label: 'Dane kupującego (PESEL)', placeholder: 'Imię, nazwisko, adres w Polsce, PESEL', type: 'textarea' },
+      { id: 'marka_model', label: 'Marka i model pojazdu', placeholder: 'np. BMW 320d', type: 'text' },
+      { id: 'rok_produkcji', label: 'Rok produkcji', placeholder: 'np. 2018', type: 'text' },
+      { id: 'numer_vin', label: 'Numer VIN', placeholder: 'np. WBA8E5101JA123456', type: 'text' },
+      { id: 'kraj_rejestracji', label: 'Kraj dotychczasowej rejestracji', placeholder: 'np. Niemcy', type: 'text' },
+      { id: 'numer_rejestracyjny_zagraniczny', label: 'Zagraniczny nr rejestracyjny', placeholder: 'np. B-AB 1234', type: 'text' },
+      { id: 'przebieg', label: 'Przebieg (km)', placeholder: 'np. 85000', type: 'text' },
+      { id: 'pojemnosc', label: 'Pojemność silnika (cm³)', placeholder: 'np. 1995', type: 'text' },
+      { id: 'rodzaj_paliwa', label: 'Rodzaj paliwa', placeholder: 'np. diesel', type: 'text' },
+      { id: 'cena_slownie', label: 'Cena w PLN lub EUR', placeholder: 'np. 15000 EUR lub 65000 PLN', type: 'text' },
+      { id: 'data_pierwszej_rejestracji', label: 'Data pierwszej rejestracji', placeholder: 'np. 15.03.2018', type: 'text' },
+      { id: 'dokumenty_pojazdu', label: 'Przekazywane dokumenty', placeholder: 'np. dowód rejestracyjny, karta pojazdu, serwisówka', type: 'textarea' }
+    ]
+  },
+  {
+    id: 'pelnomocnictwo_wyrejestrowanie',
+    nazwa: 'Pełnomocnictwo do wyrejestrowania pojazdu',
+    kategoria: 'Motoryzacja',
+    opis: 'Pełnomocnictwo dla kupującego do wyrejestrowania pojazdu po sprzedaży',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Wydział Komunikacji / Starostwo', placeholder: 'np. Wydział Komunikacji Urzędu Miasta Warszawy', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer', placeholder: 'np. ul. Marszałkowska 1', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto', placeholder: 'np. 00-001 Warszawa', type: 'text' },
+      { id: 'dane_pelnomocnika', label: 'Dane pełnomocnika (kupującego)', placeholder: 'Imię, nazwisko, PESEL, adres', type: 'textarea' },
+      { id: 'marka_model', label: 'Marka i model pojazdu', placeholder: 'np. Ford Focus', type: 'text' },
+      { id: 'numer_vin', label: 'Numer VIN', placeholder: 'np. WF0AXXGCDA123456', type: 'text' },
+      { id: 'numer_rejestracyjny', label: 'Numer rejestracyjny', placeholder: 'np. WA 12345', type: 'text' },
+      { id: 'zakres', label: 'Zakres pełnomocnictwa', placeholder: 'np. wyrejestrowanie pojazdu, odbiór dokumentów', type: 'textarea' }
+    ]
+  },
+  {
+    id: 'pelnomocnictwo_zarejestrowanie',
+    nazwa: 'Pełnomocnictwo do zarejestrowania pojazdu',
+    kategoria: 'Motoryzacja',
+    opis: 'Pełnomocnictwo do zarejestrowania pojazdu w urzędzie',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Wydział Komunikacji / Starostwo', placeholder: 'np. Wydział Komunikacji Urzędu Miasta Warszawy', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer', placeholder: 'np. ul. Marszałkowska 1', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto', placeholder: 'np. 00-001 Warszawa', type: 'text' },
+      { id: 'dane_pelnomocnika', label: 'Dane pełnomocnika', placeholder: 'Imię, nazwisko, PESEL, adres osoby, która ma załatwić sprawę', type: 'textarea' },
+      { id: 'marka_model', label: 'Marka i model pojazdu', placeholder: 'np. Opel Astra', type: 'text' },
+      { id: 'numer_vin', label: 'Numer VIN', placeholder: 'np. W0L0AHL123456789', type: 'text' },
+      { id: 'zakres', label: 'Zakres pełnomocnictwa', placeholder: 'np. rejestracja pojazdu, odbiór dokumentów, składanie wniosków', type: 'textarea' }
+    ]
+  },
+  {
+    id: 'pelnomocnictwo_import_auto',
+    nazwa: 'Pełnomocnictwo do sprowadzenia auta z zagranicy',
+    kategoria: 'Motoryzacja',
+    opis: 'Pełnomocnictwo do reprezentowania w sprawach związanych z importem pojazdu',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Właściwe urzędy', placeholder: 'np. Wydział Komunikacji, Urząd Celny, inne instytucje', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer (jeśli konkretny)', placeholder: 'np. ul. Marszałkowska 1 lub "dowolny"', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto', placeholder: 'np. 00-001 Warszawa', type: 'text' },
+      { id: 'dane_pelnomocnika', label: 'Dane pełnomocnika', placeholder: 'Imię, nazwisko, PESEL, adres osoby, która sprowadza auto', type: 'textarea' },
+      { id: 'marka_model', label: 'Marka i model pojazdu', placeholder: 'np. Mercedes-Benz E220', type: 'text' },
+      { id: 'numer_vin', label: 'Numer VIN', placeholder: 'np. WDD2120071A123456', type: 'text' },
+      { id: 'kraj_pochodzenia', label: 'Kraj pochodzenia pojazdu', placeholder: 'np. Niemcy', type: 'text' },
+      { id: 'zakres', label: 'Zakres pełnomocnictwa', placeholder: 'np. odprawa celna, rejestracja, badania techniczne, tłumaczenie dokumentów', type: 'textarea' }
+    ]
+  },
+  {
+    id: 'oswiadczenie_sprzedaz_auto',
+    nazwa: 'Oświadczenie o sprzedaży pojazdu',
+    kategoria: 'Motoryzacja',
+    opis: 'Oświadczenie sprzedającego o sprzedaży pojazdu (do wydziału komunikacji)',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Wydział Komunikacji', placeholder: 'np. Wydział Komunikacji Starostwa Powiatowego w Warszawie', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer', placeholder: 'np. ul. Marszałkowska 1', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto', placeholder: 'np. 00-001 Warszawa', type: 'text' },
+      { id: 'marka_model', label: 'Marka i model pojazdu', placeholder: 'np. Skoda Octavia', type: 'text' },
+      { id: 'numer_vin', label: 'Numer VIN', placeholder: 'np. TMBJG7NE0C0123456', type: 'text' },
+      { id: 'numer_rejestracyjny', label: 'Numer rejestracyjny', placeholder: 'np. WA 12345', type: 'text' },
+      { id: 'dane_kupujacego', label: 'Dane kupującego', placeholder: 'Imię, nazwisko, PESEL, adres nowego właściciela', type: 'textarea' },
+      { id: 'data_sprzedazy', label: 'Data sprzedaży', placeholder: 'np. 15.01.2025', type: 'text' }
+    ]
+  },
+  {
+    id: 'wniosek_rejestracja_auto_import',
+    nazwa: 'Wniosek o rejestrację pojazdu sprowadzonego z zagranicy',
+    kategoria: 'Motoryzacja',
+    opis: 'Wniosek o pierwszą rejestrację pojazdu importowanego do Polski',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Wydział Komunikacji', placeholder: 'np. Wydział Komunikacji Starostwa Powiatowego w Warszawie', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer', placeholder: 'np. ul. Marszałkowska 1', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto', placeholder: 'np. 00-001 Warszawa', type: 'text' },
+      { id: 'marka_model', label: 'Marka i model pojazdu', placeholder: 'np. Audi A6', type: 'text' },
+      { id: 'rok_produkcji', label: 'Rok produkcji', placeholder: 'np. 2017', type: 'text' },
+      { id: 'numer_vin', label: 'Numer VIN', placeholder: 'np. WAUZZZ4G7DN123456', type: 'text' },
+      { id: 'kraj_pochodzenia', label: 'Kraj pochodzenia', placeholder: 'np. Niemcy', type: 'text' },
+      { id: 'data_zakupu', label: 'Data zakupu pojazdu', placeholder: 'np. 10.01.2025', type: 'text' },
+      { id: 'numer_faktury', label: 'Numer faktury zakupu', placeholder: 'np. FV/2025/001 (jeśli dotyczy)', type: 'text' },
+      { id: 'pojemnosc', label: 'Pojemność silnika (cm³)', placeholder: 'np. 2967', type: 'text' },
+      { id: 'rodzaj_paliwa', label: 'Rodzaj paliwa', placeholder: 'np. diesel', type: 'text' },
+      { id: 'dokumenty_zalaczone', label: 'Załączane dokumenty', placeholder: 'np. umowa, dokument celny, certyfikat COC, badanie techniczne', type: 'textarea' }
+    ]
   }
 ];

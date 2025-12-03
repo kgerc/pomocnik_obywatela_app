@@ -160,7 +160,7 @@ const PaymentModal = ({ isOpen, onClose, documentId, userEmail, onPaymentSuccess
             color: '#2c3e50',
             marginBottom: '8px'
           }}>
-            Twój email (do wysłania dokumentu)
+            Twój email
           </label>
           <input
             type="email"
@@ -221,7 +221,7 @@ const PaymentModal = ({ isOpen, onClose, documentId, userEmail, onPaymentSuccess
             lineHeight: '1.5',
             marginBottom: '15px'
           }}>
-            Jednorazowa płatność. Dostęp do dokumentu na zawsze.
+            Jednorazowa płatność.
           </p>
           <button
             onClick={handlePayForDocument}

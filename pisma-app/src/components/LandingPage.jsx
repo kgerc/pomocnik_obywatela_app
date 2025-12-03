@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Wand2, FileText, Clock, Shield, Check, Star, ArrowRight, Sparkles } from 'lucide-react';
+import TermsOfService from './TermsOfService';
+import PrivacyPolicy from './PrivacyPolicy';
 
 const LandingPage = ({ onStartGenerator }) => {
   const [visibleSections, setVisibleSections] = useState({});
   const sectionRefs = useRef({});
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -146,7 +150,7 @@ const LandingPage = ({ onStartGenerator }) => {
             }}
           >
             <Wand2 size={24} />
-            Wygeneruj dokument za darmo
+            Wygeneruj dokument
             <ArrowRight size={24} />
           </button>
 
@@ -263,7 +267,7 @@ const LandingPage = ({ onStartGenerator }) => {
             color: '#2c3e50',
             marginBottom: '20px'
           }}>
-            Ponad 80 typów dokumentów w 11+ kategoriach
+            Ponad 80 typów dokumentów w 10 kategoriach
           </h2>
           <p style={{
             textAlign: 'center',
@@ -287,10 +291,9 @@ const LandingPage = ({ onStartGenerator }) => {
               { name: 'Telekomunikacja', count: '10+', icon: '📱' },
               { name: 'Kurierzy', count: '8+', icon: '📦' },
               { name: 'Konsumenckie', count: '12+', icon: '🛒' },
-              { name: 'Studia', count: '6+', icon: '🎓' },
+              { name: 'Edukacja', count: '11+', icon: '🎓' },
               { name: 'Mieszkanie', count: '10+', icon: '🏠' },
               { name: 'Biznesowe', count: '8+', icon: '💼' },
-              { name: 'Szkoła', count: '5+', icon: '📚' },
               { name: 'Praca', count: '8+', icon: '👔' },
               { name: 'Budownictwo', count: '5+', icon: '🏗️' },
               { name: 'Motoryzacja', count: '6+', icon: '🚗' }
@@ -630,6 +633,52 @@ const LandingPage = ({ onStartGenerator }) => {
           }}>
             Część ekosystemu Pomocnik Obywatela
           </p>
+
+          {/* Legal Links */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '20px',
+            marginBottom: '20px',
+            flexWrap: 'wrap'
+          }}>
+            <button
+              onClick={() => setShowTerms(true)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                opacity: 0.7,
+                fontSize: '14px',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+                transition: 'opacity 0.2s'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
+              onMouseOut={(e) => e.currentTarget.style.opacity = '0.7'}
+            >
+              Regulamin
+            </button>
+            <span style={{ opacity: 0.5 }}>•</span>
+            <button
+              onClick={() => setShowPrivacy(true)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                opacity: 0.7,
+                fontSize: '14px',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+                transition: 'opacity 0.2s'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
+              onMouseOut={(e) => e.currentTarget.style.opacity = '0.7'}
+            >
+              Polityka Prywatności
+            </button>
+          </div>
+
           <div style={{
             borderTop: '1px solid rgba(255, 255, 255, 0.1)',
             paddingTop: '20px',
@@ -640,6 +689,10 @@ const LandingPage = ({ onStartGenerator }) => {
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      {showTerms && <TermsOfService onClose={() => setShowTerms(false)} />}
+      {showPrivacy && <PrivacyPolicy onClose={() => setShowPrivacy(false)} />}
     </div>
   );
 };
