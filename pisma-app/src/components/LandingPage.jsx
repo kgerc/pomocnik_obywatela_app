@@ -685,7 +685,7 @@ const LandingPage = ({ onStartGenerator }) => {
             fontSize: '14px',
             opacity: 0.7
           }}>
-            © 2024 Pomocnik Obywatela. Wszystkie prawa zastrzeżone.
+            © 2025 Pomocnik Obywatela. Wszystkie prawa zastrzeżone.
           </div>
         </div>
       </div>
