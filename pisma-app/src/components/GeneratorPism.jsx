@@ -142,9 +142,6 @@ const GeneratorPism = ({ onBackToLanding }) => {
             // Silent fail
           } finally {
             setVerifyingPayment(false);
-            setTimeout(() => {
-              alert('✅ Płatność zakończona sukcesem! Dokument został odblokowany.');
-            }, 100);
           }
         };
 
@@ -156,6 +153,16 @@ const GeneratorPism = ({ onBackToLanding }) => {
   }, []);
 
   const handlePismoSelect = (pismo) => {
+    // Google Analytics: Track document selection
+    if (window.gtag) {
+      window.gtag('event', 'select_document', {
+        event_category: 'Generator',
+        event_label: pismo.nazwa,
+        document_category: pismo.kategoria,
+        document_id: pismo.id
+      });
+    }
+
     setSelectedPismo(pismo);
     setFormData({});
     setCurrentStep(2);
@@ -172,6 +179,16 @@ const GeneratorPism = ({ onBackToLanding }) => {
   };
 
   const handleGenerateDocument = async () => {
+    // Google Analytics: Track document generation start
+    if (window.gtag) {
+      window.gtag('event', 'generate_document', {
+        event_category: 'Generator',
+        event_label: 'Start Generation',
+        document_type: selectedPismo?.nazwa,
+        document_category: selectedPismo?.kategoria
+      });
+    }
+
     // Rozpocznij generowanie NATYCHMIAST
     setGenerating(true);
     setCurrentStep(3);
@@ -180,8 +197,8 @@ const GeneratorPism = ({ onBackToLanding }) => {
     const newDocumentId = `doc_${Date.now()}_${Math.random().toString(36).substring(7)}`;
     setDocumentId(newDocumentId);
 
-    // Dokument zawsze zablokowany (brak premium)
-    setDocumentUnlocked(false);
+    // [TEST MODE] Dokument automatycznie odblokowany dla testów
+    setDocumentUnlocked(true);
 
     // Pobierz email z formularza
     const emailFromForm = formData.email || '';
@@ -355,6 +372,17 @@ const GeneratorPism = ({ onBackToLanding }) => {
 
       setGeneratedDocument(documentText);
 
+      // Google Analytics: Track successful document generation
+      if (window.gtag) {
+        window.gtag('event', 'document_generated', {
+          event_category: 'Generator',
+          event_label: 'Success',
+          document_type: selectedPismo?.nazwa,
+          document_category: selectedPismo?.kategoria,
+          document_id: newDocumentId
+        });
+      }
+
       // Zapisz wygenerowany dokument w localStorage
       try {
         const savedState = JSON.parse(localStorage.getItem('generatorPismState') || '{}');
@@ -383,6 +411,16 @@ const GeneratorPism = ({ onBackToLanding }) => {
     if (!documentUnlocked) {
       setShowPaymentModal(true);
       return;
+    }
+
+    // Google Analytics: Track PDF download
+    if (window.gtag) {
+      window.gtag('event', 'download_pdf', {
+        event_category: 'Download',
+        event_label: 'PDF',
+        document_type: selectedPismo?.nazwa,
+        document_id: documentId
+      });
     }
 
     const element = documentRef.current;
@@ -457,6 +495,16 @@ const GeneratorPism = ({ onBackToLanding }) => {
     if (!documentUnlocked) {
       setShowPaymentModal(true);
       return;
+    }
+
+    // Google Analytics: Track DOCX download
+    if (window.gtag) {
+      window.gtag('event', 'download_docx', {
+        event_category: 'Download',
+        event_label: 'DOCX',
+        document_type: selectedPismo?.nazwa,
+        document_id: documentId
+      });
     }
 
     try {
@@ -1529,7 +1577,18 @@ const GeneratorPism = ({ onBackToLanding }) => {
                     <div style={{ display: 'flex', gap: '10px' }}>
                       {!documentUnlocked && (
                         <button
-                          onClick={() => setShowPaymentModal(true)}
+                          onClick={() => {
+                            // Google Analytics: Track payment button click
+                            if (window.gtag) {
+                              window.gtag('event', 'click_payment', {
+                                event_category: 'Payment',
+                                event_label: 'Unlock Document',
+                                document_type: selectedPismo?.nazwa,
+                                document_id: documentId
+                              });
+                            }
+                            setShowPaymentModal(true);
+                          }}
                           style={{
                             padding: '12px 24px',
                             background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
