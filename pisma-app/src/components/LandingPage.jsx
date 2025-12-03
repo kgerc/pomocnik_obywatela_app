@@ -267,7 +267,7 @@ const LandingPage = ({ onStartGenerator }) => {
             color: '#2c3e50',
             marginBottom: '20px'
           }}>
-            Ponad 80 typów dokumentów w 10 kategoriach
+            Ponad 100 typów dokumentów w 10 kategoriach
           </h2>
           <p style={{
             textAlign: 'center',
