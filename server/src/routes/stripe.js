@@ -291,7 +291,6 @@ router.post('/create-guest-document-payment', async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       customer: customer.id,
-      customer_email: email,
       payment_method_types: ['blik', 'card'],
       line_items: [guestLineItem],
       mode: 'payment',

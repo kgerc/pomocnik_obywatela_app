@@ -1,7 +1,42 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Wand2, FileText, Clock, Shield, Check, Star, ArrowRight, Sparkles } from 'lucide-react';
 
 const LandingPage = ({ onStartGenerator }) => {
+  const [visibleSections, setVisibleSections] = useState({});
+  const sectionRefs = useRef({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => ({
+              ...prev,
+              [entry.target.id]: true
+            }));
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+    );
+
+    Object.values(sectionRefs.current).forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const setSectionRef = (id) => (el) => {
+    sectionRefs.current[id] = el;
+  };
+
+  const getAnimationStyle = (sectionId, delay = 0) => ({
+    opacity: visibleSections[sectionId] ? 1 : 0,
+    transform: visibleSections[sectionId] ? 'translateY(0)' : 'translateY(30px)',
+    transition: `opacity 0.8s ease-out ${delay}s, transform 0.8s ease-out ${delay}s`
+  });
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -47,7 +82,7 @@ const LandingPage = ({ onStartGenerator }) => {
             maxWidth: '700px',
             margin: '0 auto 40px'
           }}>
-            Wygeneruj profesjonalne pisma urzędowe w 3 minuty. Wnioski, odwołania, reklamacje i więcej.
+            Wygeneruj profesjonalne pisma urzędowe w minutę. Wnioski, odwołania, reklamacje i więcej.
           </p>
 
           <button
@@ -125,7 +160,7 @@ const LandingPage = ({ onStartGenerator }) => {
             },
             {
               icon: <FileText size={40} />,
-              title: 'Ponad 50 typów pism',
+              title: 'Ponad 80 typów pism',
               description: 'Wnioski, odwołania, reklamacje, zgłoszenia – wszystko w jednym miejscu.'
             }
           ].map((feature, idx) => (
@@ -173,11 +208,113 @@ const LandingPage = ({ onStartGenerator }) => {
         </div>
       </div>
 
+      {/* Categories Section */}
+      <div
+        id="categories"
+        ref={setSectionRef('categories')}
+        style={{
+          background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+          padding: '80px 20px',
+          ...getAnimationStyle('categories')
+        }}
+      >
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
+          <h2 style={{
+            fontSize: '40px',
+            fontWeight: '700',
+            textAlign: 'center',
+            color: '#2c3e50',
+            marginBottom: '20px'
+          }}>
+            Ponad 80 typów dokumentów w 11+ kategoriach
+          </h2>
+          <p style={{
+            textAlign: 'center',
+            color: '#5a6c7d',
+            fontSize: '18px',
+            marginBottom: '60px',
+            maxWidth: '800px',
+            margin: '0 auto 60px',
+            lineHeight: '1.6'
+          }}>
+            Od spraw administracyjnych po telekomunikację - najszerszy wybór pism urzędowych w Polsce
+          </p>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '20px'
+          }}>
+            {[
+              { name: 'Administracja', count: '15+', icon: '🏛️' },
+              { name: 'Telekomunikacja', count: '10+', icon: '📱' },
+              { name: 'Kurierzy', count: '8+', icon: '📦' },
+              { name: 'Konsumenckie', count: '12+', icon: '🛒' },
+              { name: 'Studia', count: '6+', icon: '🎓' },
+              { name: 'Mieszkanie', count: '10+', icon: '🏠' },
+              { name: 'Biznesowe', count: '8+', icon: '💼' },
+              { name: 'Szkoła', count: '5+', icon: '📚' },
+              { name: 'Praca', count: '8+', icon: '👔' },
+              { name: 'Budownictwo', count: '5+', icon: '🏗️' },
+              { name: 'Motoryzacja', count: '6+', icon: '🚗' }
+            ].map((category, idx) => (
+              <div
+                key={idx}
+                style={{
+                  background: 'white',
+                  padding: '24px',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                  textAlign: 'center',
+                  transition: 'transform 0.3s, box-shadow 0.3s',
+                  cursor: 'default'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
+                }}
+              >
+                <div style={{ fontSize: '36px', marginBottom: '12px' }}>
+                  {category.icon}
+                </div>
+                <h3 style={{
+                  fontSize: '18px',
+                  fontWeight: '700',
+                  color: '#2c3e50',
+                  marginBottom: '8px'
+                }}>
+                  {category.name}
+                </h3>
+                <p style={{
+                  color: '#2c5aa0',
+                  fontSize: '16px',
+                  fontWeight: '600'
+                }}>
+                  {category.count} pism
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* How It Works Section */}
-      <div style={{
-        background: 'white',
-        padding: '80px 20px'
-      }}>
+      <div
+        id="how-it-works"
+        ref={setSectionRef('how-it-works')}
+        style={{
+          background: 'white',
+          padding: '80px 20px',
+          ...getAnimationStyle('how-it-works')
+        }}
+      >
         <div style={{
           maxWidth: '1000px',
           margin: '0 auto'
@@ -253,11 +390,16 @@ const LandingPage = ({ onStartGenerator }) => {
       </div>
 
       {/* Pricing Section */}
-      <div style={{
-        padding: '80px 20px',
-        maxWidth: '1000px',
-        margin: '0 auto'
-      }}>
+      <div
+        id="pricing"
+        ref={setSectionRef('pricing')}
+        style={{
+          padding: '80px 20px',
+          maxWidth: '1000px',
+          margin: '0 auto',
+          ...getAnimationStyle('pricing')
+        }}
+      >
         <h2 style={{
           fontSize: '40px',
           fontWeight: '700',
@@ -312,7 +454,7 @@ const LandingPage = ({ onStartGenerator }) => {
           }}>
             {[
               'Pełny dostęp do wygenerowanego dokumentu',
-              'Format PDF gotowy do druku',
+              'Format PDF, DOCX gotowy do druku',
               'Zgodność z polskim prawem',
               'Profesjonalne formatowanie',
               'Natychmiastowy dostęp po płatności',
@@ -374,12 +516,17 @@ const LandingPage = ({ onStartGenerator }) => {
       </div>
 
       {/* CTA Section */}
-      <div style={{
-        background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-        color: 'white',
-        padding: '80px 20px',
-        textAlign: 'center'
-      }}>
+      <div
+        id="cta"
+        ref={setSectionRef('cta')}
+        style={{
+          background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+          color: 'white',
+          padding: '80px 20px',
+          textAlign: 'center',
+          ...getAnimationStyle('cta')
+        }}
+      >
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <h2 style={{
             fontSize: '40px',
@@ -417,7 +564,7 @@ const LandingPage = ({ onStartGenerator }) => {
             onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
           >
             <Wand2 size={24} />
-            Zacznij teraz - to darmowe!
+            Zacznij teraz!
           </button>
         </div>
       </div>
