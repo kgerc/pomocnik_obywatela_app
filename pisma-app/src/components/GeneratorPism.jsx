@@ -5,6 +5,8 @@ import { DOSTEPNE_PISMA } from '../data/pisma';
 import html2canvas from "html2canvas";
 import { PDFDocument } from "pdf-lib";
 import PaymentModal from './PaymentModal';
+import { Document, Packer, Paragraph, TextRun, AlignmentType } from "docx";
+import { saveAs } from "file-saver";
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
@@ -361,6 +363,122 @@ const GeneratorPism = () => {
     link.click();
 
     URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadDOCX = async () => {
+    if (!generatedDocument) return;
+
+    if (!documentUnlocked) {
+      setShowPaymentModal(true);
+      return;
+    }
+
+    try {
+      // Parse HTML and create DOCX paragraphs
+      const parser = new DOMParser();
+      const htmlDoc = parser.parseFromString(generatedDocument, 'text/html');
+      const paragraphs = [];
+
+      // Get body content and process all child nodes
+      const body = htmlDoc.body;
+
+      const processNode = (node, skipTextNodes = false) => {
+        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'DIV') {
+          const style = node.getAttribute('style') || '';
+          const textAlign = style.match(/text-align:\s*([^;]+)/)?.[1]?.trim() || 'left';
+
+          // Get direct text content (not nested divs)
+          let text = '';
+          node.childNodes.forEach(child => {
+            if (child.nodeType === Node.TEXT_NODE) {
+              text += child.textContent;
+            }
+          });
+
+          text = text.trim();
+
+          if (text) {
+            // Split by newlines to handle multiple lines in one div
+            const lines = text.split('\n').filter(line => line.trim());
+
+            lines.forEach(line => {
+              let alignment = AlignmentType.LEFT;
+
+              if (textAlign === 'center') {
+                alignment = AlignmentType.CENTER;
+              } else if (textAlign === 'right') {
+                alignment = AlignmentType.RIGHT;
+              }
+
+              paragraphs.push(
+                new Paragraph({
+                  children: [new TextRun({
+                    text: line.trim(),
+                    font: "Times New Roman",
+                    size: 24, // 12pt = 24 half-points
+                  })],
+                  alignment: alignment,
+                  spacing: {
+                    after: 200, // spacing after paragraph
+                  }
+                })
+              );
+            });
+          }
+
+          // Process children of this div, but skip text nodes (already processed above)
+          node.childNodes.forEach(child => processNode(child, true));
+        } else if (node.nodeType === Node.TEXT_NODE && !skipTextNodes) {
+          // Only handle text nodes if not already processed by parent div
+          const text = node.textContent.trim();
+          if (text) {
+            const lines = text.split('\n').filter(line => line.trim());
+            lines.forEach(line => {
+              paragraphs.push(
+                new Paragraph({
+                  children: [new TextRun({
+                    text: line.trim(),
+                    font: "Times New Roman",
+                    size: 24,
+                  })],
+                  alignment: AlignmentType.LEFT,
+                  spacing: {
+                    after: 200,
+                  }
+                })
+              );
+            });
+          }
+        } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'DIV') {
+          // Process other elements' children
+          node.childNodes.forEach(child => processNode(child, skipTextNodes));
+        }
+      };
+
+      processNode(body);
+
+      const docx = new Document({
+        sections: [{
+          properties: {
+            page: {
+              margin: {
+                top: 1440,    // 1 inch = 1440 twips
+                right: 1440,
+                bottom: 1440,
+                left: 1440,
+              },
+            },
+          },
+          children: paragraphs,
+        }],
+      });
+
+      const blob = await Packer.toBlob(docx);
+      saveAs(blob, `${selectedPismo?.nazwa || "dokument"}.docx`);
+    } catch (err) {
+      console.error(err);
+      alert("Błąd podczas generowania pliku DOCX");
+    }
   };
 
   const handleStartOver = () => {
@@ -1128,6 +1246,29 @@ const GeneratorPism = () => {
                       >
                         <Download size={16} />
                         Zapisz PDF
+                      </button>
+
+                      <button
+                        onClick={handleDownloadDOCX}
+                        style={{
+                          padding: '12px 24px',
+                          background: documentUnlocked
+                            ? 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)'
+                            : '#ccc',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '8px',
+                          fontWeight: '600',
+                          fontSize: '14px',
+                          cursor: documentUnlocked ? 'pointer' : 'not-allowed',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          opacity: documentUnlocked ? 1 : 0.6
+                        }}
+                      >
+                        <Download size={16} />
+                        Zapisz DOCX
                       </button>
                     </div>
                   </div>

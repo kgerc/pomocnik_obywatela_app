@@ -8,6 +8,8 @@ import DocumentPaymentModal from '../generator/DocumentPaymentModal';
 import { DOSTEPNE_PISMA } from '../../data/pisma';
 import html2canvas from "html2canvas";
 import { PDFDocument } from "pdf-lib";
+import { Document, Packer, Paragraph, TextRun, AlignmentType } from "docx";
+import { saveAs } from "file-saver";
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
@@ -36,12 +38,25 @@ const GeneratorPismTab = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [verifyingPayment, setVerifyingPayment] = useState(false); // loading state for payment verification
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 9;
 
   const categories = ['wszystkie', ...new Set(DOSTEPNE_PISMA.map(p => p.kategoria))];
 
   const filteredPisma = selectedCategory === 'wszystkie'
     ? DOSTEPNE_PISMA
     : DOSTEPNE_PISMA.filter(p => p.kategoria === selectedCategory);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredPisma.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentPisma = filteredPisma.slice(startIndex, endIndex);
+
+  // Reset page when category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory]);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
@@ -422,7 +437,121 @@ const handleDownloadPDF = async () => {
   URL.revokeObjectURL(url);
 };
 
+const handleDownloadDOCX = async () => {
+  if (!generatedDocument) return;
 
+  if (!documentUnlocked) {
+    setShowPaymentModal(true);
+    return;
+  }
+
+  try {
+    // Parse HTML and create DOCX paragraphs
+    const parser = new DOMParser();
+    const htmlDoc = parser.parseFromString(generatedDocument, 'text/html');
+    const paragraphs = [];
+
+    // Get body content and process all child nodes
+    const body = htmlDoc.body;
+
+    const processNode = (node, skipTextNodes = false) => {
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'DIV') {
+        const style = node.getAttribute('style') || '';
+        const textAlign = style.match(/text-align:\s*([^;]+)/)?.[1]?.trim() || 'left';
+
+        // Get direct text content (not nested divs)
+        let text = '';
+        node.childNodes.forEach(child => {
+          if (child.nodeType === Node.TEXT_NODE) {
+            text += child.textContent;
+          }
+        });
+
+        text = text.trim();
+
+        if (text) {
+          // Split by newlines to handle multiple lines in one div
+          const lines = text.split('\n').filter(line => line.trim());
+
+          lines.forEach(line => {
+            let alignment = AlignmentType.LEFT;
+
+            if (textAlign === 'center') {
+              alignment = AlignmentType.CENTER;
+            } else if (textAlign === 'right') {
+              alignment = AlignmentType.RIGHT;
+            }
+
+            paragraphs.push(
+              new Paragraph({
+                children: [new TextRun({
+                  text: line.trim(),
+                  font: "Times New Roman",
+                  size: 24, // 12pt = 24 half-points
+                })],
+                alignment: alignment,
+                spacing: {
+                  after: 200, // spacing after paragraph
+                }
+              })
+            );
+          });
+        }
+
+        // Process children of this div, but skip text nodes (already processed above)
+        node.childNodes.forEach(child => processNode(child, true));
+      } else if (node.nodeType === Node.TEXT_NODE && !skipTextNodes) {
+        // Only handle text nodes if not already processed by parent div
+        const text = node.textContent.trim();
+        if (text) {
+          const lines = text.split('\n').filter(line => line.trim());
+          lines.forEach(line => {
+            paragraphs.push(
+              new Paragraph({
+                children: [new TextRun({
+                  text: line.trim(),
+                  font: "Times New Roman",
+                  size: 24,
+                })],
+                alignment: AlignmentType.LEFT,
+                spacing: {
+                  after: 200,
+                }
+              })
+            );
+          });
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'DIV') {
+        // Process other elements' children
+        node.childNodes.forEach(child => processNode(child, skipTextNodes));
+      }
+    };
+
+    processNode(body);
+
+    const docx = new Document({
+      sections: [{
+        properties: {
+          page: {
+            margin: {
+              top: 1440,    // 1 inch = 1440 twips
+              right: 1440,
+              bottom: 1440,
+              left: 1440,
+            },
+          },
+        },
+        children: paragraphs,
+      }],
+    });
+
+    const blob = await Packer.toBlob(docx);
+    saveAs(blob, `${selectedPismo?.nazwa || "dokument"}.docx`);
+  } catch (err) {
+    console.error(err);
+    showError("Błąd podczas generowania pliku DOCX");
+  }
+};
 
   const handleStartOver = () => {
     setSelectedPismo(null);
@@ -610,9 +739,10 @@ const handleDownloadPDF = async () => {
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-            gap: '20px'
+            gap: '20px',
+            marginBottom: '30px'
           }}>
-            {filteredPisma.map(pismo => (
+            {currentPisma.map(pismo => (
               <div
                 key={pismo.id}
                 onClick={() => handlePismoSelect(pismo)}
@@ -674,6 +804,91 @@ const handleDownloadPDF = async () => {
                 </p>
               </div>
             ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '10px',
+              marginTop: '30px'
+            }}>
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                style={{
+                  padding: '10px 20px',
+                  background: currentPage === 1 ? '#e1e8ed' : 'white',
+                  color: currentPage === 1 ? '#a0a0a0' : '#2c5aa0',
+                  border: '2px solid #e1e8ed',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                ← Poprzednia
+              </button>
+
+              <div style={{
+                display: 'flex',
+                gap: '5px'
+              }}>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    style={{
+                      padding: '10px 15px',
+                      background: currentPage === page
+                        ? 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)'
+                        : 'white',
+                      color: currentPage === page ? 'white' : '#2c5aa0',
+                      border: currentPage === page ? 'none' : '2px solid #e1e8ed',
+                      borderRadius: '8px',
+                      fontWeight: '600',
+                      fontSize: '14px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      minWidth: '40px'
+                    }}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+                style={{
+                  padding: '10px 20px',
+                  background: currentPage === totalPages ? '#e1e8ed' : 'white',
+                  color: currentPage === totalPages ? '#a0a0a0' : '#2c5aa0',
+                  border: '2px solid #e1e8ed',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Następna →
+              </button>
+            </div>
+          )}
+
+          {/* Info o liczbie pism */}
+          <div style={{
+            textAlign: 'center',
+            marginTop: '20px',
+            color: '#5a6c7d',
+            fontSize: '14px'
+          }}>
+            Pokazuję {startIndex + 1}-{Math.min(endIndex, filteredPisma.length)} z {filteredPisma.length} pism
           </div>
         </>
       )}
@@ -1145,6 +1360,29 @@ const handleDownloadPDF = async () => {
                   >
                     <Download size={16} />
                     Zapisz PDF
+                  </button>
+
+                  <button
+                    onClick={handleDownloadDOCX}
+                    style={{
+                      padding: '12px 24px',
+                      background: (documentUnlocked || isPremium)
+                        ? 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)'
+                        : '#ccc',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontWeight: '600',
+                      fontSize: '14px',
+                      cursor: (documentUnlocked || isPremium) ? 'pointer' : 'not-allowed',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      opacity: (documentUnlocked || isPremium) ? 1 : 0.6
+                    }}
+                  >
+                    <Download size={16} />
+                    Zapisz DOCX
                   </button>
                 </div>
               </div>
