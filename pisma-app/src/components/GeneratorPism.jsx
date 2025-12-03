@@ -311,6 +311,18 @@ const GeneratorPism = ({ onBackToLanding }) => {
         - NIE używaj Markdown (**, ##, itp.) - tylko znaczniki [LEFT], [RIGHT], [CENTER], [HEADER]
         - Stosuj polskie przepisy prawne gdzie to właściwe
 
+        ## KRYTYCZNIE WAŻNE - ADRES ADRESATA:
+        - W sekcji [RIGHT] po nagłówku MUSISZ umieścić PEŁNY adres adresata DOKŁADNIE jak podano w DANYCH ADRESATA
+        - Adres MUSI zawierać WSZYSTKIE trzy linie: nazwa instytucji, ulica i numer, kod pocztowy i miasto
+        - NIE skracaj, NIE pomijaj żadnych informacji z adresu
+        - Przykład poprawnego formatowania adresu:
+          [RIGHT]
+          PKO Bank Polski S.A.
+          ul. Puławska 15
+          02-515 Warszawa
+          [/RIGHT]
+        - Jeśli w DANYCH ADRESATA brakuje pełnego adresu (tylko nazwa instytucji), to MUSISZ wyszukać w swojej wiedzy pełny adres siedziby głównej tej instytucji i użyć go
+
         Wygeneruj TYLKO treść pisma ze znacznikami.
       `;
 
