@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Wand2, FileText, Loader, Download, Check, ChevronRight, Lock, Search } from 'lucide-react';
+import { Wand2, FileText, Loader, Download, Check, ChevronRight, Lock, Search, ArrowLeft, ArrowRight  } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { DOSTEPNE_PISMA } from '../data/pisma';
 import html2canvas from "html2canvas";
@@ -321,17 +321,20 @@ const GeneratorPism = ({ onBackToLanding }) => {
       documentText = documentText
         .replace(/\[LEFT\]\s*([\s\S]*?)\s*\[\/LEFT\]/g,
           (_, content) =>
-            `<div style="text-align: left; display: block; width: 100%;">${
+            `<div class="left-align" style="text-align: left; display: block; width: 100%;">${
               content.split('\n').map(line => line.trim()).join('<br>')
             }</div>`
         )
         .replace(/\[RIGHT\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/RIGHT\]/g,
-          '<div style="text-align: right; display: block; width: 100%;">$1</div>'
+          (_, content) =>
+            `<div class="right-align" style="text-align: right; display: block; width: 100%;">${
+              content.split('\n').map(line => line.trim()).filter(line => line).join('<br>')
+            }</div>`
         )
         .replace(/\[CENTER\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/CENTER\]/g,
-          '<div style="text-align: center; font-weight: bold; width: 100%;">$1</div>'
+          '<div class="center-align" style="text-align: center; font-weight: bold; width: 100%;">$1</div>'
         )
-        .replace(/\[HEADER\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/HEADER\]/g,`<div style="width: 100%; display: flex; justify-content: space-between; align-items: flex-start;">$1</div>`);
+        .replace(/\[HEADER\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/HEADER\]/g,`<div class="header-flex" style="width: 100%; display: flex; justify-content: space-between; align-items: flex-start;">$1</div>`);
 
       setGeneratedDocument(documentText);
 
@@ -448,52 +451,138 @@ const GeneratorPism = ({ onBackToLanding }) => {
       // Get body content and process all child nodes
       const body = htmlDoc.body;
 
+      const extractTextSegments = (node) => {
+        const textSegments = [];
+        let currentText = '';
+
+        node.childNodes.forEach(child => {
+          if (child.nodeType === Node.TEXT_NODE) {
+            currentText += child.textContent;
+          } else if (child.nodeType === Node.ELEMENT_NODE && child.tagName === 'BR') {
+            if (currentText.trim()) {
+              textSegments.push(currentText.trim());
+            }
+            currentText = '';
+          }
+        });
+
+        if (currentText.trim()) {
+          textSegments.push(currentText.trim());
+        }
+
+        return textSegments;
+      };
+
       const processNode = (node, skipTextNodes = false) => {
         if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'DIV') {
+          const className = node.getAttribute('class') || '';
           const style = node.getAttribute('style') || '';
           const textAlign = style.match(/text-align:\s*([^;]+)/)?.[1]?.trim() || 'left';
 
-          // Get direct text content (not nested divs)
-          let text = '';
-          node.childNodes.forEach(child => {
-            if (child.nodeType === Node.TEXT_NODE) {
-              text += child.textContent;
-            }
-          });
+          // Special handling for header-flex (two-column layout)
+          if (className.includes('header-flex')) {
+            const leftDiv = node.querySelector('.left-align');
+            const rightDiv = node.querySelector('.right-align');
 
-          text = text.trim();
+            if (leftDiv && rightDiv) {
+              const leftLines = extractTextSegments(leftDiv);
+              const rightLines = extractTextSegments(rightDiv);
+              const maxLines = Math.max(leftLines.length, rightLines.length);
 
-          if (text) {
-            // Split by newlines to handle multiple lines in one div
-            const lines = text.split('\n').filter(line => line.trim());
+              // First line: left text on left, right text on right using tab stop
+              if (maxLines > 0) {
+                const leftText = leftLines[0] || '';
+                const rightText = rightLines[0] || '';
 
-            lines.forEach(line => {
-              let alignment = AlignmentType.LEFT;
-
-              if (textAlign === 'center') {
-                alignment = AlignmentType.CENTER;
-              } else if (textAlign === 'right') {
-                alignment = AlignmentType.RIGHT;
+                paragraphs.push(
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: leftText,
+                        font: "Times New Roman",
+                        size: 24,
+                      }),
+                      new TextRun({
+                        text: '\t' + rightText,
+                        font: "Times New Roman",
+                        size: 24,
+                      })
+                    ],
+                    tabStops: [
+                      {
+                        type: 'right',
+                        position: 9638, // Right edge of page (in twips: 6.7 inches * 1440)
+                      }
+                    ],
+                    spacing: {
+                      after: 200,
+                    }
+                  })
+                );
               }
 
+              // Remaining lines from left side only
+              for (let i = 1; i < leftLines.length; i++) {
+                paragraphs.push(
+                  new Paragraph({
+                    children: [new TextRun({
+                      text: leftLines[i],
+                      font: "Times New Roman",
+                      size: 24,
+                    })],
+                    spacing: {
+                      after: 200,
+                    }
+                  })
+                );
+              }
+
+              // Add extra spacing after header section
               paragraphs.push(
                 new Paragraph({
-                  children: [new TextRun({
-                    text: line.trim(),
-                    font: "Times New Roman",
-                    size: 24, // 12pt = 24 half-points
-                  })],
-                  alignment: alignment,
-                  spacing: {
-                    after: 200, // spacing after paragraph
-                  }
+                  children: [new TextRun({ text: '', size: 24 })],
+                  spacing: { after: 200 }
                 })
               );
-            });
+            }
+            return; // Don't process children again
           }
 
-          // Process children of this div, but skip text nodes (already processed above)
-          node.childNodes.forEach(child => processNode(child, true));
+          let alignment = AlignmentType.LEFT;
+          if (textAlign === 'center') {
+            alignment = AlignmentType.CENTER;
+          } else if (textAlign === 'right') {
+            alignment = AlignmentType.RIGHT;
+          }
+
+          // Collect text segments split by <br> tags
+          const textSegments = extractTextSegments(node);
+
+          // Create a paragraph for each text segment
+          textSegments.forEach((text, index) => {
+            const isLastInSection = index === textSegments.length - 1;
+
+            paragraphs.push(
+              new Paragraph({
+                children: [new TextRun({
+                  text: text,
+                  font: "Times New Roman",
+                  size: 24,
+                })],
+                alignment: alignment,
+                spacing: {
+                  after: isLastInSection ? 400 : 200, // Extra spacing after last line of section
+                }
+              })
+            );
+          });
+
+          // Process children of this div (nested divs), but skip text nodes (already processed above)
+          node.childNodes.forEach(child => {
+            if (child.nodeType === Node.ELEMENT_NODE && child.tagName === 'DIV' && !child.getAttribute('class')?.includes('left-align') && !child.getAttribute('class')?.includes('right-align')) {
+              processNode(child, false);
+            }
+          });
         } else if (node.nodeType === Node.TEXT_NODE && !skipTextNodes) {
           // Only handle text nodes if not already processed by parent div
           const text = node.textContent.trim();
@@ -642,7 +731,7 @@ const GeneratorPism = ({ onBackToLanding }) => {
               e.currentTarget.style.borderColor = '#e1e8ed';
             }}
           >
-            ← Powrót do strony głównej
+            <ArrowLeft size={18} color="#2c5aa0" /> Powrót do strony głównej
           </button>
         </div>
       </div>
@@ -923,7 +1012,7 @@ const GeneratorPism = ({ onBackToLanding }) => {
                       transition: 'all 0.2s'
                     }}
                   >
-                    ← Poprzednia
+                    <ArrowLeft size={16} color="#2c5aa0" style={{ verticalAlign: '-3px' }}/> Poprzednia
                   </button>
 
                   <div style={{
@@ -969,7 +1058,7 @@ const GeneratorPism = ({ onBackToLanding }) => {
                       transition: 'all 0.2s'
                     }}
                   >
-                    Następna →
+                    Następna <ArrowRight size={16} color="#2c5aa0" style={{ verticalAlign: '-3px' }}/>
                   </button>
                 </div>
               )}
