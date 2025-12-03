@@ -198,7 +198,7 @@ const LandingPage = ({ onStartGenerator }) => {
             },
             {
               icon: <FileText size={40} />,
-              title: 'Ponad 80 typów pism',
+              title: 'Ponad 100 typów pism',
               description: 'Wnioski, odwołania, reklamacje, zgłoszenia – wszystko w jednym miejscu.'
             }
           ].map((feature, idx) => (
@@ -287,7 +287,7 @@ const LandingPage = ({ onStartGenerator }) => {
             gap: '20px'
           }}>
             {[
-              { name: 'Administracja', count: '15+', icon: '🏛️' },
+              { name: 'Administracja', count: '10+', icon: '🏛️' },
               { name: 'Telekomunikacja', count: '10+', icon: '📱' },
               { name: 'Kurierzy', count: '8+', icon: '📦' },
               { name: 'Konsumenckie', count: '12+', icon: '🛒' },
@@ -375,7 +375,7 @@ const LandingPage = ({ onStartGenerator }) => {
               {
                 step: '1',
                 title: 'Wybierz typ pisma',
-                description: 'Z ponad 50 dostępnych szablonów wybierz ten, który potrzebujesz.'
+                description: 'Z ponad 100 dostępnych szablonów wybierz ten, który potrzebujesz.'
               },
               {
                 step: '2',
