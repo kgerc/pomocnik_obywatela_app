@@ -88,9 +88,6 @@ const PrivacyPolicy = ({ onClose }) => {
                 Niniejsza Polityka Prywatności określa zasady przetwarzania i ochrony danych osobowych przekazanych przez Użytkowników w związku z korzystaniem z serwisu Generator Pism AI (dalej: "Serwis").
               </li>
               <li style={{ marginBottom: '8px' }}>
-                Administratorem danych osobowych jest [Nazwa firmy/osoby], adres: [adres], NIP: [NIP], e-mail: [e-mail] (dalej: "Administrator").
-              </li>
-              <li style={{ marginBottom: '8px' }}>
                 Dane osobowe są przetwarzane zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. (RODO).
               </li>
             </ol>
@@ -220,7 +217,7 @@ const PrivacyPolicy = ({ onClose }) => {
               </li>
             </ol>
             <p style={{ marginBottom: '8px', marginTop: '12px' }}>
-              Aby skorzystać z powyższych praw, należy skontaktować się z Administratorem pod adresem: [e-mail kontaktowy].
+              Aby skorzystać z powyższych praw, należy skontaktować się z Administratorem pod adresem: kontakt@pomocnikobywatela.pl.
             </p>
           </section>
 
@@ -288,9 +285,7 @@ const PrivacyPolicy = ({ onClose }) => {
               W razie pytań dotyczących przetwarzania danych osobowych lub niniejszej Polityki Prywatności, prosimy o kontakt:
             </p>
             <ul style={{ paddingLeft: '20px', marginTop: '12px' }}>
-              <li style={{ marginBottom: '8px' }}>E-mail: [e-mail kontaktowy]</li>
-              <li style={{ marginBottom: '8px' }}>Telefon: [numer telefonu]</li>
-              <li style={{ marginBottom: '8px' }}>Adres korespondencyjny: [adres]</li>
+              <li style={{ marginBottom: '8px' }}>E-mail: kontakt@pomocnikobywatela.pl</li>
             </ul>
           </section>
         </div>

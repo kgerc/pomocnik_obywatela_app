@@ -76,7 +76,7 @@ const TermsOfService = ({ onClose }) => {
           lineHeight: '1.8'
         }}>
           <p style={{ marginBottom: '20px', color: '#5a6c7d' }}>
-            Obowiązuje od: 3 grudnia 2024
+            Obowiązuje od: 3 grudnia 2025
           </p>
 
           <section style={{ marginBottom: '30px' }}>
@@ -85,10 +85,7 @@ const TermsOfService = ({ onClose }) => {
             </h3>
             <ol style={{ paddingLeft: '20px', marginBottom: '10px' }}>
               <li style={{ marginBottom: '8px' }}>
-                Niniejszy Regulamin określa zasady korzystania z serwisu Generator Pism AI dostępnego pod adresem [adres strony] (dalej: "Serwis").
-              </li>
-              <li style={{ marginBottom: '8px' }}>
-                Właścicielem i administratorem Serwisu jest [Nazwa firmy/osoby], adres: [adres], NIP: [NIP], e-mail: [e-mail].
+                Niniejszy Regulamin określa zasady korzystania z serwisu Generator Pism AI dostępnego pod adresem https://pisma.pomocnikobywatela.pl/ (dalej: "Serwis").
               </li>
               <li style={{ marginBottom: '8px' }}>
                 Serwis świadczy usługi generowania dokumentów urzędowych za pomocą technologii sztucznej inteligencji.
@@ -154,7 +151,7 @@ const TermsOfService = ({ onClose }) => {
                 Po dokonaniu płatności Użytkownik otrzymuje natychmiastowy dostęp do pełnej wersji dokumentu.
               </li>
               <li style={{ marginBottom: '8px' }}>
-                W przypadku problemów z płatnością należy skontaktować się z Administratorem pod adresem [e-mail kontaktowy].
+                W przypadku problemów z płatnością należy skontaktować się z Administratorem pod adresem kontakt@pomocnikobywatela.pl.
               </li>
             </ol>
           </section>
@@ -171,7 +168,7 @@ const TermsOfService = ({ onClose }) => {
                 Poprzez dokonanie płatności Użytkownik wyraża zgodę na natychmiastowe wykonanie usługi i traci prawo do odstąpienia od umowy.
               </li>
               <li style={{ marginBottom: '8px' }}>
-                Użytkownik ma prawo złożyć reklamację dotyczącą świadczonych usług w terminie 14 dni od dnia zakupu dokumentu, przesyłając wiadomość e-mail na adres: [e-mail kontaktowy].
+                Użytkownik ma prawo złożyć reklamację dotyczącą świadczonych usług w terminie 14 dni od dnia zakupu dokumentu, przesyłając wiadomość e-mail na adres: kontakt@pomocnikobywatela.pl.
               </li>
               <li style={{ marginBottom: '8px' }}>
                 Administrator rozpatrzy reklamację w terminie do 14 dni roboczych od jej otrzymania.
@@ -243,7 +240,7 @@ const TermsOfService = ({ onClose }) => {
                 Spory wynikające z korzystania z Serwisu będą rozstrzygane przez sąd właściwy dla siedziby Administratora.
               </li>
               <li style={{ marginBottom: '8px' }}>
-                Kontakt z Administratorem: [e-mail kontaktowy], [numer telefonu].
+                Kontakt z Administratorem: kontakt@pomocnikobywatela.pl.
               </li>
             </ol>
           </section>
