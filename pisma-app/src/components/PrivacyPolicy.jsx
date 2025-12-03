@@ -76,7 +76,7 @@ const PrivacyPolicy = ({ onClose }) => {
           lineHeight: '1.8'
         }}>
           <p style={{ marginBottom: '20px', color: '#5a6c7d' }}>
-            Obowiązuje od: 3 grudnia 2024
+            Obowiązuje od: 3 grudnia 2025
           </p>
 
           <section style={{ marginBottom: '30px' }}>
