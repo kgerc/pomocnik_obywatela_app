@@ -159,7 +159,7 @@ const LandingPage = ({ onStartGenerator }) => {
             fontSize: '14px',
             opacity: 0.9
           }}>
-            ✓ Bez rejestracji  •  ✓ Płatność tylko 2 zł za dokument  •  ✓ Natychmiastowy dostęp
+            <Check size={18} color="#10b981" style={{ verticalAlign: '-3px' }}/> Bez rejestracji   <Check size={18} color="#10b981" style={{ verticalAlign: '-3px' }}/> Płatność tylko 2 zł za dokument    <Check size={18} color="#10b981" style={{ verticalAlign: '-3px' }}/> Natychmiastowy dostęp
           </div>
         </div>
       </div>
