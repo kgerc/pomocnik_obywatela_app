@@ -67,6 +67,8 @@ const GeneratorPism = () => {
       const returnedDocId = urlParams.get('documentId');
       const email = urlParams.get('email');
 
+      console.log('🔍 URL params:', { success, payment, returnedDocId, email });
+
       if (email) {
         setUserEmail(email);
       }
@@ -74,14 +76,29 @@ const GeneratorPism = () => {
       // Przywróć stan dokumentu z localStorage
       try {
         const savedStateStr = localStorage.getItem('generatorPismState');
+        console.log('📦 Saved state from localStorage:', savedStateStr ? 'exists' : 'null');
+
         if (savedStateStr) {
           const savedState = JSON.parse(savedStateStr);
+          console.log('📊 Parsed saved state:', {
+            hasSelectedPismo: !!savedState.selectedPismo,
+            hasFormData: !!savedState.formData,
+            hasDocumentId: !!savedState.documentId,
+            hasGeneratedDocument: !!savedState.generatedDocument,
+            hasDocumentUnlocked: !!savedState.documentUnlocked,
+            timestamp: savedState.timestamp
+          });
 
           // Sprawdź czy stan nie jest zbyt stary (max 1 godzina)
           const oneHour = 60 * 60 * 1000;
-          if (Date.now() - savedState.timestamp < oneHour) {
+          const stateAge = Date.now() - savedState.timestamp;
+          console.log('⏰ State age:', stateAge, 'ms (max:', oneHour, 'ms)');
+
+          if (stateAge < oneHour) {
             // Przywróć stan tylko jeśli wracamy z płatności lub dokument był wygenerowany
             if ((success === 'true' && payment === 'document') || savedState.generatedDocument) {
+              console.log('✅ Restoring state from localStorage');
+
               setSelectedPismo(savedState.selectedPismo);
               setFormData(savedState.formData);
               setDocumentId(savedState.documentId);
@@ -91,22 +108,47 @@ const GeneratorPism = () => {
               }
 
               if (savedState.generatedDocument) {
+                console.log('📄 Restoring generated document');
                 setGeneratedDocument(savedState.generatedDocument);
                 setCurrentStep(3);
+              } else {
+                console.warn('⚠️ No generated document in saved state!');
+
+                // If we're coming back from payment but don't have document, show error
+                if (success === 'true' && payment === 'document') {
+                  console.error('❌ CRITICAL: Payment success but no document in localStorage!');
+                  alert('⚠️ Nie udało się przywrócić dokumentu. Sprawdź czy przeglądarka nie wyczyściła pamięci lokalnej. Wygeneruj dokument ponownie.');
+                  setCurrentStep(1);
+                }
               }
 
               // Restore document unlocked state if exists
               if (savedState.documentUnlocked) {
+                console.log('🔓 Restoring unlocked state');
                 setDocumentUnlocked(true);
               }
+            } else {
+              console.log('❌ Not restoring state - conditions not met');
             }
+          } else {
+            console.log('⏰ State is too old, not restoring');
+          }
+        } else {
+          console.log('❌ No saved state in localStorage');
+
+          // Critical error: payment success but no localStorage
+          if (success === 'true' && payment === 'document') {
+            console.error('❌ CRITICAL: Payment success but localStorage is empty!');
+            alert('⚠️ Nie można przywrócić dokumentu - brak danych w pamięci przeglądarki. Skontaktuj się z pomocą techniczną podając ID dokumentu: ' + returnedDocId);
           }
         }
       } catch (e) {
-        console.error('Failed to restore state from localStorage:', e);
+        console.error('❌ Failed to restore state from localStorage:', e);
       }
 
       if (success === 'true' && payment === 'document' && returnedDocId) {
+        console.log('💳 Starting payment verification...');
+
         // Simulate payment verification with delay (since we don't have API check for guests)
         const verifyPayment = async () => {
           try {
@@ -114,6 +156,8 @@ const GeneratorPism = () => {
 
             // Simulate checking payment status (wait 2 seconds)
             await new Promise(resolve => setTimeout(resolve, 2000));
+
+            console.log('✅ Payment verified, unlocking document');
 
             // Unlock document
             setDocumentUnlocked(true);
@@ -125,15 +169,17 @@ const GeneratorPism = () => {
                 ...savedState,
                 documentUnlocked: true
               }));
+              console.log('💾 Updated localStorage with unlocked state');
             } catch (e) {
-              console.error('Failed to update documentUnlocked in localStorage:', e);
+              console.error('❌ Failed to update documentUnlocked in localStorage:', e);
             }
 
             // Clear URL parameters AFTER updating state
             window.history.replaceState({}, document.title, window.location.pathname);
+            console.log('🧹 Cleared URL parameters');
 
           } catch (error) {
-            console.error('Error verifying payment:', error);
+            console.error('❌ Error verifying payment:', error);
           } finally {
             setVerifyingPayment(false);
             // Show success notification after loader disappears
@@ -184,15 +230,17 @@ const GeneratorPism = () => {
 
     // Zapisz stan formularza i dokumentu w localStorage (do przywrócenia po powrocie z checkout)
     try {
-      localStorage.setItem('generatorPismState', JSON.stringify({
+      const initialState = {
         selectedPismo: selectedPismo,
         formData: formData,
         documentId: newDocumentId,
         userEmail: emailFromForm,
         timestamp: Date.now()
-      }));
+      };
+      localStorage.setItem('generatorPismState', JSON.stringify(initialState));
+      console.log('💾 Saved initial state to localStorage (before generation):', Object.keys(initialState));
     } catch (e) {
-      console.error('Failed to save state to localStorage:', e);
+      console.error('❌ Failed to save state to localStorage:', e);
     }
 
     try {
@@ -311,13 +359,18 @@ const GeneratorPism = () => {
       // Zapisz wygenerowany dokument w localStorage
       try {
         const savedState = JSON.parse(localStorage.getItem('generatorPismState') || '{}');
-        localStorage.setItem('generatorPismState', JSON.stringify({
+        const newState = {
           ...savedState,
           generatedDocument: documentText,
           documentUnlocked: false
-        }));
+        };
+        localStorage.setItem('generatorPismState', JSON.stringify(newState));
+        console.log('💾 Saved generated document to localStorage:', {
+          documentLength: documentText.length,
+          stateKeys: Object.keys(newState)
+        });
       } catch (e) {
-        console.error('Failed to save generated document to localStorage:', e);
+        console.error('❌ Failed to save generated document to localStorage:', e);
       }
 
     } catch (error) {
@@ -333,6 +386,20 @@ const GeneratorPism = () => {
     if (!generatedDocument) return;
 
     if (!documentUnlocked) {
+      // Verify document is in localStorage before showing payment modal
+      console.log('💳 Opening payment modal. Verifying localStorage...');
+      const savedState = localStorage.getItem('generatorPismState');
+      if (savedState) {
+        const parsed = JSON.parse(savedState);
+        console.log('✅ localStorage verified:', {
+          hasDocument: !!parsed.generatedDocument,
+          documentLength: parsed.generatedDocument?.length,
+          documentId: parsed.documentId
+        });
+      } else {
+        console.error('❌ WARNING: No localStorage found when opening payment modal!');
+      }
+
       setShowPaymentModal(true);
       return;
     }
