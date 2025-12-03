@@ -259,8 +259,15 @@ const GeneratorPismTab = () => {
 
       // Dzisiejsza data w formacie polskim
       const dzisiaj = new Date();
+
+      // Pobranie miasta z pola "kod_miasto", np. "00-950 Warszawa"
+      const miasto = daneOsobowe.kod_miasto.split(' ').slice(1).join(' ') || '[MIASTO]';
+
+      // Odmiana miesiąca — toLocaleDateString daje już poprawną odmianę (grudnia, stycznia itp.)
       const miesiac = dzisiaj.toLocaleDateString('pl-PL', { month: 'long' });
-      const dataFormatted = `${daneOsobowe.kod_miasto.split(' ')[1] || '[MIASTO]'}, ${dzisiaj.getDate()} ${miesiac} ${dzisiaj.getFullYear()} r.`;
+
+      // Finalny format: "Warszawa, 3 grudnia 2025 r."
+      const dataFormatted = `${miasto}, ${dzisiaj.getDate()} ${miesiac} ${dzisiaj.getFullYear()} r.`;
 
       const prompt = `
         Jesteś profesjonalnym asystentem prawnym w Polsce. Wygeneruj POPRAWNIE SFORMATOWANE pismo urzędowe.
@@ -287,15 +294,18 @@ const GeneratorPismTab = () => {
 
         Wygeneruj pismo według DOKŁADNIE tej struktury:
 
-        [LEFT]
-        ${dataFormatted}
-
-        ${daneOsobowe.imie_nazwisko}
-        ${daneOsobowe.ulica_numer}
-        ${daneOsobowe.kod_miasto}
-        ${daneOsobowe.telefon ? 'Tel: ' + daneOsobowe.telefon : ''}
-        ${daneOsobowe.email ? 'Email: ' + daneOsobowe.email : ''}
-        [/LEFT]
+        [HEADER]
+          [LEFT]
+          ${daneOsobowe.imie_nazwisko}
+          ${daneOsobowe.ulica_numer}
+          ${daneOsobowe.kod_miasto}
+          ${daneOsobowe.telefon ? 'Tel: ' + daneOsobowe.telefon : ''}
+          ${daneOsobowe.email ? 'Email: ' + daneOsobowe.email : ''}
+          [/LEFT]
+          [RIGHT]
+          ${dataFormatted}
+          [/RIGHT]
+        [/HEADER]
 
         [RIGHT]
         ${daneAdresata.nazwa_organu}
@@ -321,11 +331,12 @@ const GeneratorPismTab = () => {
         [/RIGHT]
 
         ## WAŻNE WYMOGI:
-        - MUSISZ użyć znaczników [LEFT], [RIGHT], [CENTER] do formatowania
+        - MUSISZ użyć znaczników [LEFT], [RIGHT], [CENTER], [HEADER] do formatowania
+        - jeśli znaczniki są wewnątrz znacznika [HEADER] to muszą się zaczynać od tej samej linii
         - Tytuł pisma w [CENTER] wielkimi literami - ZWRÓĆ UWAGĘ NA ORTOGRAFIĘ (np. "WNIOSEK" a nie "WNIENIOSEK")
         - Podpis w [RIGHT] - wyrównany do prawej strony
         - Używaj formalnego języka urzędowego
-        - NIE używaj Markdown (**, ##, itp.) - tylko znaczniki [LEFT], [RIGHT], [CENTER]
+        - NIE używaj Markdown (**, ##, itp.) - tylko znaczniki [LEFT], [RIGHT], [CENTER], [HEADER]
         - Stosuj polskie przepisy prawne gdzie to właściwe
 
         Wygeneruj TYLKO treść pisma ze znacznikami.
@@ -336,9 +347,19 @@ const GeneratorPismTab = () => {
 
       // Przetwórz znaczniki formatowania na HTML
       documentText = documentText
-        .replace(/\[LEFT\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/LEFT\]/g, '<div style="text-align: left; display: block; width: 100%;">$1</div>')
-        .replace(/\[RIGHT\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/RIGHT\]/g, '<div style="text-align: right; display: block; width: 100%;">$1</div>')
-        .replace(/\[CENTER\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/CENTER\]/g, '<div style="text-align: center; font-weight: bold; display: block; width: 100%;">$1</div>');
+        .replace(/\[LEFT\]\s*([\s\S]*?)\s*\[\/LEFT\]/g,
+          (_, content) =>
+            `<div style="text-align: left; display: block; width: 100%;">${
+              content.split('\n').map(line => line.trim()).join('<br>')
+            }</div>`
+        )
+        .replace(/\[RIGHT\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/RIGHT\]/g,
+          '<div style="text-align: right; display: block; width: 100%;">$1</div>'
+        )
+        .replace(/\[CENTER\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/CENTER\]/g,
+          '<div style="text-align: center; font-weight: bold; width: 100%;">$1</div>'
+        )
+        .replace(/\[HEADER\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/HEADER\]/g,`<div style="width: 100%; display: flex; justify-content: space-between; align-items: flex-start;">$1</div>`);
 
       setGeneratedDocument(documentText);
 

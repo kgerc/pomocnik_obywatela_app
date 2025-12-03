@@ -16,33 +16,70 @@ body {
   min-height: 100vh;
 }
 
-.fade-in {
-  opacity: 0;
-  transition: opacity 0.5s ease-in;
+input {
+  color-scheme: light !important;
+  background-color: #fff !important;
+  color: #000 !important;
 }
 
-.fade-in.visible {
-  opacity: 1;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset !important;
+  -webkit-text-fill-color: #000 !important;
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 .spin {
   animation: spin 1s linear infinite;
 }
 
+.fade-in {
+  opacity: 1;
+  /* Usunięto transform - powodował problemy z position: fixed w modalach */
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.fade-in:not(.visible) {
+  opacity: 0;
+}
+
+/* Animations for loading overlay */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes pulse {
   0%, 100% {
+    transform: scale(1);
     opacity: 1;
   }
   50% {
-    opacity: 0.5;
+    transform: scale(1.05);
+    opacity: 0.9;
   }
 }
