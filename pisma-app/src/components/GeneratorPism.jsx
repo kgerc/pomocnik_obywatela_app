@@ -19,7 +19,7 @@ const DANE_OSOBOWE = [
   { id: 'email', label: 'Adres email', placeholder: 'np. jan.kowalski@example.com', type: 'text', required: false }
 ];
 
-const GeneratorPism = () => {
+const GeneratorPism = ({ onBackToLanding }) => {
   const [selectedPismo, setSelectedPismo] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
@@ -63,11 +63,10 @@ const GeneratorPism = () => {
     const checkPaymentSuccess = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const success = urlParams.get('success');
+      const canceled = urlParams.get('canceled');
       const payment = urlParams.get('payment');
       const returnedDocId = urlParams.get('documentId');
       const email = urlParams.get('email');
-
-      console.log('🔍 URL params:', { success, payment, returnedDocId, email });
 
       if (email) {
         setUserEmail(email);
@@ -76,113 +75,61 @@ const GeneratorPism = () => {
       // Przywróć stan dokumentu z localStorage
       try {
         const savedStateStr = localStorage.getItem('generatorPismState');
-        console.log('📦 Saved state from localStorage:', savedStateStr ? 'exists' : 'null');
-
         if (savedStateStr) {
           const savedState = JSON.parse(savedStateStr);
-          console.log('📊 Parsed saved state:', {
-            hasSelectedPismo: !!savedState.selectedPismo,
-            hasFormData: !!savedState.formData,
-            hasDocumentId: !!savedState.documentId,
-            hasGeneratedDocument: !!savedState.generatedDocument,
-            hasDocumentUnlocked: !!savedState.documentUnlocked,
-            timestamp: savedState.timestamp
-          });
 
-          // Sprawdź czy stan nie jest zbyt stary (max 1 godzina)
-          const oneHour = 60 * 60 * 1000;
-          const stateAge = Date.now() - savedState.timestamp;
-          console.log('⏰ State age:', stateAge, 'ms (max:', oneHour, 'ms)');
+          // Przywróć stan jeśli wracamy z płatności (sukces lub anulowanie) lub dokument był wygenerowany
+          if ((success === 'true' && payment === 'document') || (canceled === 'true') || savedState.generatedDocument) {
+            if (savedState.selectedPismo) setSelectedPismo(savedState.selectedPismo);
+            if (savedState.formData) setFormData(savedState.formData);
+            if (savedState.documentId) setDocumentId(savedState.documentId);
+            if (savedState.userEmail) setUserEmail(savedState.userEmail);
 
-          if (stateAge < oneHour) {
-            // Przywróć stan tylko jeśli wracamy z płatności lub dokument był wygenerowany
-            if ((success === 'true' && payment === 'document') || savedState.generatedDocument) {
-              console.log('✅ Restoring state from localStorage');
-
-              setSelectedPismo(savedState.selectedPismo);
-              setFormData(savedState.formData);
-              setDocumentId(savedState.documentId);
-
-              if (savedState.userEmail) {
-                setUserEmail(savedState.userEmail);
-              }
-
-              if (savedState.generatedDocument) {
-                console.log('📄 Restoring generated document');
-                setGeneratedDocument(savedState.generatedDocument);
-                setCurrentStep(3);
-              } else {
-                console.warn('⚠️ No generated document in saved state!');
-
-                // If we're coming back from payment but don't have document, show error
-                if (success === 'true' && payment === 'document') {
-                  console.error('❌ CRITICAL: Payment success but no document in localStorage!');
-                  alert('⚠️ Nie udało się przywrócić dokumentu. Sprawdź czy przeglądarka nie wyczyściła pamięci lokalnej. Wygeneruj dokument ponownie.');
-                  setCurrentStep(1);
-                }
-              }
+            if (savedState.generatedDocument) {
+              setGeneratedDocument(savedState.generatedDocument);
+              setCurrentStep(3);
 
               // Restore document unlocked state if exists
               if (savedState.documentUnlocked) {
-                console.log('🔓 Restoring unlocked state');
                 setDocumentUnlocked(true);
               }
-            } else {
-              console.log('❌ Not restoring state - conditions not met');
             }
-          } else {
-            console.log('⏰ State is too old, not restoring');
-          }
-        } else {
-          console.log('❌ No saved state in localStorage');
-
-          // Critical error: payment success but no localStorage
-          if (success === 'true' && payment === 'document') {
-            console.error('❌ CRITICAL: Payment success but localStorage is empty!');
-            alert('⚠️ Nie można przywrócić dokumentu - brak danych w pamięci przeglądarki. Skontaktuj się z pomocą techniczną podając ID dokumentu: ' + returnedDocId);
           }
         }
       } catch (e) {
-        console.error('❌ Failed to restore state from localStorage:', e);
+        // Silent fail - localStorage może być niedostępny
       }
 
-      if (success === 'true' && payment === 'document' && returnedDocId) {
-        console.log('💳 Starting payment verification...');
+      // Handle payment cancellation
+      if (canceled === 'true') {
+        window.history.replaceState({}, document.title, '?generator=true');
+        return;
+      }
 
-        // Simulate payment verification with delay (since we don't have API check for guests)
+      // Handle successful payment
+      if (success === 'true' && payment === 'document' && returnedDocId) {
         const verifyPayment = async () => {
           try {
             setVerifyingPayment(true);
-
-            // Simulate checking payment status (wait 2 seconds)
             await new Promise(resolve => setTimeout(resolve, 2000));
 
-            console.log('✅ Payment verified, unlocking document');
-
-            // Unlock document
             setDocumentUnlocked(true);
 
-            // Update localStorage to persist unlocked state
             try {
               const savedState = JSON.parse(localStorage.getItem('generatorPismState') || '{}');
               localStorage.setItem('generatorPismState', JSON.stringify({
                 ...savedState,
                 documentUnlocked: true
               }));
-              console.log('💾 Updated localStorage with unlocked state');
             } catch (e) {
-              console.error('❌ Failed to update documentUnlocked in localStorage:', e);
+              // Silent fail
             }
 
-            // Clear URL parameters AFTER updating state
-            window.history.replaceState({}, document.title, window.location.pathname);
-            console.log('🧹 Cleared URL parameters');
-
+            window.history.replaceState({}, document.title, '?generator=true');
           } catch (error) {
-            console.error('❌ Error verifying payment:', error);
+            // Silent fail
           } finally {
             setVerifyingPayment(false);
-            // Show success notification after loader disappears
             setTimeout(() => {
               alert('✅ Płatność zakończona sukcesem! Dokument został odblokowany.');
             }, 100);
@@ -238,9 +185,8 @@ const GeneratorPism = () => {
         timestamp: Date.now()
       };
       localStorage.setItem('generatorPismState', JSON.stringify(initialState));
-      console.log('💾 Saved initial state to localStorage (before generation):', Object.keys(initialState));
     } catch (e) {
-      console.error('❌ Failed to save state to localStorage:', e);
+      // Silent fail - localStorage może być niedostępny
     }
 
     try {
@@ -365,12 +311,8 @@ const GeneratorPism = () => {
           documentUnlocked: false
         };
         localStorage.setItem('generatorPismState', JSON.stringify(newState));
-        console.log('💾 Saved generated document to localStorage:', {
-          documentLength: documentText.length,
-          stateKeys: Object.keys(newState)
-        });
       } catch (e) {
-        console.error('❌ Failed to save generated document to localStorage:', e);
+        // Silent fail - localStorage może być niedostępny
       }
 
     } catch (error) {
@@ -386,20 +328,6 @@ const GeneratorPism = () => {
     if (!generatedDocument) return;
 
     if (!documentUnlocked) {
-      // Verify document is in localStorage before showing payment modal
-      console.log('💳 Opening payment modal. Verifying localStorage...');
-      const savedState = localStorage.getItem('generatorPismState');
-      if (savedState) {
-        const parsed = JSON.parse(savedState);
-        console.log('✅ localStorage verified:', {
-          hasDocument: !!parsed.generatedDocument,
-          documentLength: parsed.generatedDocument?.length,
-          documentId: parsed.documentId
-        });
-      } else {
-        console.error('❌ WARNING: No localStorage found when opening payment modal!');
-      }
-
       setShowPaymentModal(true);
       return;
     }
@@ -621,6 +549,71 @@ const GeneratorPism = () => {
         }}
       />
 
+      {/* Header */}
+      <div style={{
+        background: 'white',
+        borderBottom: '2px solid #e1e8ed',
+        padding: '20px 0',
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000,
+        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+        height: '74px',
+        boxSizing: 'border-box'
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '0 20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px',
+          height: '100%'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <FileText size={32} color="#2c5aa0" strokeWidth={2.5} />
+            <h1 style={{
+              fontSize: '24px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              margin: 0,
+              lineHeight: '1'
+            }}>
+              Pomocnik Obywatela
+            </h1>
+          </div>
+
+          <button
+            onClick={onBackToLanding}
+            style={{
+              background: 'white',
+              color: '#2c5aa0',
+              border: '2px solid #e1e8ed',
+              padding: '10px 20px',
+              borderRadius: '8px',
+              fontWeight: '600',
+              fontSize: '14px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.2s'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#f8f9fb';
+              e.currentTarget.style.borderColor = '#2c5aa0';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = 'white';
+              e.currentTarget.style.borderColor = '#e1e8ed';
+            }}
+          >
+            ← Powrót do strony głównej
+          </button>
+        </div>
+      </div>
+
       <div
         className={`fade-in ${isVisible ? 'visible' : ''}`}
         style={{
@@ -637,9 +630,9 @@ const GeneratorPism = () => {
           padding: '30px',
           boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
         }}>
-          {/* Header */}
+          {/* Generator Header */}
           <div style={{ marginBottom: '30px', textAlign: 'center' }}>
-            <h1 style={{
+            <h2 style={{
               fontSize: '32px',
               fontWeight: '700',
               color: '#2c3e50',
@@ -651,7 +644,7 @@ const GeneratorPism = () => {
             }}>
               <Wand2 size={32} color="#2c5aa0" />
               Generator Pism AI
-            </h1>
+            </h2>
             <p style={{
               color: '#5a6c7d',
               lineHeight: '1.6',

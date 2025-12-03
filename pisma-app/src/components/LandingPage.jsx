@@ -42,6 +42,40 @@ const LandingPage = ({ onStartGenerator }) => {
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%)'
     }}>
+      {/* Header */}
+      <div style={{
+        background: 'white',
+        borderBottom: '2px solid #e1e8ed',
+        padding: '20px 0',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+        height: '74px',
+        boxSizing: 'border-box'
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '0 20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px',
+          height: '100%'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <FileText size={32} color="#2c5aa0" strokeWidth={2.5} />
+            <h1 style={{
+              fontSize: '24px',
+              fontWeight: '700',
+              color: '#2c3e50',
+              margin: 0,
+              lineHeight: '1'
+            }}>
+              Pomocnik Obywatela
+            </h1>
+          </div>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <div style={{
         background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',

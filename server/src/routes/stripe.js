@@ -294,8 +294,8 @@ router.post('/create-guest-document-payment', async (req, res) => {
       payment_method_types: ['blik', 'card'],
       line_items: [guestLineItem],
       mode: 'payment',
-      success_url: `${process.env.PISMA_APP_URL || 'https://pisma.pomocnikobywatela.pl'}?success=true&payment=document&documentId=${documentId}&email=${encodeURIComponent(email)}`,
-      cancel_url: `${process.env.PISMA_APP_URL || 'https://pisma.pomocnikobywatela.pl'}?canceled=true`,
+      success_url: `${process.env.PISMA_APP_URL || 'https://pisma.pomocnikobywatela.pl'}?success=true&payment=document&documentId=${documentId}&email=${encodeURIComponent(email)}&generator=true`,
+      cancel_url: `${process.env.PISMA_APP_URL || 'https://pisma.pomocnikobywatela.pl'}?canceled=true&generator=true`,
       metadata: {
         email: email,
         paymentType: 'guest_document',
