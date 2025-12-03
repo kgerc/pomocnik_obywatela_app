@@ -338,6 +338,9 @@ const GeneratorPismTab = () => {
         - Używaj formalnego języka urzędowego
         - NIE używaj Markdown (**, ##, itp.) - tylko znaczniki [LEFT], [RIGHT], [CENTER], [HEADER]
         - Stosuj polskie przepisy prawne gdzie to właściwe
+        - KRYTYCZNIE WAŻNE: NIE dodawaj samotnych znaczników [/RIGHT], [/LEFT] itp. bez odpowiadających im znaczników otwierających!
+        - Każdy znacznik zamykający [/TAG] MUSI mieć odpowiadający mu znacznik otwierający [TAG]
+        - Treść główna pisma (między "Szanowni Państwo" a "Z poważaniem") NIE MOŻE być wewnątrz żadnych znaczników - po prostu pisz normalny tekst
 
         ## KRYTYCZNIE WAŻNE - ADRES ADRESATA:
         - W sekcji [RIGHT] po nagłówku MUSISZ umieścić PEŁNY adres adresata DOKŁADNIE jak podano w DANYCH ADRESATA
@@ -374,7 +377,9 @@ const GeneratorPismTab = () => {
         .replace(/\[CENTER\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/CENTER\]/g,
           '<div class="center-align" style="text-align: center; font-weight: bold; width: 100%;">$1</div>'
         )
-        .replace(/\[HEADER\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/HEADER\]/g,`<div class="header-flex" style="width: 100%; display: flex; justify-content: space-between; align-items: flex-start;">$1</div>`);
+        .replace(/\[HEADER\][\s\r\n]*([\s\S]*?)[\s\r\n]*\[\/HEADER\]/g,`<div class="header-flex" style="width: 100%; display: flex; justify-content: space-between; align-items: flex-start;">$1</div>`)
+        // Usuń wszelkie pozostałe nieprzetworzone znaczniki
+        .replace(/\[\/?(LEFT|RIGHT|CENTER|HEADER)\]/g, '');
 
       setGeneratedDocument(documentText);
 
