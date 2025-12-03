@@ -1293,7 +1293,7 @@ const GeneratorPism = ({ onBackToLanding }) => {
                     </div>
                   </div>
 
-                  <div style={{
+                  <div className="pismo-scroll" style={{
                     position: 'relative',
                     marginBottom: '25px'
                   }}>

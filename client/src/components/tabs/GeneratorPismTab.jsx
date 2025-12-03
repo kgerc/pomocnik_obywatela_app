@@ -1210,13 +1210,14 @@ const handleDownloadDOCX = async () => {
                 </div>
               </div>
 
-              <div style={{
+              <div className="pismo-scroll" style={{
                 position: 'relative',
-                marginBottom: '25px'
+                marginBottom: '25px'               
               }}>
                 <div style={{
                   background: 'white',
                   border: '2px solid #e1e8ed',
+              
                   borderRadius: '12px',
                   padding: '40px',
                   lineHeight: '1.6',
