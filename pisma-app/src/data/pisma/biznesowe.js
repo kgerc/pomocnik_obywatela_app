@@ -148,6 +148,23 @@ export const pismaBiznesowe = [
     ]
   },
   {
+    id: 'wniosek_zawieszenie_dzialalnosci',
+    nazwa: 'Wniosek o zawieszenie działalności gospodarczej',
+    kategoria: 'Biznes',
+    opis: 'Wniosek o zawieszenie działalności w CEIDG',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Urząd Gminy/Miasta', placeholder: 'np. Urząd Miasta Warszawy', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Marszałkowska 1', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto urzędu', placeholder: 'np. 00-001 Warszawa', type: 'text' },
+      { id: 'nazwa_firmy', label: 'Nazwa firmy', placeholder: 'np. Jan Kowalski prowadzący działalność gospodarczą', type: 'text' },
+      { id: 'nip', label: 'NIP', placeholder: 'np. 1234567890', type: 'text' },
+      { id: 'regon', label: 'REGON', placeholder: 'np. 123456789', type: 'text' },
+      { id: 'data_zawieszenia', label: 'Data zawieszenia działalności', placeholder: 'np. 01.03.2025', type: 'text' },
+      { id: 'okres_zawieszenia', label: 'Planowany okres zawieszenia', placeholder: 'np. 6 miesięcy, 12 miesięcy', type: 'text' },
+      { id: 'powod_zawieszenia', label: 'Powód zawieszenia', placeholder: 'np. urlop macierzyński, choroba, inne zobowiązania', type: 'textarea' }
+    ]
+  },
+  {
     id: 'wniosek_wykreslenie_ceidg',
     nazwa: 'Wniosek o wykreślenie z CEIDG',
     kategoria: 'Biznes',
