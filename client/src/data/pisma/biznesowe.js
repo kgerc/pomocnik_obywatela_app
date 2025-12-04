@@ -146,5 +146,148 @@ export const pismaBiznesowe = [
       { id: 'rodzaj_zadania', label: 'Rodzaj żądania RODO', placeholder: 'np. dostęp do danych, usunięcie danych, sprostowanie', type: 'text' },
       { id: 'data_zadania', label: 'Data otrzymania żądania', placeholder: 'np. 15.01.2025', type: 'text' }
     ]
+  },
+  {
+    id: 'wniosek_zawieszenie_dzialalnosci',
+    nazwa: 'Wniosek o zawieszenie działalności gospodarczej',
+    kategoria: 'Biznes',
+    opis: 'Wniosek o zawieszenie działalności w CEIDG',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Urząd Gminy/Miasta', placeholder: 'np. Urząd Miasta Warszawy', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Marszałkowska 1', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto urzędu', placeholder: 'np. 00-001 Warszawa', type: 'text' },
+      { id: 'nazwa_firmy', label: 'Nazwa firmy', placeholder: 'np. Jan Kowalski prowadzący działalność gospodarczą', type: 'text' },
+      { id: 'nip', label: 'NIP', placeholder: 'np. 1234567890', type: 'text' },
+      { id: 'regon', label: 'REGON', placeholder: 'np. 123456789', type: 'text' },
+      { id: 'data_zawieszenia', label: 'Data zawieszenia działalności', placeholder: 'np. 01.03.2025', type: 'text' },
+      { id: 'okres_zawieszenia', label: 'Planowany okres zawieszenia', placeholder: 'np. 6 miesięcy, 12 miesięcy', type: 'text' },
+      { id: 'powod_zawieszenia', label: 'Powód zawieszenia', placeholder: 'np. urlop macierzyński, choroba, inne zobowiązania', type: 'textarea' }
+    ]
+  },
+  {
+    id: 'wniosek_wykreslenie_ceidg',
+    nazwa: 'Wniosek o wykreślenie z CEIDG',
+    kategoria: 'Biznes',
+    opis: 'Wniosek o wykreślenie działalności gospodarczej z CEIDG',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Urząd Gminy/Miasta', placeholder: 'np. Urząd Miasta Warszawy', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Marszałkowska 1', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto urzędu', placeholder: 'np. 00-001 Warszawa', type: 'text' },
+      { id: 'nazwa_firmy', label: 'Nazwa firmy', placeholder: 'np. Jan Kowalski prowadzący działalność gospodarczą', type: 'text' },
+      { id: 'nip', label: 'NIP', placeholder: 'np. 1234567890', type: 'text' },
+      { id: 'regon', label: 'REGON', placeholder: 'np. 123456789', type: 'text' },
+      { id: 'data_rozpoczecia', label: 'Data rozpoczęcia działalności', placeholder: 'np. 01.01.2020', type: 'text' },
+      { id: 'data_zakonczenia', label: 'Data zakończenia działalności', placeholder: 'np. 31.12.2024', type: 'text' },
+      { id: 'powod_likwidacji', label: 'Powód likwidacji', placeholder: 'np. zakończenie działalności, przejście na umowę o pracę', type: 'textarea' }
+    ]
+  },
+  {
+    id: 'oswiadczenie_wykreslenie_vat',
+    nazwa: 'Oświadczenie o wykreśleniu z VAT',
+    kategoria: 'Biznes',
+    opis: 'Oświadczenie o rezygnacji z VAT przy zamknięciu działalności',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Urząd Skarbowy', placeholder: 'np. Urząd Skarbowy Warszawa-Śródmieście', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer', placeholder: 'np. ul. Marszałkowska 1', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto', placeholder: 'np. 00-001 Warszawa', type: 'text' },
+      { id: 'nazwa_firmy', label: 'Nazwa firmy', placeholder: 'np. Jan Kowalski prowadzący działalność gospodarczą', type: 'text' },
+      { id: 'nip', label: 'NIP', placeholder: 'np. 1234567890', type: 'text' },
+      { id: 'data_rejestracji_vat', label: 'Data rejestracji jako podatnik VAT', placeholder: 'np. 01.01.2020', type: 'text' },
+      { id: 'data_wykreslenia', label: 'Data wykreślenia z działalności', placeholder: 'np. 31.12.2024', type: 'text' },
+      { id: 'ostatnia_deklaracja', label: 'Czy złożono ostatnią deklarację VAT?', placeholder: 'tak/nie, podaj za jaki okres', type: 'text' }
+    ]
+  },
+  {
+    id: 'wniosek_zwrot_nadplaty_zus',
+    nazwa: 'Wniosek o zwrot nadpłaty składek ZUS',
+    kategoria: 'Biznes',
+    opis: 'Wniosek o zwrot nadpłaconych składek po zakończeniu działalności',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Oddział ZUS', placeholder: 'np. Zakład Ubezpieczeń Społecznych Oddział w Warszawie', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer', placeholder: 'np. ul. Czerniakowska 16', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto', placeholder: 'np. 00-701 Warszawa', type: 'text' },
+      { id: 'nazwa_firmy', label: 'Nazwa firmy', placeholder: 'np. Jan Kowalski prowadzący działalność gospodarczą', type: 'text' },
+      { id: 'nip', label: 'NIP', placeholder: 'np. 1234567890', type: 'text' },
+      { id: 'numer_zus', label: 'Numer ZUS', placeholder: 'np. 12345678901', type: 'text' },
+      { id: 'kwota_nadplaty', label: 'Kwota nadpłaty (zł)', placeholder: 'np. 2000', type: 'text' },
+      { id: 'okres_nadplaty', label: 'Za jaki okres nadpłata?', placeholder: 'np. styczeń-grudzień 2024', type: 'text' },
+      { id: 'numer_konta', label: 'Numer konta do zwrotu', placeholder: 'np. 12 3456 7890 1234 5678 9012 3456', type: 'text' }
+    ]
+  },
+  {
+    id: 'zgloszenie_wyrejestrowanie_zus',
+    nazwa: 'Zgłoszenie wyrejestrowania z ZUS',
+    kategoria: 'Biznes',
+    opis: 'Zgłoszenie zaprzestania opłacania składek ZUS po zamknięciu firmy',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Oddział ZUS', placeholder: 'np. Zakład Ubezpieczeń Społecznych Oddział w Warszawie', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer', placeholder: 'np. ul. Czerniakowska 16', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto', placeholder: 'np. 00-701 Warszawa', type: 'text' },
+      { id: 'nazwa_firmy', label: 'Nazwa firmy', placeholder: 'np. Jan Kowalski prowadzący działalność gospodarczą', type: 'text' },
+      { id: 'nip', label: 'NIP', placeholder: 'np. 1234567890', type: 'text' },
+      { id: 'numer_zus', label: 'Numer ZUS', placeholder: 'np. 12345678901', type: 'text' },
+      { id: 'data_zakonczenia', label: 'Data zakończenia działalności', placeholder: 'np. 31.12.2024', type: 'text' },
+      { id: 'ostatnie_skladki', label: 'Za jaki okres opłacono ostatnie składki?', placeholder: 'np. grudzień 2024', type: 'text' }
+    ]
+  },
+  {
+    id: 'powiadomienie_kontrahentow_likwidacja',
+    nazwa: 'Powiadomienie kontrahentów o likwidacji',
+    kategoria: 'Biznes',
+    opis: 'Oficjalne pismo informujące klientów/dostawców o zamknięciu firmy',
+    pytania: [
+      { id: 'nazwa_firmy', label: 'Nazwa Twojej firmy', placeholder: 'np. ABC Solutions Sp. z o.o.', type: 'text' },
+      { id: 'data_zakonczenia', label: 'Data zakończenia działalności', placeholder: 'np. 31.12.2024', type: 'text' },
+      { id: 'powod_ogolny', label: 'Powód zakończenia (opcjonalnie)', placeholder: 'np. emerytura, zmiana branży, restrukturyzacja', type: 'text' },
+      { id: 'rozliczenia_info', label: 'Informacje o rozliczeniach', placeholder: 'np. wszystkie faktury zostaną rozliczone do 31.01.2025', type: 'textarea' },
+      { id: 'kontakt_awaryjny', label: 'Kontakt po zakończeniu działalności', placeholder: 'np. email lub telefon do kontaktu w razie pilnych spraw', type: 'text' }
+    ]
+  },
+  {
+    id: 'oswiadczenie_rozliczenie_ostateczne',
+    nazwa: 'Oświadczenie o ostatecznym rozliczeniu działalności',
+    kategoria: 'Biznes',
+    opis: 'Dokument potwierdzający rozliczenie wszystkich zobowiązań',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Instytucja (urząd, bank, kontrahent)', placeholder: 'np. Urząd Skarbowy, Bank XYZ', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer', placeholder: 'np. ul. Marszałkowska 1', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto', placeholder: 'np. 00-001 Warszawa', type: 'text' },
+      { id: 'nazwa_firmy', label: 'Nazwa firmy', placeholder: 'np. Jan Kowalski prowadzący działalność gospodarczą', type: 'text' },
+      { id: 'nip', label: 'NIP', placeholder: 'np. 1234567890', type: 'text' },
+      { id: 'data_zakonczenia', label: 'Data zakończenia działalności', placeholder: 'np. 31.12.2024', type: 'text' },
+      { id: 'potwierdzenie_oplat', label: 'Potwierdzenie zapłaty zobowiązań', placeholder: 'np. wszystkie faktury opłacone, brak zadłużeń', type: 'textarea' }
+    ]
+  },
+  {
+    id: 'wniosek_zamkniecie_rachunku_firmowego',
+    nazwa: 'Wniosek o zamknięcie rachunku firmowego',
+    kategoria: 'Biznes',
+    opis: 'Wniosek do banku o zamknięcie konta firmowego',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Nazwa banku', placeholder: 'np. Bank PKO BP S.A.', type: 'text' },
+      { id: 'ulica_organu', label: 'Adres oddziału', placeholder: 'np. ul. Marszałkowska 1', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto', placeholder: 'np. 00-001 Warszawa', type: 'text' },
+      { id: 'nazwa_firmy', label: 'Nazwa firmy', placeholder: 'np. Jan Kowalski prowadzący działalność gospodarczą', type: 'text' },
+      { id: 'nip', label: 'NIP', placeholder: 'np. 1234567890', type: 'text' },
+      { id: 'numer_rachunku', label: 'Numer rachunku do zamknięcia', placeholder: 'np. 12 3456 7890 1234 5678 9012 3456', type: 'text' },
+      { id: 'data_zakonczenia', label: 'Data zakończenia działalności', placeholder: 'np. 31.12.2024', type: 'text' },
+      { id: 'rachunek_prywatny', label: 'Numer rachunku prywatnego do przelewu salda', placeholder: 'np. 98 7654 3210 9876 5432 1098 7654', type: 'text' }
+    ]
+  },
+  {
+    id: 'pismo_do_urzedu_pracy_likwidacja',
+    nazwa: 'Zgłoszenie likwidacji stanowiska do Urzędu Pracy',
+    kategoria: 'Biznes',
+    opis: 'Zgłoszenie zakończenia działalności do Powiatowego Urzędu Pracy',
+    pytania: [
+      { id: 'nazwa_organu', label: 'Powiatowy Urząd Pracy', placeholder: 'np. Powiatowy Urząd Pracy w Warszawie', type: 'text' },
+      { id: 'ulica_organu', label: 'Ulica i numer', placeholder: 'np. ul. Młynarska 16', type: 'text' },
+      { id: 'kod_miasto_organu', label: 'Kod i miasto', placeholder: 'np. 01-205 Warszawa', type: 'text' },
+      { id: 'nazwa_firmy', label: 'Nazwa firmy', placeholder: 'np. Jan Kowalski prowadzący działalność gospodarczą', type: 'text' },
+      { id: 'nip', label: 'NIP', placeholder: 'np. 1234567890', type: 'text' },
+      { id: 'regon', label: 'REGON', placeholder: 'np. 123456789', type: 'text' },
+      { id: 'data_zakonczenia', label: 'Data zakończenia działalności', placeholder: 'np. 31.12.2024', type: 'text' },
+      { id: 'czy_pracownicy', label: 'Czy były zatrudnione osoby?', placeholder: 'nie/tak - jeśli tak, podaj szczegóły zwolnień', type: 'textarea' }
+    ]
   }
 ];
