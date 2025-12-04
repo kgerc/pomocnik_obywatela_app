@@ -11,6 +11,7 @@ import { pismaSzkola } from './szkola';
 import { pismaPraca } from './praca';
 import { pismaBudownictwo } from './budownictwo';
 import { pismaMotoryzacja } from './motoryzacja';
+import { pismaPomocSpoleczna } from './pomoc_spoleczna';
 
 // Pisma z oryginalnego GeneratorPismTab (zachowane dla kompatybilności)
 export const pismaUrzedowe = [
@@ -70,7 +71,8 @@ export const DOSTEPNE_PISMA = [
   ...pismaSzkola,
   ...pismaPraca,
   ...pismaBudownictwo,
-  ...pismaMotoryzacja
+  ...pismaMotoryzacja,
+  ...pismaPomocSpoleczna
 ];
 
 export default DOSTEPNE_PISMA;

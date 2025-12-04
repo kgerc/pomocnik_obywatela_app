@@ -32,7 +32,7 @@ export const pismaAdministracja = [
   {
     id: 'wniosek_zasilek',
     nazwa: 'Wniosek o zasiłek dla bezrobotnych',
-    kategoria: 'Pomoc społeczna',
+    kategoria: 'Praca',
     opis: 'Złóż wniosek o zasiłek dla osób bezrobotnych',
     pytania: [
       { id: 'nazwa_organu', label: 'Do którego Urzędu Pracy kierujesz wniosek?', placeholder: 'np. Powiatowy Urząd Pracy w Krakowie', type: 'text' },
