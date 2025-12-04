@@ -1,0 +1,13 @@
+# Robots.txt for Generator Pism AI - Pomocnik Obywatela
+# Allow all search engines to crawl all content
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /payment/
+
+# Sitemap location
+Sitemap: https://pisma.pomocnikobywatela.pl/sitemap.xml
+
+# Crawl-delay for responsible crawling
+Crawl-delay: 1

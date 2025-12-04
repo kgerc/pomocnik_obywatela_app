@@ -288,14 +288,14 @@ const LandingPage = ({ onStartGenerator }) => {
           }}>
             {[
               { name: 'Administracja', count: '10+', icon: '🏛️' },
-              { name: 'Telekomunikacja', count: '10+', icon: '📱' },
-              { name: 'Kurierzy', count: '8+', icon: '📦' },
-              { name: 'Konsumenckie', count: '12+', icon: '🛒' },
-              { name: 'Edukacja', count: '11+', icon: '🎓' },
-              { name: 'Mieszkanie', count: '10+', icon: '🏠' },
-              { name: 'Biznesowe', count: '8+', icon: '💼' },
-              { name: 'Praca', count: '8+', icon: '👔' },
-              { name: 'Budownictwo', count: '5+', icon: '🏗️' },
+              { name: 'Telekomunikacja', count: '4+', icon: '📱' },
+              { name: 'Kurierzy', count: '4+', icon: '📦' },
+              { name: 'Konsumenckie', count: '11+', icon: '🛒' },
+              { name: 'Edukacja', count: '17+', icon: '🎓' },
+              { name: 'Mieszkanie', count: '7+', icon: '🏠' },
+              { name: 'Biznesowe', count: '18+', icon: '💼' },
+              { name: 'Praca', count: '7+', icon: '👔' },
+              { name: 'Budownictwo', count: '15+', icon: '🏗️' },
               { name: 'Motoryzacja', count: '10+', icon: '🚗' }
             ].map((category, idx) => (
               <div

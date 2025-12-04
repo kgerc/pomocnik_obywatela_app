@@ -9,6 +9,14 @@ import { Document, Packer, Paragraph, TextRun, AlignmentType } from "docx";
 import { saveAs } from "file-saver";
 import TermsOfService from './TermsOfService';
 import PrivacyPolicy from './PrivacyPolicy';
+import {
+  updateMetaTags,
+  getCategoryMeta,
+  getDocumentMeta,
+  DEFAULT_META,
+  updateStructuredData,
+  generateDocumentSchema
+} from '../utils/seo';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
@@ -64,6 +72,47 @@ const GeneratorPism = ({ onBackToLanding }) => {
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedCategory, searchQuery]);
+
+  // Update SEO meta tags when category changes
+  useEffect(() => {
+    if (selectedCategory && selectedCategory !== 'wszystkie') {
+      const categoryMeta = getCategoryMeta(selectedCategory);
+      updateMetaTags(categoryMeta);
+    } else if (selectedCategory === 'wszystkie') {
+      // Reset to default meta tags
+      updateMetaTags(DEFAULT_META);
+    }
+  }, [selectedCategory]);
+
+  // Update SEO meta tags when document is selected
+  useEffect(() => {
+    if (selectedPismo) {
+      const documentMeta = getDocumentMeta(selectedPismo);
+      updateMetaTags(documentMeta);
+
+      // Add structured data for the specific document
+      const documentSchema = generateDocumentSchema(selectedPismo);
+      updateStructuredData(documentSchema, 'document-schema');
+
+      // Track document view in Google Analytics
+      if (window.gtag) {
+        window.gtag('event', 'view_document_details', {
+          event_category: 'Generator',
+          event_label: selectedPismo.nazwa,
+          document_category: selectedPismo.kategoria,
+          document_id: selectedPismo.id
+        });
+      }
+    } else {
+      // Reset to default meta tags when no document is selected
+      updateMetaTags(DEFAULT_META);
+      // Remove document-specific schema
+      const schemaElement = document.getElementById('document-schema');
+      if (schemaElement) {
+        schemaElement.remove();
+      }
+    }
+  }, [selectedPismo]);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
@@ -709,6 +758,15 @@ const GeneratorPism = ({ onBackToLanding }) => {
     setDocumentId(null);
     setDocumentUnlocked(false);
     setShowPaymentModal(false);
+
+    // Reset SEO meta tags to default
+    updateMetaTags(DEFAULT_META);
+
+    // Remove document-specific schema
+    const schemaElement = document.getElementById('document-schema');
+    if (schemaElement) {
+      schemaElement.remove();
+    }
 
     // Wyczyść zapisany stan z localStorage
     try {
