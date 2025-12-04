@@ -246,8 +246,8 @@ const GeneratorPism = ({ onBackToLanding }) => {
     const newDocumentId = `doc_${Date.now()}_${Math.random().toString(36).substring(7)}`;
     setDocumentId(newDocumentId);
 
-    // [TEST MODE] Dokument automatycznie odblokowany dla testów
-    setDocumentUnlocked(true);
+    // Dokument jest zablokowany - wymaga płatności 2 zł
+    setDocumentUnlocked(false);
 
     // Pobierz email z formularza
     const emailFromForm = formData.email || '';
