@@ -307,7 +307,7 @@ const LandingPage = ({ onStartGenerator }) => {
               { name: 'Praca', count: '7+', icon: '👔' },
               { name: 'Budownictwo', count: '15+', icon: '🏗️' },
               { name: 'Motoryzacja', count: '10+', icon: '🚗' },
-              { name: 'Pomoc społeczna', count: '9+', icon: '🤝' }
+              { name: 'Pomoc społeczna', count: '16+', icon: '🤝' }
             ].map((category, idx) => (
               <div
                 key={idx}
