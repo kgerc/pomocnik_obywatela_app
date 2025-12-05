@@ -29,7 +29,7 @@ const DANE_OSOBOWE = [
   { id: 'email', label: 'Adres email', placeholder: 'np. jan.kowalski@example.com', type: 'text', required: false }
 ];
 
-const GeneratorPism = ({ onBackToLanding }) => {
+const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
   const [selectedPismo, setSelectedPismo] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({});
@@ -38,7 +38,7 @@ const GeneratorPism = ({ onBackToLanding }) => {
   const documentRef = useRef(null);
   const [documentId, setDocumentId] = useState(null);
   const [documentUnlocked, setDocumentUnlocked] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('wszystkie');
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory || 'wszystkie');
   const [isVisible, setIsVisible] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [userEmail, setUserEmail] = useState('');

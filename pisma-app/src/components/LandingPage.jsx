@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Wand2, FileText, Clock, Shield, Check, Star, ArrowRight, Sparkles, X } from 'lucide-react';
+import { Wand2, FileText, Clock, Shield, Check, ArrowRight, Sparkles, X } from 'lucide-react';
 import TermsOfService from './TermsOfService';
 import PrivacyPolicy from './PrivacyPolicy';
 
@@ -96,46 +96,63 @@ const LandingPage = ({ onStartGenerator }) => {
         background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
         color: 'white',
         padding: '80px 20px',
-        textAlign: 'center'
+        display: 'flex',
+        justifyContent: 'center'
       }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: 'rgba(255, 255, 255, 0.2)',
-            padding: '8px 16px',
-            borderRadius: '20px',
-            marginBottom: '20px',
-            fontSize: '14px',
-            fontWeight: '600'
-          }}>
-            <Sparkles size={16} />
-            Powered by AI
-          </div>
+        <div style={{
+          maxWidth: '1200px',
+          width: '100%',
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: '60px'
+        }}>
+          {/* LEWA KOLUMNA - TEKST */}
+          <div style={{ flex: '1 1 500px', textAlign: 'left' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(255, 255, 255, 0.2)',
+              padding: '8px 16px',
+              borderRadius: '20px',
+              marginBottom: '20px',
+              fontSize: '14px',
+              fontWeight: '600'
+            }}>
+              <Sparkles size={16} />
+              Powered by AI
+            </div>
 
-          <h1 style={{
-            fontSize: '56px',
-            fontWeight: '700',
-            marginBottom: '20px',
-            lineHeight: '1.2'
-          }}>
-            Generator Pism AI
-          </h1>
+            <h1 style={{
+              fontSize: '56px',
+              fontWeight: '700',
+              marginBottom: '20px',
+              lineHeight: '1.2'
+            }}>
+              Generator Pism AI
+            </h1>
 
-          <p style={{
-            fontSize: '24px',
-            marginBottom: '40px',
-            opacity: 0.95,
-            lineHeight: '1.5',
-            maxWidth: '700px',
-            margin: '0 auto 40px'
-          }}>
-            Wygeneruj profesjonalne pisma urzędowe w minutę. Wnioski, odwołania, reklamacje i więcej.
-          </p>
+            <p style={{
+              fontSize: '24px',
+              marginBottom: '40px',
+              opacity: 0.95,
+              lineHeight: '1.5'
+            }}>
+              Wygeneruj profesjonalne pisma urzędowe w minutę. Wnioski, odwołania, reklamacje i więcej.
+            </p>
 
-          <button
-            onClick={onStartGenerator}
+            <button
+              onClick={() => {
+                // Track hero CTA click
+                if (window.gtag) {
+                  window.gtag('event', 'click_cta', {
+                    event_category: 'engagement',
+                    event_label: 'hero_button'
+                  });
+                }
+                onStartGenerator();
+              }}
             style={{
               background: 'white',
               color: '#2c5aa0',
@@ -165,31 +182,97 @@ const LandingPage = ({ onStartGenerator }) => {
             <ArrowRight size={24} />
           </button>
 
-          <div style={{
-            marginTop: '30px',
-            fontSize: '14px',
-            opacity: 0.9
-          }}>
-            <Check size={18} color="#10b981" style={{ verticalAlign: '-3px' }}/> Bez rejestracji   <Check size={18} color="#10b981" style={{ verticalAlign: '-3px' }}/> Płatność tylko 2 zł za dokument    <Check size={18} color="#10b981" style={{ verticalAlign: '-3px' }}/> Natychmiastowy dostęp
+            <div style={{
+              marginTop: '30px',
+              fontSize: '14px',
+              opacity: 0.9
+            }}>
+              <Check size={18} color="#10b981" style={{ verticalAlign: '-3px' }}/> Bez rejestracji   <Check size={18} color="#10b981" style={{ verticalAlign: '-3px' }}/> Płatność tylko 2 zł za dokument    <Check size={18} color="#10b981" style={{ verticalAlign: '-3px' }}/> Natychmiastowy dostęp
+            </div>
+          </div>
+
+          {/* PRAWA KOLUMNA - WIZUALIZACJA DOKUMENTU */}
+          <div style={{ flex: '1 1 400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{
+              position: 'relative',
+              transform: 'rotate(3deg)',
+              transition: 'transform 0.3s',
+              cursor: 'pointer'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'rotate(0deg) scale(1.02)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'rotate(3deg)'}
+            >
+              {/* CSS Document Skeleton */}
+              <div style={{
+                width: '300px',
+                height: '420px',
+                background: 'white',
+                borderRadius: '8px',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+                position: 'relative',
+                padding: '30px',
+                overflow: 'hidden'
+              }}>
+                {/* Header line */}
+                <div style={{width: '40%', height: '10px', background: '#2c5aa0', marginBottom: '20px', borderRadius: '2px'}}></div>
+                <div style={{width: '100%', height: '2px', background: '#e2e8f0', marginBottom: '30px'}}></div>
+
+                {/* Text lines group 1 */}
+                <div style={{width: '90%', height: '8px', background: '#f1f5f9', marginBottom: '10px', borderRadius: '2px'}}></div>
+                <div style={{width: '85%', height: '8px', background: '#f1f5f9', marginBottom: '10px', borderRadius: '2px'}}></div>
+                <div style={{width: '90%', height: '8px', background: '#f1f5f9', marginBottom: '30px', borderRadius: '2px'}}></div>
+
+                {/* Text lines group 2 */}
+                <div style={{width: '70%', height: '8px', background: '#f1f5f9', marginBottom: '10px', borderRadius: '2px'}}></div>
+                <div style={{width: '95%', height: '8px', background: '#f1f5f9', marginBottom: '10px', borderRadius: '2px'}}></div>
+                <div style={{width: '80%', height: '8px', background: '#f1f5f9', marginBottom: '30px', borderRadius: '2px'}}></div>
+
+                {/* Text lines group 3 */}
+                <div style={{width: '85%', height: '8px', background: '#f1f5f9', marginBottom: '10px', borderRadius: '2px'}}></div>
+                <div style={{width: '75%', height: '8px', background: '#f1f5f9', marginBottom: '10px', borderRadius: '2px'}}></div>
+
+                {/* Badge "Gotowy do druku" */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: '20px',
+                  right: '20px',
+                  background: '#dcfce7',
+                  color: '#166534',
+                  padding: '8px 12px',
+                  borderRadius: '20px',
+                  fontSize: '12px',
+                  fontWeight: '700',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px'
+                }}>
+                  <Check size={14} color="#166534" />
+                  Gotowy do druku
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Features Section */}
       <div style={{
-        padding: '80px 20px',
-        maxWidth: '1200px',
-        margin: '0 auto'
+        background: 'white',
+        padding: '80px 20px'
       }}>
-        <h2 style={{
-          fontSize: '40px',
-          fontWeight: '700',
-          textAlign: 'center',
-          color: '#2c3e50',
-          marginBottom: '60px'
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto'
         }}>
-          Dlaczego Generator Pism AI?
-        </h2>
+          <h2 style={{
+            fontSize: '40px',
+            fontWeight: '700',
+            textAlign: 'center',
+            color: '#2c3e50',
+            marginBottom: '60px'
+          }}>
+            Dlaczego Generator Pism AI?
+          </h2>
 
         <div style={{
           display: 'grid',
@@ -204,8 +287,8 @@ const LandingPage = ({ onStartGenerator }) => {
             },
             {
               icon: <Shield size={40} />,
-              title: 'Zgodność prawna',
-              description: 'AI zna aktualne przepisy i generuje pisma zgodne z polskim prawem.'
+              title: 'Sprawdzone wzory',
+              description: 'Pisma przygotowane w oparciu o aktualne wymogi polskich urzędów i sprawdzone szablony.'
             },
             {
               icon: <FileText size={40} />,
@@ -255,6 +338,7 @@ const LandingPage = ({ onStartGenerator }) => {
             </div>
           ))}
         </div>
+        </div>
       </div>
 
       {/* Categories Section */}
@@ -298,35 +382,53 @@ const LandingPage = ({ onStartGenerator }) => {
             gap: '20px'
           }}>
             {[
-              { name: 'Administracja', count: '10+', icon: '🏛️' },
-              { name: 'Telekomunikacja', count: '4+', icon: '📱' },
-              { name: 'Konsumenckie', count: '11+', icon: '🛒' },
-              { name: 'Edukacja', count: '17+', icon: '🎓' },
-              { name: 'Mieszkanie', count: '7+', icon: '🏠' },
-              { name: 'Biznesowe', count: '18+', icon: '💼' },
-              { name: 'Praca', count: '7+', icon: '👔' },
-              { name: 'Budownictwo', count: '15+', icon: '🏗️' },
-              { name: 'Motoryzacja', count: '10+', icon: '🚗' },
-              { name: 'Pomoc społeczna', count: '16+', icon: '🤝' }
+              { name: 'Administracja', count: '10+', icon: '🏛️', dataCategory: 'Administracja' },
+              { name: 'Telekomunikacja', count: '4+', icon: '📱', dataCategory: 'Telekomunikacja' },
+              { name: 'Konsumenckie', count: '11+', icon: '🛒', dataCategory: 'Prawa konsumenta' },
+              { name: 'Edukacja', count: '17+', icon: '🎓', dataCategory: 'Szkoła' },
+              { name: 'Mieszkanie', count: '7+', icon: '🏠', dataCategory: 'Mieszkanie' },
+              { name: 'Biznesowe', count: '18+', icon: '💼', dataCategory: 'Biznes' },
+              { name: 'Praca', count: '7+', icon: '👔', dataCategory: 'Praca' },
+              { name: 'Budownictwo', count: '15+', icon: '🏗️', dataCategory: 'Budownictwo' },
+              { name: 'Motoryzacja', count: '10+', icon: '🚗', dataCategory: 'Motoryzacja' },
+              { name: 'Pomoc społeczna', count: '16+', icon: '🤝', dataCategory: 'Pomoc społeczna' }
             ].map((category, idx) => (
               <div
                 key={idx}
+                onClick={() => {
+                  // Track click event
+                  if (window.gtag) {
+                    window.gtag('event', 'click_category', {
+                      event_category: 'engagement',
+                      event_label: category.name
+                    });
+                  }
+                  onStartGenerator(category.dataCategory);
+                }}
                 style={{
                   background: 'white',
                   padding: '24px',
                   borderRadius: '12px',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                   textAlign: 'center',
-                  transition: 'transform 0.3s, box-shadow 0.3s',
-                  cursor: 'default'
+                  transition: 'transform 0.2s, box-shadow 0.2s, background-color 0.2s',
+                  cursor: 'pointer'
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.transform = 'translateY(-5px)';
                   e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)';
+                  e.currentTarget.style.background = '#f8f9fa';
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
                   e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
+                  e.currentTarget.style.background = 'white';
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.transform = 'scale(0.98)';
+                }}
+                onMouseUp={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-5px)';
                 }}
               >
                 <div style={{ fontSize: '36px', marginBottom: '12px' }}>
@@ -507,7 +609,16 @@ const LandingPage = ({ onStartGenerator }) => {
           {/* CTA Button */}
           <div style={{ textAlign: 'center' }}>
             <button
-              onClick={onStartGenerator}
+              onClick={() => {
+                // Track demo CTA click
+                if (window.gtag) {
+                  window.gtag('event', 'click_cta', {
+                    event_category: 'engagement',
+                    event_label: 'demo_section_button'
+                  });
+                }
+                onStartGenerator();
+              }}
               style={{
                 background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
                 color: 'white',
@@ -533,7 +644,7 @@ const LandingPage = ({ onStartGenerator }) => {
               }}
             >
               <Wand2 size={20} />
-              Wypróbuj za darmo
+              Stwórz dokument teraz
               <ArrowRight size={20} />
             </button>
             <p style={{
@@ -547,198 +658,12 @@ const LandingPage = ({ onStartGenerator }) => {
         </div>
       </div>
 
-      {/* Social Proof Section */}
-      <div
-        id="social-proof"
-        ref={setSectionRef('social-proof')}
-        style={{
-          background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
-          padding: '80px 20px',
-          ...getAnimationStyle('social-proof')
-        }}
-      >
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto'
-        }}>
-          <h2 style={{
-            fontSize: '40px',
-            fontWeight: '700',
-            textAlign: 'center',
-            color: '#2c3e50',
-            marginBottom: '60px'
-          }}>
-            Zaufało nam tysiące Polaków
-          </h2>
-
-          {/* Stats */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '40px',
-            marginBottom: '80px'
-          }}>
-            {[
-              {
-                number: '15,000+',
-                label: 'Wygenerowanych dokumentów',
-                icon: '📄'
-              },
-              {
-                number: '4.8/5',
-                label: 'Średnia ocena',
-                icon: '⭐'
-              },
-              {
-                number: '98%',
-                label: 'Zadowolonych użytkowników',
-                icon: '😊'
-              }
-            ].map((stat, idx) => (
-              <div key={idx} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '48px', marginBottom: '15px' }}>
-                  {stat.icon}
-                </div>
-                <div style={{
-                  fontSize: '48px',
-                  fontWeight: '700',
-                  color: '#2c5aa0',
-                  marginBottom: '10px'
-                }}>
-                  {stat.number}
-                </div>
-                <p style={{
-                  color: '#5a6c7d',
-                  fontSize: '16px',
-                  fontWeight: '500'
-                }}>
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Testimonials */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '30px'
-          }}>
-            {[
-              {
-                name: 'Anna J.',
-                role: 'Student',
-                text: 'Potrzebowałam złożyć wniosek o zasiłek rodzinny. Generator stworzył profesjonalne pismo w 5 minut. Oszczędziłam godziny szukania wzorów!',
-                rating: 5
-              },
-              {
-                name: 'Marek D.',
-                role: 'Przedsiębiorca',
-                text: 'Regularnie potrzebuję różnych pism urzędowych. Ten generator to prawdziwa rewolucja - szybko, tanio i profesjonalnie.',
-                rating: 5
-              },
-              {
-                name: 'Joanna W.',
-                role: 'Właścicielka mieszkania',
-                text: 'Reklamacja przesyłki kurierskiej nigdy nie była prostsza. Dokument był idealnie sformatowany i zawierał wszystkie potrzebne przepisy.',
-                rating: 5
-              }
-            ].map((testimonial, idx) => (
-              <div
-                key={idx}
-                style={{
-                  background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)',
-                  padding: '30px',
-                  borderRadius: '16px',
-                  border: '2px solid #e1e8ed',
-                  transition: 'transform 0.3s, box-shadow 0.3s',
-                  display: 'flex',
-                  flexDirection: 'column'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-5px)';
-                  e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.1)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                <div style={{ flex: 1 }}>
-                  {/* Stars */}
-                  <div style={{
-                    display: 'flex',
-                    gap: '4px',
-                    marginBottom: '15px'
-                  }}>
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} size={20} fill="#fbbf24" color="#fbbf24" />
-                    ))}
-                  </div>
-
-                  {/* Quote */}
-                  <p style={{
-                    color: '#2c3e50',
-                    fontSize: '15px',
-                    lineHeight: '1.7',
-                    marginBottom: '20px',
-                    fontStyle: 'italic'
-                  }}>
-                    "{testimonial.text}"
-                  </p>
-                </div>
-
-                {/* Author - always at bottom */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  marginTop: 'auto',
-                  paddingTop: '20px',
-                  borderTop: '1px solid #e1e8ed'
-                }}>
-                  <div style={{
-                    width: '50px',
-                    height: '50px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'white',
-                    fontSize: '20px',
-                    fontWeight: '700'
-                  }}>
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  <div>
-                    <div style={{
-                      fontSize: '16px',
-                      fontWeight: '700',
-                      color: '#2c3e50'
-                    }}>
-                      {testimonial.name}
-                    </div>
-                    <div style={{
-                      fontSize: '14px',
-                      color: '#5a6c7d'
-                    }}>
-                      {testimonial.role}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* Pricing Section */}
       <div
         id="pricing"
         ref={setSectionRef('pricing')}
         style={{
-          background: 'white',
+          background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
           padding: '80px 20px',
           ...getAnimationStyle('pricing')
         }}
