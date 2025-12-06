@@ -3,7 +3,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -11,193 +11,286 @@
   <!-- Generator -->
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/?generator=true</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+  </url>
+
+  <!-- Blog Main Page -->
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Blog Articles -->
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/jak-napisac-reklamacje-telefonu</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/odwolanie-od-mandatu-poradnik</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/wniosek-zasilek-okresowy-poradnik</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <!-- Category Pages (Virtual URLs for SEO) -->
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/administracja</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/telekomunikacja</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/kurierzy</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/konsumenckie</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/studia</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/mieszkanie</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/biznesowe</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/szkola</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/praca</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/budownictwo</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/motoryzacja</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/pomoc-spoleczna</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
-  <!-- Popular Document URLs (examples for major documents) -->
+  <!-- Document Landing Pages (Top 20) -->
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/pismo/reklamacja-telefon</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/pismo/reklamacja-internet</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/pismo/reklamacja-kurier</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://pisma.pomocnikobywatela.pl/pismo/odwolanie-decyzja-ubezpieczyciel</loc>
-    <lastmod>2025-12-05</lastmod>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/odwolanie-od-mandatu</loc>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-pozwolenie-budowa-domu</loc>
-    <lastmod>2025-12-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-o-rente</loc>
-    <lastmod>2025-12-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://pisma.pomocnikobywatela.pl/pismo/wypowiedzenie-umowy-najmu</loc>
-    <lastmod>2025-12-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-zawieszenie-dzialalnosci</loc>
-    <lastmod>2025-12-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://pisma.pomocnikobywatela.pl/pismo/reklamacja-produkt-wadliwy</loc>
-    <lastmod>2025-12-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://pisma.pomocnikobywatela.pl/pismo/odwolanie-mandatu</loc>
-    <lastmod>2025-12-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Popular Social Assistance Documents -->
-  <url>
-    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-zasilek-staly</loc>
-    <lastmod>2025-12-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-zasilek-okresowy</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-zasilek-staly</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/wypowiedzenie-umowy-najmu</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/reklamacja-produktu-wadliwego</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/odwolanie-od-decyzji-ubezpieczyciela</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-pozwolenie-na-budowe</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-dodatek-mieszkaniowy</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-urlop-dziekanski</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-zawieszenie-dzialalnosci</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/odwolanie-do-uke</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/reklamacja-poczta-polska</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-swiadectwo-pracy</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/reklamacja-telewizji</loc>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-pomoc-ofiara-przemocy</loc>
-    <lastmod>2025-12-05</lastmod>
+    <lastmod>2025-12-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-stypendium-socjalne</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-o-rente</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Old document URLs (for backward compatibility) -->
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/odwolanie-decyzja-ubezpieczyciel</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-pozwolenie-budowa-domu</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/pismo/wniosek-o-rente</loc>
+    <lastmod>2025-12-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>
