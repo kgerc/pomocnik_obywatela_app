@@ -5,10 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 5174",
-    "build": "vite build && react-snap",
-    "build:nosnap": "vite build",
-    "preview": "vite preview",
-    "postbuild": "echo Build completed with react-snap pre-rendering"
+    "build": "vite build",
+    "build:snap": "vite build && react-snap",
+    "preview": "vite preview"
   },
   "reactSnap": {
     "source": "dist",
