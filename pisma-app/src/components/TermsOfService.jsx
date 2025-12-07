@@ -85,10 +85,10 @@ const TermsOfService = ({ onClose }) => {
             </h3>
             <ol style={{ paddingLeft: '20px', marginBottom: '10px' }}>
               <li style={{ marginBottom: '8px' }}>
-                Niniejszy Regulamin określa zasady korzystania z serwisu Generator Pism AI dostępnego pod adresem https://pisma.pomocnikobywatela.pl/ (dalej: "Serwis").
+                Niniejszy Regulamin określa zasady korzystania z serwisu Generator Pism dostępnego pod adresem https://pisma.pomocnikobywatela.pl/ (dalej: "Serwis").
               </li>
               <li style={{ marginBottom: '8px' }}>
-                Serwis świadczy usługi generowania dokumentów urzędowych za pomocą technologii sztucznej inteligencji.
+                Serwis świadczy usługi generowania dokumentów urzędowych online.
               </li>
               <li style={{ marginBottom: '8px' }}>
                 Korzystanie z Serwisu oznacza akceptację niniejszego Regulaminu.

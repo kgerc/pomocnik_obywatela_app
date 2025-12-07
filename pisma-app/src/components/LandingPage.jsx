@@ -121,7 +121,7 @@ const LandingPage = ({ onStartGenerator }) => {
               fontWeight: '600'
             }}>
               <Sparkles size={16} />
-              Powered by AI
+              Automatyczny Generator
             </div>
 
             <h1 style={{
@@ -130,7 +130,7 @@ const LandingPage = ({ onStartGenerator }) => {
               marginBottom: '20px',
               lineHeight: '1.2'
             }}>
-              Generator Pism AI
+              Generator Pism
             </h1>
 
             <p style={{
@@ -271,7 +271,7 @@ const LandingPage = ({ onStartGenerator }) => {
             color: '#2c3e50',
             marginBottom: '60px'
           }}>
-            Dlaczego Generator Pism AI?
+            Dlaczego Generator Pism?
           </h2>
 
         <div style={{
@@ -514,7 +514,7 @@ const LandingPage = ({ onStartGenerator }) => {
               {
                 step: '3',
                 title: '3. Pobierz gotowy dokument',
-                description: 'AI generuje profesjonalne pismo. Zapłać 2 zł i pobierz PDF/DOCX',
+                description: 'System wygeneruje profesjonalne pismo. Zapłać 2 zł i pobierz PDF/DOCX',
                 image: '/screenshots/step3-preview.png',
                 fallback: 'https://placehold.co/600x400/2c5aa0/white?text=Krok+3%3A+Pobierz+PDF'
               }
@@ -860,7 +860,7 @@ const LandingPage = ({ onStartGenerator }) => {
             gap: '10px'
           }}>
             <Wand2 size={28} />
-            Generator Pism AI
+            Generator Pism
           </div>
           <p style={{
             opacity: 0.7,

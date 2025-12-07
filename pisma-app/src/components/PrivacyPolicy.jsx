@@ -85,7 +85,7 @@ const PrivacyPolicy = ({ onClose }) => {
             </h3>
             <ol style={{ paddingLeft: '20px', marginBottom: '10px' }}>
               <li style={{ marginBottom: '8px' }}>
-                Niniejsza Polityka Prywatności określa zasady przetwarzania i ochrony danych osobowych przekazanych przez Użytkowników w związku z korzystaniem z serwisu Generator Pism AI (dalej: "Serwis").
+                Niniejsza Polityka Prywatności określa zasady przetwarzania i ochrony danych osobowych przekazanych przez Użytkowników w związku z korzystaniem z serwisu Generator Pism (dalej: "Serwis").
               </li>
               <li style={{ marginBottom: '8px' }}>
                 Dane osobowe są przetwarzane zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. (RODO).

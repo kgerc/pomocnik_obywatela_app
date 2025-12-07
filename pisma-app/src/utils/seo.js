@@ -8,87 +8,87 @@ const BASE_URL = 'https://pisma.pomocnikobywatela.pl';
 // Category metadata for SEO
 export const CATEGORY_META = {
   'Administracja': {
-    title: 'Pisma Administracyjne - Generator Dokumentów AI | Pomocnik Obywatela',
-    description: 'Generuj pisma administracyjne online: wnioski do urzędów, odwołania od decyzji, skargi administracyjne i więcej. Profesjonalne dokumenty w minutę z AI.',
+    title: 'Pisma Administracyjne - Generator Dokumentów Online | Pomocnik Obywatela',
+    description: 'Generuj pisma administracyjne online: wnioski do urzędów, odwołania od decyzji, skargi administracyjne i więcej. Profesjonalne dokumenty w minutę.',
     keywords: 'pisma administracyjne, wnioski do urzędu, odwołania administracyjne, dokumenty urzędowe'
   },
   'Telekomunikacja': {
-    title: 'Reklamacje Telekomunikacyjne - Generator Pism AI | Pomocnik Obywatela',
-    description: 'Wygeneruj reklamację telefonu, internetu, TV. Pisma do Orange, Play, Plus, T-Mobile. Odwołania do UKE. Profesjonalne dokumenty AI w minutę.',
+    title: 'Reklamacje Telekomunikacyjne - Generator Pism Online | Pomocnik Obywatela',
+    description: 'Wygeneruj reklamację telefonu, internetu, TV. Pisma do Orange, Play, Plus, T-Mobile. Odwołania do UKE. Profesjonalne dokumenty w minutę.',
     keywords: 'reklamacja telefon, reklamacja internet, reklamacja TV, odwołanie UKE, pisma telekomunikacyjne'
   },
   'Kurierzy': {
-    title: 'Reklamacje do Kurierów - Generator Pism AI | Pomocnik Obywatela',
-    description: 'Generuj reklamacje do InPost, DPD, DHL, Poczta Polska. Zgłoszenie uszkodzonej przesyłki, opóźnienia, zgubienia paczki. Dokumenty AI w minutę.',
+    title: 'Reklamacje do Kurierów - Generator Pism Online | Pomocnik Obywatela',
+    description: 'Generuj reklamacje do InPost, DPD, DHL, Poczta Polska. Zgłoszenie uszkodzonej przesyłki, opóźnienia, zgubienia paczki. Dokumenty w minutę.',
     keywords: 'reklamacja InPost, reklamacja DPD, reklamacja DHL, reklamacja Poczta Polska, zgubiona paczka'
   },
   'Konsumenckie': {
-    title: 'Pisma Konsumenckie - Reklamacje i Odwołania AI | Pomocnik Obywatela',
-    description: 'Generator pism konsumenckich: reklamacje produktów wadliwych, zwroty, gwarancje, odwołania do UOKiK, pisma ubezpieczeniowe. Dokumenty AI w minutę.',
+    title: 'Pisma Konsumenckie - Reklamacje i Odwołania Online | Pomocnik Obywatela',
+    description: 'Generator pism konsumenckich: reklamacje produktów wadliwych, zwroty, gwarancje, odwołania do UOKiK, pisma ubezpieczeniowe. Dokumenty w minutę.',
     keywords: 'reklamacja produktu, zwrot towaru, reklamacja gwarancyjna, pisma ubezpieczeniowe, odwołanie UOKiK'
   },
   'Studia': {
-    title: 'Pisma dla Studentów - Generator Dokumentów AI | Pomocnik Obywatela',
-    description: 'Wygeneruj podania dla studentów: urlopy dziekańskie, stypendia, egzaminy poprawkowe, zmiany kierunku. Profesjonalne dokumenty AI w minutę.',
+    title: 'Pisma dla Studentów - Generator Dokumentów Online | Pomocnik Obywatela',
+    description: 'Wygeneruj podania dla studentów: urlopy dziekańskie, stypendia, egzaminy poprawkowe, zmiany kierunku. Profesjonalne dokumenty w minutę.',
     keywords: 'podanie urlop dziekański, wniosek stypendium, podanie egzamin poprawkowy, pisma studenckie'
   },
   'Mieszkanie': {
-    title: 'Pisma Mieszkaniowe - Generator Dokumentów AI | Pomocnik Obywatela',
-    description: 'Generuj pisma mieszkaniowe: wypowiedzenia umów najmu, reklamacje lokali, wnioski do spółdzielni, pisma do zarządców. Dokumenty AI w minutę.',
+    title: 'Pisma Mieszkaniowe - Generator Dokumentów Online | Pomocnik Obywatela',
+    description: 'Generuj pisma mieszkaniowe: wypowiedzenia umów najmu, reklamacje lokali, wnioski do spółdzielni, pisma do zarządców. Dokumenty w minutę.',
     keywords: 'wypowiedzenie najmu, reklamacja mieszkania, pisma do spółdzielni, zarządca nieruchomości'
   },
   'Biznesowe': {
-    title: 'Pisma Biznesowe - Generator Dokumentów AI | Pomocnik Obywatela',
-    description: 'Wygeneruj pisma biznesowe: zawieszenie działalności, rejestracja firmy, wnioski do CEIDG, pisma podatkowe. Profesjonalne dokumenty AI w minutę.',
+    title: 'Pisma Biznesowe - Generator Dokumentów Online | Pomocnik Obywatela',
+    description: 'Wygeneruj pisma biznesowe: zawieszenie działalności, rejestracja firmy, wnioski do CEIDG, pisma podatkowe. Profesjonalne dokumenty w minutę.',
     keywords: 'zawieszenie działalności, rejestracja firmy, wnioski CEIDG, pisma podatkowe, dokumenty biznesowe'
   },
   'Szkola': {
-    title: 'Pisma Szkolne dla Rodziców - Generator AI | Pomocnik Obywatela',
-    description: 'Generuj pisma szkolne: zwolnienia, podania o urlop, reklamacje ocen, wnioski do dyrektora. Profesjonalne dokumenty dla rodziców AI w minutę.',
+    title: 'Pisma Szkolne dla Rodziców - Generator Online | Pomocnik Obywatela',
+    description: 'Generuj pisma szkolne: zwolnienia, podania o urlop, reklamacje ocen, wnioski do dyrektora. Profesjonalne dokumenty dla rodziców w minutę.',
     keywords: 'zwolnienie z zajęć, podanie urlop szkolny, reklamacja oceny, pisma do szkoły, wnioski rodziców'
   },
   'Praca': {
-    title: 'Pisma Związane z Pracą - Generator AI | Pomocnik Obywatela',
-    description: 'Wygeneruj pisma pracownicze: urlopy, podwyżki, reklamacje wypłat, wnioski o świadectwo pracy, pisma do ZUS. Dokumenty AI w minutę.',
+    title: 'Pisma Związane z Pracą - Generator Online | Pomocnik Obywatela',
+    description: 'Wygeneruj pisma pracownicze: urlopy, podwyżki, reklamacje wypłat, wnioski o świadectwo pracy, pisma do ZUS. Dokumenty w minutę.',
     keywords: 'wniosek urlop, podwyżka wynagrodzenia, świadectwo pracy, reklamacja wypłaty, pisma ZUS'
   },
   'Budownictwo': {
-    title: 'Pisma Budowlane - Generator Dokumentów AI | Pomocnik Obywatela',
-    description: 'Generuj pisma budowlane: wnioski o pozwolenia na budowę, zgłoszenia robót, podłączenia mediów, wnioski geodezyjne. Dokumenty AI w minutę.',
+    title: 'Pisma Budowlane - Generator Dokumentów Online | Pomocnik Obywatela',
+    description: 'Generuj pisma budowlane: wnioski o pozwolenia na budowę, zgłoszenia robót, podłączenia mediów, wnioski geodezyjne. Dokumenty w minutę.',
     keywords: 'pozwolenie na budowę, zgłoszenie robót budowlanych, podłączenie mediów, pisma budowlane'
   },
   'Motoryzacja': {
-    title: 'Pisma Motoryzacyjne - Generator Dokumentów AI | Pomocnik Obywatela',
-    description: 'Wygeneruj pisma motoryzacyjne: odwołania od mandatów, reklamacje serwisów, wnioski komunikacyjne, umowy kupna-sprzedaży. Dokumenty AI w minutę.',
+    title: 'Pisma Motoryzacyjne - Generator Dokumentów Online | Pomocnik Obywatela',
+    description: 'Wygeneruj pisma motoryzacyjne: odwołania od mandatów, reklamacje serwisów, wnioski komunikacyjne, umowy kupna-sprzedaży. Dokumenty w minutę.',
     keywords: 'odwołanie mandat, reklamacja serwis samochodowy, umowa kupna auta, pisma komunikacyjne'
   },
   'Urząd Stanu Cywilnego': {
-    title: 'Pisma do USC - Generator Dokumentów AI | Pomocnik Obywatela',
-    description: 'Generuj wnioski do Urzędu Stanu Cywilnego: akty urodzenia, ślubu, zgonu, zmiana nazwiska. Profesjonalne dokumenty AI w minutę.',
+    title: 'Pisma do USC - Generator Dokumentów Online | Pomocnik Obywatela',
+    description: 'Generuj wnioski do Urzędu Stanu Cywilnego: akty urodzenia, ślubu, zgonu, zmiana nazwiska. Profesjonalne dokumenty w minutę.',
     keywords: 'akt urodzenia, akt małżeństwa, zmiana nazwiska, pisma USC'
   },
   'Pomoc społeczna': {
-    title: 'Wnioski o Pomoc Społeczną - Generator AI | Pomocnik Obywatela',
-    description: 'Wygeneruj wnioski o pomoc społeczną: zasiłki rodzinne, świadczenia, pomoc materialna. Profesjonalne dokumenty AI w minutę.',
+    title: 'Wnioski o Pomoc Społeczną - Generator Online | Pomocnik Obywatela',
+    description: 'Wygeneruj wnioski o pomoc społeczną: zasiłki rodzinne, świadczenia, pomoc materialna. Profesjonalne dokumenty w minutę.',
     keywords: 'zasiłek rodzinny, wniosek pomoc społeczna, świadczenia rodzinne, OPS'
   },
   'Urząd Skarbowy': {
-    title: 'Pisma do Urzędu Skarbowego - Generator AI | Pomocnik Obywatela',
-    description: 'Generuj pisma do US: zwrot nadpłaty podatku, wnioski podatkowe, korekty zeznań. Profesjonalne dokumenty AI w minutę.',
+    title: 'Pisma do Urzędu Skarbowego - Generator Online | Pomocnik Obywatela',
+    description: 'Generuj pisma do US: zwrot nadpłaty podatku, wnioski podatkowe, korekty zeznań. Profesjonalne dokumenty w minutę.',
     keywords: 'zwrot podatku, wniosek US, nadpłata podatku, pisma podatkowe'
   },
   'Ubezpieczenia': {
-    title: 'Pisma Ubezpieczeniowe - Generator Dokumentów AI | Pomocnik Obywatela',
-    description: 'Wygeneruj pisma ubezpieczeniowe: odwołania od decyzji, wnioski o dopłatę, zgłoszenia szkód, reklamacje ubezpieczeń. Dokumenty AI w minutę.',
+    title: 'Pisma Ubezpieczeniowe - Generator Dokumentów Online | Pomocnik Obywatela',
+    description: 'Wygeneruj pisma ubezpieczeniowe: odwołania od decyzji, wnioski o dopłatę, zgłoszenia szkód, reklamacje ubezpieczeń. Dokumenty w minutę.',
     keywords: 'odwołanie decyzja ubezpieczyciel, zgłoszenie szkody, reklamacja ubezpieczenie, dopłata odszkodowanie'
   }
 };
 
 // Default meta tags
 export const DEFAULT_META = {
-  title: 'Generator Pism AI - Ponad 100 Typów Dokumentów | Pomocnik Obywatela',
-  description: 'Najszerszy wybór pism urzędowych w Polsce! Wygeneruj profesjonalne dokumenty AI w minutę: wnioski administracyjne, reklamacje telekomunikacyjne, pisma do kurierów, studia, mieszkanie, praca i więcej. Tylko 2 zł za dokument.',
-  keywords: 'generator pism, pisma urzędowe, wnioski AI, dokumenty online, pisma administracyjne, reklamacje telekomunikacyjne, pisma do kurierów, wnioski konsumenckie, pisma szkolne, dokumenty praca, pisma mieszkaniowe, wnioski budownictwo, dokumenty motoryzacja, generator dokumentów, sztuczna inteligencja, pisma online, automatyczne pisma, wzory pism, generator wniosków',
+  title: 'Generator Pism - Ponad 100 Typów Dokumentów | Pomocnik Obywatela',
+  description: 'Najszerszy wybór pism urzędowych w Polsce! Wygeneruj profesjonalne dokumenty w minutę: wnioski administracyjne, reklamacje telekomunikacyjne, pisma do kurierów, studia, mieszkanie, praca i więcej. Tylko 2 zł za dokument.',
+  keywords: 'generator pism, pisma urzędowe, wnioski online, dokumenty online, pisma administracyjne, reklamacje telekomunikacyjne, pisma do kurierów, wnioski konsumenckie, pisma szkolne, dokumenty praca, pisma mieszkaniowe, wnioski budownictwo, dokumenty motoryzacja, generator dokumentów, pisma online, automatyczne pisma, wzory pism, generator wniosków',
   ogImage: `${BASE_URL}/og-image.png`
 };
 
@@ -180,8 +180,8 @@ export const getCategoryMeta = (category) => {
 export const getDocumentMeta = (document) => {
   if (!document) return DEFAULT_META;
 
-  const title = `${document.nazwa} - Generator AI | Pomocnik Obywatela`;
-  const description = `${document.opis}. Wygeneruj profesjonalne pismo "${document.nazwa}" w minutę z pomocą AI. Format PDF i DOCX. Tylko 2 zł.`;
+  const title = `${document.nazwa} - Generator Online | Pomocnik Obywatela`;
+  const description = `${document.opis}. Wygeneruj profesjonalne pismo "${document.nazwa}" w minutę. Format PDF i DOCX. Tylko 2 zł.`;
   const keywords = `${document.nazwa}, generator ${document.nazwa.toLowerCase()}, ${document.kategoria.toLowerCase()}, pisma ${document.kategoria.toLowerCase()}, wzór pisma`;
 
   return {
@@ -224,7 +224,7 @@ export const generateDocumentSchema = (document) => {
     "totalTime": "PT3M",
     "tool": {
       "@type": "HowToTool",
-      "name": "Generator Pism AI"
+      "name": "Generator Pism Online"
     },
     "step": [
       {
@@ -243,7 +243,7 @@ export const generateDocumentSchema = (document) => {
         "@type": "HowToStep",
         "position": 3,
         "name": "Wygeneruj dokument",
-        "text": "AI wygeneruje profesjonalne pismo w kilka sekund"
+        "text": "System wygeneruje profesjonalne pismo w kilka sekund"
       },
       {
         "@type": "HowToStep",

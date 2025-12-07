@@ -188,7 +188,7 @@ const BlogArticle = ({ onGenerateClick }) => {
               marginBottom: '30px',
               opacity: 0.95
             }}>
-              Nasz generator AI wypełni wszystkie wymagane pola i przygotuje profesjonalne pismo gotowe do wysłania.
+              Nasz generator wypełni wszystkie wymagane pola i przygotuje profesjonalne pismo gotowe do wysłania.
             </p>
             <button
               onClick={() => navigate('/?generator=true')}

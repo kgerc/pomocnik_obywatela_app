@@ -888,14 +888,14 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
               gap: '10px'
             }}>
               <Wand2 size={32} color="#2c5aa0" />
-              Generator Pism AI
+              Generator Pism
             </h2>
             <p style={{
               color: '#5a6c7d',
               lineHeight: '1.6',
               fontSize: '16px'
             }}>
-              Wybierz typ pisma, odpowiedz na kilka pytań, a AI wygeneruje gotowy dokument do podpisu i wysłania.
+              Wybierz typ pisma, odpowiedz na kilka pytań, a system wygeneruje gotowy dokument do podpisu i wysłania.
             </p>
           </div>
 
@@ -1431,7 +1431,7 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
                     color: '#2c3e50',
                     marginBottom: '10px'
                   }}>
-                    AI generuje Twój dokument...
+                    Generowanie dokumentu...
                   </h3>
                   <p style={{
                     color: '#5a6c7d',

@@ -41,7 +41,7 @@ const DocumentLandingPage = () => {
         "@type": "HowToStep",
         "position": 3,
         "name": "Wygeneruj dokument",
-        "text": "AI wygeneruje profesjonalne pismo w kilka sekund"
+        "text": "System wygeneruje profesjonalne pismo w kilka sekund"
       },
       {
         "@type": "HowToStep",
@@ -71,7 +71,7 @@ const DocumentLandingPage = () => {
       background: 'linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%)'
     }}>
       <Helmet>
-        <title>{doc.nazwa} - Generator AI | Pomocnik Obywatela</title>
+        <title>{doc.nazwa} - Generator Online | Pomocnik Obywatela</title>
         <meta name="description" content={`${doc.longDescription} Wygeneruj profesjonalne pismo w minutę. Format PDF i DOCX. Tylko 2 zł.`} />
         <meta name="keywords" content={doc.keywords} />
         <link rel="canonical" href={`https://pisma.pomocnikobywatela.pl/pismo/${doc.slug}`} />
@@ -262,7 +262,7 @@ const DocumentLandingPage = () => {
             {[
               { step: '1', title: 'Wybierz dokument', desc: `${doc.nazwa}` },
               { step: '2', title: 'Odpowiedz na pytania', desc: 'Proste pytania o Twoją sprawę' },
-              { step: '3', title: 'AI generuje pismo', desc: 'W kilka sekund' },
+              { step: '3', title: 'Generowanie pisma', desc: 'W kilka sekund' },
               { step: '4', title: 'Pobierz i wyślij', desc: 'PDF lub DOCX' }
             ].map((item) => (
               <div key={item.step} style={{ textAlign: 'center' }}>
