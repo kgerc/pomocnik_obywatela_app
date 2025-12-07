@@ -2800,7 +2800,170 @@ Zmiana nazwiska to proces wymagający cierpliwości, ale wykonalny!
 **Podstawa prawna:**
 - Ustawa Prawo o aktach stanu cywilnego z 28.11.2014 r. (art. 43-44)
 `
-  }
+  },
+  {
+  id: 'wniosek-o-zasilek-rodzinny-poradnik',
+  slug: 'wniosek-o-zasilek-rodzinny-poradnik',
+  title: 'Wniosek o zasiłek rodzinny - Kompletny poradnik 2025',
+  metaDescription: 'Jak wypełnić wniosek o zasiłek rodzinny? Komu przysługuje, jakie dokumenty są potrzebne, terminy i wzór wniosku. Praktyczny poradnik 2025.',
+  category: 'Pomoc Społeczna',
+  author: 'Zespół Pomocnik Obywatela',
+  publishDate: '2025-12-07',
+  readTime: '8 min',
+  keywords: 'zasiłek rodzinny, pomoc społeczna, wniosek o zasiłek, świadczenia rodzinne, jak wypełnić wniosek',
+  excerpt: 'Dowiedz się, kto może otrzymać zasiłek rodzinny, jakie dokumenty są wymagane i jak prawidłowo wypełnić wniosek w 2025 roku.',
+  content: `
+# Wniosek o zasiłek rodzinny — Kompletny poradnik 2025
+
+Zasiłek rodzinny to jedno z najważniejszych świadczeń dla rodzin w Polsce. W tym poradniku dowiesz się, jak krok po kroku wypełnić wniosek i uniknąć najczęstszych błędów.
+
+## Komu przysługuje zasiłek rodzinny?
+
+Zasiłek rodzinny otrzymasz, jeśli:
+- dochód na osobę w rodzinie nie przekracza ustawowego progu,
+- wychowujesz dziecko do 18 r.ż. (lub 25 r.ż. jeśli się uczy),
+- dziecko nie pozostaje w związku małżeńskim,
+- dziecko nie przebywa w pieczy zastępczej.
+
+## Jakie dokumenty są potrzebne?
+
+Przygotuj:
+- Dowód osobisty
+- Zaświadczenie o dochodach
+- Akt urodzenia dziecka
+- Zaświadczenie ze szkoły (dla uczniów powyżej 18 r.ż.)
+- Oświadczenie o sytuacji rodzinnej
+
+## Jak wypełnić wniosek? Krok po kroku
+
+1. **Dane osobowe wnioskodawcy**
+2. **Dane dzieci i ich sytuacja szkolna**
+3. **Dochody rodziny z poprzedniego roku**
+4. **Oświadczenia o pobieranych świadczeniach**
+5. **Podpis i data**
+
+## Wzór wniosku o zasiłek rodzinny
+
+\`\`\`
+WNIOSEK O ZASIŁEK RODZINNY
+
+Dane wnioskodawcy:
+[Imię i nazwisko]
+[PESEL]
+[Adres zamieszkania]
+[Telefon / e-mail]
+
+Dane członków rodziny (w tym dzieci):
+[Imię i nazwisko, data urodzenia, stopień pokrewieństwa]
+[Imię i nazwisko dziecka, data urodzenia, szkoła/przedszkole]
+[Imię i nazwisko drugiego rodzica / opiekuna – jeśli dotyczy]
+
+Dochody rodziny:
+[Dochód roczny z ostatniego roku podatkowego]
+[Źródła dochodu: umowa o pracę, zasiłki, alimenty, działalność — jeśli dotyczy]
+[Liczba osób w gospodarstwie domowym]
+
+Uzasadnienie wniosku:
+[Krótka informacja o sytuacji rodzinnej, np. samotne wychowywanie dziecka, niskie dochody, utrata pracy, zwiększone koszty utrzymania]
+
+Oświadczenia:
+Oświadczam, że:
+- Dane podane we wniosku są zgodne z prawdą.
+- Zobowiązuję się do niezwłocznego poinformowania organu o każdej zmianie mającej wpływ na prawo do świadczeń rodzinnych.
+- Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z obowiązującymi przepisami.
+
+Proszę o przyznanie zasiłku rodzinnego na okres zasiłkowy:
+[od – do]
+
+..........................................
+[Podpis wnioskodawcy]
+\`\`\`
+
+## Podsumowanie
+
+Zasiłek rodzinny to proste świadczenie, jednak wymaga poprawnie wypełnionego wniosku i kompletu dokumentów. Dzięki generatorowi zrobisz to w kilka minut.
+
+## Wygeneruj wniosek automatycznie
+
+Skorzystaj z naszego generatora — wypełni za Ciebie cały dokument, zgodnie z aktualnymi wymogami MOPS/GOPS.
+`
+},
+{
+  id: 'wniosek-o-urlop-wypoczynkowy',
+  slug: 'wniosek-o-urlop-wypoczynkowy',
+  title: 'Wniosek o urlop wypoczynkowy - jak napisać? Wzór 2025',
+  metaDescription: 'Jak napisać wniosek o urlop wypoczynkowy? Wzór pisma, zasady udzielania urlopu, terminy i prawa pracownika. Aktualny poradnik 2025.',
+  category: 'Praca',
+  author: 'Zespół Pomocnik Obywatela',
+  publishDate: '2025-12-07',
+  readTime: '6 min',
+  keywords: 'urlop wypoczynkowy, wniosek urlopowy, prawo pracy, wniosek o urlop',
+excerpt: 'Zobacz, jak poprawnie napisać wniosek o urlop wypoczynkowy, jakie elementy musi zawierać oraz pobierz gotowy wzór na 2025 rok.',
+content: `
+# Wniosek o urlop wypoczynkowy — Kompletny poradnik 2025
+
+Każdy pracownik zatrudniony na podstawie umowy o pracę ma prawo do corocznego, płatnego urlopu wypoczynkowego. Aby z niego skorzystać, najczęściej wymagany jest pisemny (lub elektroniczny) wniosek złożony pracodawcy. Choć dokument jest prosty, powinien zawierać kilka obowiązkowych elementów — inaczej pracodawca może poprosić o poprawki.
+
+Poniżej znajdziesz krótki poradnik, jak prawidłowo przygotować wniosek, co musi się w nim znaleźć oraz aktualny wzór na 2025 rok.
+
+## Jak napisać wniosek o urlop?
+
+Wniosek o urlop wypoczynkowy powinien być zwięzły, czytelny i zawierać wszystkie podstawowe dane potrzebne pracodawcy do zatwierdzenia nieobecności. Standardowo w dokumencie umieszcza się:
+
+- **Dane pracownika** — imię, nazwisko, stanowisko, kontakt (opcjonalnie).
+- **Dane pracodawcy lub działu kadr** — nazwa firmy i adres.
+- **Dokładny termin urlopu** — od kiedy do kiedy oraz ile dni obejmuje.
+- **Informację o rodzaju urlopu** — bieżący czy zaległy.
+- **Ewentualne przekazanie obowiązków** — kto przejmuje zadania podczas Twojej nieobecności.
+- **Podstawę prawną** — odwołanie do Kodeksu pracy.
+- **Podpis pracownika**.
+
+Dobrze przygotowany dokument przyspiesza akceptację urlopu i ułatwia pracodawcy planowanie zastępstw.
+
+## Wzór wniosku o urlop wypoczynkowy 2025
+
+\`\`\`
+WNIOSEK O UDZIELENIE URLOPU WYPOCZYNKOWEGO
+
+Dane pracownika:
+[Imię i nazwisko]
+[Stanowisko]
+[Adres e-mail / telefon – opcjonalnie]
+
+Dane pracodawcy:
+[Nazwa firmy]
+[Adres zakładu pracy]
+
+Treść wniosku:
+Zwracam się z prośbą o udzielenie mi urlopu wypoczynkowego 
+w wymiarze [liczba dni] dni, w terminie od [data od] do [data do].
+
+Informacje dodatkowe:
+[Opcjonalnie: urlop zaległy / bieżący]
+[Opcjonalnie: przekazanie obowiązków na czas nieobecności]
+
+Podstawa prawna:
+Urlop wypoczynkowy przysługuje na podstawie art. 152–173 ustawy z dnia 26 czerwca 1974 r. – Kodeks pracy.
+
+Oświadczenie:
+Oświadczam, że podane dane są zgodne z prawdą i jestem świadomy/a odpowiedzialności za ich poprawność.
+
+..........................................  
+[Podpis pracownika]
+
+Decyzja pracodawcy:
+Urlopu udzielono / nie udzielono*
+Uwagi: .....................................
+
+..........................................  
+[Podpis i pieczątka pracodawcy]
+\`\`\`
+
+## Wygeneruj swój wniosek automatycznie
+
+Nie musisz tworzyć wniosku ręcznie. Skorzystaj z naszego generatora — odpowiedz tylko na kilka pytań, a pobierzesz gotowy dokument w formacie **PDF lub DOCX**, gotowy do wydruku lub wysłania do pracodawcy.
+`
+}
 
   // Dodamy więcej artykułów w przyszłości
 ];
