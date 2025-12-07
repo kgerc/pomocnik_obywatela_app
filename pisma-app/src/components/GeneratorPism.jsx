@@ -1778,7 +1778,7 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
               color: '#5a6c7d',
               margin: 0
             }}>
-              © 2024 Pomocnik Obywatela. Wszystkie prawa zastrzeżone.
+              © 2025 Pomocnik Obywatela. Wszystkie prawa zastrzeżone.
             </p>
           </div>
         </div>
