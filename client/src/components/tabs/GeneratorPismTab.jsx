@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Wand2, FileText, Loader, AlertCircle, Download, Sparkles, Check, ChevronRight, Lock } from 'lucide-react';
+import { Wand2, FileText, Loader, 
+  AlertCircle, Download, Sparkles, Check,
+  ChevronRight, Lock, ArrowLeft, ArrowRight } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useAppData } from '../../contexts/AppDataContext';
 import { useAuth } from '../../contexts/AuthContext';
@@ -957,7 +959,7 @@ const handleDownloadDOCX = async () => {
                   transition: 'all 0.2s'
                 }}
               >
-                ← Poprzednia
+                <ArrowLeft size={16} color="#2c5aa0" style={{ verticalAlign: '-3px' }}/>
               </button>
 
               <div style={{
@@ -1003,7 +1005,7 @@ const handleDownloadDOCX = async () => {
                   transition: 'all 0.2s'
                 }}
               >
-                Następna →
+                <ArrowRight size={16} color="#2c5aa0" style={{ verticalAlign: '-3px' }}/>
               </button>
             </div>
           )}
