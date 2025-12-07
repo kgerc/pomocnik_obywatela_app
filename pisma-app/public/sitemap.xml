@@ -46,6 +46,55 @@
     <priority>0.8</priority>
   </url>
 
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/wypowiedzenie-umowy-najmu</loc>
+    <lastmod>2025-12-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/reklamacja-przesylki-inpost</loc>
+    <lastmod>2025-12-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/urlop-dziekanski-jak-uzyskac</loc>
+    <lastmod>2025-12-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/wniosek-o-podwyzke</loc>
+    <lastmod>2025-12-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/pozwolenie-na-budowe-garaz</loc>
+    <lastmod>2025-12-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/zwrot-nadplaty-podatku</loc>
+    <lastmod>2025-12-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/zmiana-nazwiska-usc</loc>
+    <lastmod>2025-12-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Category Pages (Virtual URLs for SEO) -->
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/administracja</loc>
