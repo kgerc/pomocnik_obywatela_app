@@ -94,5 +94,32 @@ export const pismaPraca = [
       { id: 'od_kiedy', label: 'Od kiedy oczekujesz podwyżki?', placeholder: 'np. od 01.03.2025', type: 'text' },
       { id: 'uzasadnienie', label: 'Uzasadnienie', placeholder: 'Opisz swoje osiągnięcia, nowe obowiązki, wyniki', type: 'textarea' }
     ]
+  },
+  {
+    id: 'wypowiedzenie_umowy_pracodawca',
+    nazwa: 'Pismo o rozwiązanie umowy o pracę przez pracodawcę',
+    kategoria: 'Praca',
+    opis: 'Wypowiedzenie umowy o pracę przez pracodawcę (dla pracodawców)',
+    pytania: [
+      { id: 'nazwa_firmy', label: 'Nazwa Twojej firmy', placeholder: 'np. ABC Sp. z o.o.', type: 'text' },
+      { id: 'imie_nazwisko_pracownika', label: 'Imię i nazwisko pracownika', placeholder: 'np. Jan Kowalski', type: 'text' },
+      { id: 'stanowisko', label: 'Stanowisko pracownika', placeholder: 'np. Specjalista ds. sprzedaży', type: 'text' },
+      { id: 'rodzaj_umowy', label: 'Rodzaj umowy', placeholder: 'np. umowa o pracę na czas nieokreślony', type: 'text' },
+      { id: 'okres_wypowiedzenia', label: 'Okres wypowiedzenia', placeholder: 'np. 1 miesiąc, 3 miesiące', type: 'text' },
+      { id: 'data_rozwiazania', label: 'Data rozwiązania umowy', placeholder: 'np. 31.03.2025', type: 'text' },
+      { id: 'uzasadnienie', label: 'Uzasadnienie wypowiedzenia', placeholder: 'Podaj powody rozwiązania umowy', type: 'textarea' }
+    ]
+  },
+  {
+    id: 'urlop_na_zadanie',
+    nazwa: 'Wniosek o urlop na żądanie',
+    kategoria: 'Praca',
+    opis: 'Szybki wniosek o urlop na żądanie (4 dni w roku)',
+    pytania: [
+      { id: 'nazwa_firmy', label: 'Nazwa firmy', placeholder: 'np. ABC Sp. z o.o.', type: 'text' },
+      { id: 'stanowisko', label: 'Twoje stanowisko', placeholder: 'np. Specjalista ds. IT', type: 'text' },
+      { id: 'data_urlopu', label: 'Data urlopu na żądanie', placeholder: 'np. 25.01.2025', type: 'text' },
+      { id: 'liczba_dni', label: 'Liczba dni', placeholder: 'np. 1 dzień', type: 'text' }
+    ]
   }
 ];

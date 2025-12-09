@@ -12,6 +12,7 @@ import { pismaPraca } from './praca';
 import { pismaBudownictwo } from './budownictwo';
 import { pismaMotoryzacja } from './motoryzacja';
 import { pismaPomocSpoleczna } from './pomoc_spoleczna';
+import { pismaPrawne } from './prawne';
 
 // Pisma z oryginalnego GeneratorPismTab (zachowane dla kompatybilności)
 export const pismaUrzedowe = [
@@ -72,7 +73,8 @@ export const DOSTEPNE_PISMA = [
   ...pismaPraca,
   ...pismaBudownictwo,
   ...pismaMotoryzacja,
-  ...pismaPomocSpoleczna
+  ...pismaPomocSpoleczna,
+  ...pismaPrawne
 ];
 
 export default DOSTEPNE_PISMA;

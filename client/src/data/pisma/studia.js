@@ -136,5 +136,36 @@ export const pismaStudia = [
       { id: 'dochod_na_osobe', label: 'Dochód na osobę (zł)', placeholder: 'np. 800', type: 'text' },
       { id: 'uzasadnienie', label: 'Uzasadnienie sytuacji materialnej', placeholder: 'Opisz krótko sytuację finansową rodziny', type: 'textarea' }
     ]
+  },
+  {
+    id: 'rezygnacja_ze_studiow',
+    nazwa: 'Pismo o rezygnacji ze studiów',
+    kategoria: 'Studia',
+    opis: 'Oficjalne zgłoszenie rezygnacji z kontynuowania studiów',
+    pytania: [
+      { id: 'uczelnia', label: 'Nazwa uczelni', placeholder: 'np. Uniwersytet Warszawski', type: 'text' },
+      { id: 'wydzial', label: 'Wydział', placeholder: 'np. Wydział Informatyki', type: 'text' },
+      { id: 'kierunek', label: 'Kierunek studiów', placeholder: 'np. Informatyka', type: 'text' },
+      { id: 'numer_albumu', label: 'Numer albumu', placeholder: 'np. 123456', type: 'text' },
+      { id: 'rok_semestr', label: 'Rok i semestr', placeholder: 'np. II rok, semestr letni', type: 'text' },
+      { id: 'data_rezygnacji', label: 'Data, od której rezygnujesz', placeholder: 'np. 28.02.2025', type: 'text' },
+      { id: 'powod', label: 'Powód rezygnacji (opcjonalnie)', placeholder: 'np. podjęcie pracy, zmiana planów zawodowych', type: 'textarea' }
+    ]
+  },
+  {
+    id: 'zmiana_promotora',
+    nazwa: 'Podanie o zmianę promotora pracy dyplomowej',
+    kategoria: 'Studia',
+    opis: 'Wniosek o zmianę promotora pracy licencjackiej/magisterskiej',
+    pytania: [
+      { id: 'uczelnia', label: 'Nazwa uczelni', placeholder: 'np. Uniwersytet Warszawski', type: 'text' },
+      { id: 'wydzial', label: 'Wydział', placeholder: 'np. Wydział Informatyki', type: 'text' },
+      { id: 'kierunek', label: 'Kierunek studiów', placeholder: 'np. Informatyka', type: 'text' },
+      { id: 'numer_albumu', label: 'Numer albumu', placeholder: 'np. 123456', type: 'text' },
+      { id: 'promotor_obecny', label: 'Obecny promotor', placeholder: 'np. dr hab. Jan Kowalski', type: 'text' },
+      { id: 'promotor_nowy', label: 'Nowy promotor (proponowany)', placeholder: 'np. prof. dr hab. Anna Nowak', type: 'text' },
+      { id: 'temat_pracy', label: 'Temat pracy dyplomowej', placeholder: 'np. Systemy sztucznej inteligencji w medycynie', type: 'text' },
+      { id: 'uzasadnienie', label: 'Uzasadnienie zmiany', placeholder: 'Wyjaśnij powody zmiany promotora', type: 'textarea' }
+    ]
   }
 ];

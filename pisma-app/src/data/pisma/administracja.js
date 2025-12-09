@@ -170,5 +170,126 @@ export const pismaAdministracja = [
       { id: 'data_decyzji', label: 'Data wydania decyzji', placeholder: 'np. 10.10.2024', type: 'text' },
       { id: 'nowe_okolicznosci', label: 'Jakie są nowe okoliczności/dowody?', placeholder: 'Opisz nowe fakty, które pojawiły się po wydaniu decyzji', type: 'textarea' }
     ]
+  },
+  {
+    id: 'wniosek_odpis_akt_zgonu',
+    nazwa: 'Wniosek o wydanie odpisu aktu zgonu',
+    kategoria: 'Urząd Stanu Cywilnego',
+    opis: 'Wniosek o wydanie odpisu aktu zgonu',
+    pytania: [
+      { id: 'nazwa_usc', label: 'Nazwa Urzędu Stanu Cywilnego', placeholder: 'np. Urząd Stanu Cywilnego w Warszawie', type: 'text' },
+      { id: 'ulica_usc', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Nowy Świat 18/20', type: 'text' },
+      { id: 'kod_miasto_usc', label: 'Kod pocztowy i miasto', placeholder: 'np. 00-373 Warszawa', type: 'text' },
+      { id: 'imie_nazwisko_zmarlego', label: 'Imię i nazwisko zmarłego', placeholder: 'np. Jan Kowalski', type: 'text' },
+      { id: 'data_zgonu', label: 'Data zgonu', placeholder: 'np. 15.01.2025', type: 'text' },
+      { id: 'miejsce_zgonu', label: 'Miejsce zgonu', placeholder: 'np. Warszawa', type: 'text' },
+      { id: 'rodzaj_odpisu', label: 'Rodzaj odpisu', placeholder: 'np. zupełny, skrócony', type: 'text' },
+      { id: 'cel', label: 'Cel wydania odpisu', placeholder: 'np. sprawa spadkowa, ubezpieczenie, emerytura', type: 'text' },
+      { id: 'stosunek_do_zmarlego', label: 'Twój stosunek do zmarłego', placeholder: 'np. syn, córka, małżonek', type: 'text' }
+    ]
+  },
+  {
+    id: 'wniosek_dowod_osobisty',
+    nazwa: 'Wniosek o wydanie dowodu osobistego',
+    kategoria: 'Administracja',
+    opis: 'Wniosek o wydanie nowego dowodu osobistego',
+    pytania: [
+      { id: 'nazwa_urzedu', label: 'Nazwa urzędu', placeholder: 'np. Urząd Dzielnicy Śródmieście m.st. Warszawy', type: 'text' },
+      { id: 'ulica_urzedu', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Nowogrodzka 43', type: 'text' },
+      { id: 'kod_miasto_urzedu', label: 'Kod pocztowy i miasto', placeholder: 'np. 00-691 Warszawa', type: 'text' },
+      { id: 'powod_wniosku', label: 'Powód złożenia wniosku', placeholder: 'np. upływ terminu ważności, kradzież, zgubienie, zmiana danych', type: 'text' },
+      { id: 'numer_starego', label: 'Numer poprzedniego dowodu (jeśli posiadasz)', placeholder: 'np. ABC 123456', type: 'text' },
+      { id: 'adres_do_korespondencji', label: 'Adres do korespondencji (jeśli inny niż zameldowania)', placeholder: 'np. ul. Kwiatowa 5, 02-123 Warszawa', type: 'text' }
+    ]
+  },
+  {
+    id: 'wniosek_ekuz',
+    nazwa: 'Wniosek o wydanie Europejskiej Karty Ubezpieczenia Zdrowotnego (EKUZ)',
+    kategoria: 'Ubezpieczenia',
+    opis: 'Wniosek o wydanie EKUZ umożliwiającej korzystanie z opieki zdrowotnej w UE',
+    pytania: [
+      { id: 'oddzial_nfz', label: 'Oddział NFZ', placeholder: 'np. Mazowiecki Oddział Wojewódzki NFZ w Warszawie', type: 'text' },
+      { id: 'ulica_nfz', label: 'Ulica i numer', placeholder: 'np. ul. Grójecka 186', type: 'text' },
+      { id: 'kod_miasto_nfz', label: 'Kod pocztowy i miasto', placeholder: 'np. 02-390 Warszawa', type: 'text' },
+      { id: 'numer_pesel', label: 'Numer PESEL', placeholder: 'np. 90010112345', type: 'text' },
+      { id: 'okres_waznosci', label: 'Na jaki okres potrzebujesz karty?', placeholder: 'np. od 01.02.2025 do 31.08.2025', type: 'text' },
+      { id: 'kraj_docelowy', label: 'Kraj, do którego planujesz wyjazd', placeholder: 'np. Niemcy, Hiszpania, Włochy', type: 'text' },
+      { id: 'cel_pobytu', label: 'Cel pobytu za granicą', placeholder: 'np. turystyka, praca, studia', type: 'text' }
+    ]
+  },
+  {
+    id: 'wniosek_zameldowanie',
+    nazwa: 'Wniosek o zameldowanie na pobyt stały',
+    kategoria: 'Administracja',
+    opis: 'Zgłoszenie pobytu stałego w nowym miejscu zamieszkania',
+    pytania: [
+      { id: 'nazwa_urzedu', label: 'Nazwa urzędu', placeholder: 'np. Urząd Dzielnicy Praga-Północ m.st. Warszawy', type: 'text' },
+      { id: 'ulica_urzedu', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Kłopotowskiego 15', type: 'text' },
+      { id: 'kod_miasto_urzedu', label: 'Kod pocztowy i miasto', placeholder: 'np. 03-708 Warszawa', type: 'text' },
+      { id: 'adres_nowy', label: 'Nowy adres zamieszkania', placeholder: 'np. ul. Targowa 10 m. 5, 03-728 Warszawa', type: 'text' },
+      { id: 'data_wprowadzenia', label: 'Data wprowadzenia się', placeholder: 'np. 01.02.2025', type: 'text' },
+      { id: 'tytul_prawny', label: 'Tytuł prawny do lokalu', placeholder: 'np. właściciel, najemca, członek rodziny właściciela', type: 'text' },
+      { id: 'wlasciciel', label: 'Imię i nazwisko właściciela (jeśli nie jesteś właścicielem)', placeholder: 'np. Anna Kowalska', type: 'text' }
+    ]
+  },
+  {
+    id: 'wniosek_wymeldowanie',
+    nazwa: 'Wniosek o wymeldowanie z pobytu stałego',
+    kategoria: 'Administracja',
+    opis: 'Zgłoszenie zakończenia pobytu stałego pod dotychczasowym adresem',
+    pytania: [
+      { id: 'nazwa_urzedu', label: 'Nazwa urzędu', placeholder: 'np. Urząd Dzielnicy Mokotów m.st. Warszawy', type: 'text' },
+      { id: 'ulica_urzedu', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Rakowiecka 25/27', type: 'text' },
+      { id: 'kod_miasto_urzedu', label: 'Kod pocztowy i miasto', placeholder: 'np. 02-517 Warszawa', type: 'text' },
+      { id: 'adres_aktualny', label: 'Adres, z którego się wymeldujesz', placeholder: 'np. ul. Puławska 100 m. 20, 02-620 Warszawa', type: 'text' },
+      { id: 'data_wyprowadzki', label: 'Data wyprowadzki', placeholder: 'np. 31.01.2025', type: 'text' },
+      { id: 'nowy_adres', label: 'Nowy adres zamieszkania (jeśli znany)', placeholder: 'np. ul. Kwiatowa 5, 30-001 Kraków', type: 'text' },
+      { id: 'powod', label: 'Powód wymeldowania', placeholder: 'np. przeprowadzka, wyjazd za granicę, zmiana miejsca zamieszkania', type: 'text' }
+    ]
+  },
+  {
+    id: 'pismo_wojewoda_karta_pobytu',
+    nazwa: 'Pismo do wojewody o wydanie karty pobytu',
+    kategoria: 'Administracja',
+    opis: 'Wniosek o wydanie karty pobytu dla cudzoziemca',
+    pytania: [
+      { id: 'nazwa_urzedu', label: 'Nazwa urzędu wojewódzkiego', placeholder: 'np. Mazowiecki Urząd Wojewódzki w Warszawie', type: 'text' },
+      { id: 'ulica_urzedu', label: 'Ulica i numer', placeholder: 'np. pl. Bankowy 3/5', type: 'text' },
+      { id: 'kod_miasto_urzedu', label: 'Kod pocztowy i miasto', placeholder: 'np. 00-950 Warszawa', type: 'text' },
+      { id: 'rodzaj_karty', label: 'Rodzaj karty pobytu', placeholder: 'np. karta pobytu czasowego, stałego, rezydenta długoterminowego UE', type: 'text' },
+      { id: 'obywatelstwo', label: 'Twoje obywatelstwo', placeholder: 'np. Ukraina, Białoruś', type: 'text' },
+      { id: 'numer_paszportu', label: 'Numer paszportu', placeholder: 'np. AB1234567', type: 'text' },
+      { id: 'cel_pobytu', label: 'Cel pobytu w Polsce', placeholder: 'np. praca, studia, połączenie rodziny', type: 'text' },
+      { id: 'adres_w_polsce', label: 'Adres zamieszkania w Polsce', placeholder: 'np. ul. Marszałkowska 10/5, 00-001 Warszawa', type: 'text' }
+    ]
+  },
+  {
+    id: 'wniosek_orzeczenie_niepelnosprawnosc',
+    nazwa: 'Wniosek o wydanie orzeczenia o niepełnosprawności',
+    kategoria: 'Administracja',
+    opis: 'Wniosek o ustalenie niepełnosprawności lub stopnia niepełnosprawności',
+    pytania: [
+      { id: 'nazwa_zespolu', label: 'Nazwa Powiatowego Zespołu ds. Orzekania o Niepełnosprawności', placeholder: 'np. Powiatowy Zespół ds. Orzekania o Niepełnosprawności w Warszawie', type: 'text' },
+      { id: 'ulica_zespolu', label: 'Ulica i numer', placeholder: 'np. ul. Polna 40', type: 'text' },
+      { id: 'kod_miasto_zespolu', label: 'Kod pocztowy i miasto', placeholder: 'np. 00-635 Warszawa', type: 'text' },
+      { id: 'rodzaj_orzeczenia', label: 'Rodzaj orzeczenia', placeholder: 'np. o niepełnosprawności, o stopniu niepełnosprawności', type: 'text' },
+      { id: 'grupa_wiekowa', label: 'Grupa wiekowa', placeholder: 'np. osoba dorosła (powyżej 16 lat), dziecko (do 16 lat)', type: 'text' },
+      { id: 'schorzenia', label: 'Główne schorzenia', placeholder: 'Opisz schorzenia uzasadniające wniosek', type: 'textarea' },
+      { id: 'cel_orzeczenia', label: 'Cel uzyskania orzeczenia', placeholder: 'np. ulgi podatkowe, dofinansowania, prawo jazdy, inne świadczenia', type: 'text' }
+    ]
+  },
+  {
+    id: 'wniosek_zaswiadczenie_zameldowanie',
+    nazwa: 'Wniosek o wydanie zaświadczenia o zameldowaniu/braku zameldowania',
+    kategoria: 'Administracja',
+    opis: 'Zaświadczenie o miejscu zameldowania lub jego braku',
+    pytania: [
+      { id: 'nazwa_urzedu', label: 'Nazwa urzędu', placeholder: 'np. Urząd Dzielnicy Wola m.st. Warszawy', type: 'text' },
+      { id: 'ulica_urzedu', label: 'Ulica i numer urzędu', placeholder: 'np. ul. Wolska 21/29', type: 'text' },
+      { id: 'kod_miasto_urzedu', label: 'Kod pocztowy i miasto', placeholder: 'np. 01-197 Warszawa', type: 'text' },
+      { id: 'rodzaj_zaswiadczenia', label: 'Rodzaj zaświadczenia', placeholder: 'np. o zameldowaniu na pobyt stały, o braku zameldowania', type: 'text' },
+      { id: 'adres_zameldowania', label: 'Adres zameldowania (jeśli dotyczy)', placeholder: 'np. ul. Górczewska 30/10, 01-401 Warszawa', type: 'text' },
+      { id: 'cel', label: 'Cel wydania zaświadczenia', placeholder: 'np. dla banku, do postępowania sądowego, dla pracodawcy', type: 'text' }
+    ]
   }
 ];
