@@ -2963,7 +2963,506 @@ Uwagi: .....................................
 
 Nie musisz tworzyć wniosku ręcznie. Skorzystaj z naszego generatora — odpowiedz tylko na kilka pytań, a pobierzesz gotowy dokument w formacie **PDF lub DOCX**, gotowy do wydruku lub wysłania do pracodawcy.
 `
-}
+},
+{
+    id: 'wezwanie-do-zaplaty-wzor',
+    slug: 'wezwanie-do-zaplaty-wzor',
+    title: 'Wezwanie do zapłaty - Wzór i Poradnik 2025 [Krok po kroku]',
+    metaDescription: 'Jak napisać skuteczne wezwanie do zapłaty? Pobierz darmowy wzór pisma, poznaj terminy i dowiedz się, jak odzyskać należność bez sądu.',
+    category: 'Sprawy prawne',
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-09',
+    readTime: '10 min',
+    keywords: 'wezwanie do zapłaty, wzór wezwania, jak odzyskać dług, przedsądowe wezwanie do zapłaty, windykacja',
+    excerpt: 'Masz nieuregulowaną należność? Wezwanie do zapłaty to pierwszy krok do odzyskania pieniędzy. Zobacz, jak je prawidłowo sporządzić.',
+    content: `
+# Wezwanie do zapłaty - Wzór i Poradnik 2025 [Krok po kroku]
+
+Ktoś jest Ci winien pieniądze i nie oddaje ich mimo obietnic? Zanim zdecydujesz się na drogę sądową, musisz wysłać **wezwanie do zapłaty** - przedsądowe pismo, które jest pierwszym krokiem w procesie windykacji należności.
+
+## Czym jest wezwanie do zapłaty?
+
+Wezwanie do zapłaty to formalne pismo, w którym wierzyciel (osoba, której należą się pieniądze) żąda od dłużnika uregulowania zaległości w określonym terminie. Jest to **warunek konieczny** przed wystąpieniem do sądu z pozwem o zapłatę.
+
+### Czy wezwanie do zapłaty jest obowiązkowe?
+
+**Tak!** Zgodnie z art. 455 Kodeksu cywilnego, przed wytoczeniem powództwa musisz:
+1. Wezwać dłużnika do zapłaty
+2. Wyznaczyć dodatkowy, odpowiedni termin do spełnienia świadczenia
+3. Upłynięcie tego terminu uprawnia do skierowania sprawy do sądu
+
+Bez wezwania do zapłaty Twój pozew może zostać odrzucony przez sąd!
+
+## Kiedy wysłać wezwanie do zapłaty?
+
+Wezwanie do zapłaty warto wysłać, gdy:
+- **Minął termin płatności** określony w umowie lub na fakturze
+- **Dłużnik nie reaguje** na nieformalne prośby o zapłatę
+- **Chcesz zachować dowód** próby polubownego załatwienia sprawy
+- **Planujesz skierować sprawę do sądu** - jest to krok obowiązkowy
+
+**Ważne:** Im szybciej wyślesz wezwanie, tym większa szansa na odzyskanie długu bez sądu!
+
+## Ile czasu dłużnik ma na zapłatę?
+
+W wezwaniu musisz wyznaczyć **dodatkowy, odpowiedni termin** do zapłaty. Zazwyczaj stosuje się:
+
+- **7 dni** - przy małych kwotach i jasnej sytuacji
+- **14 dni** - standard dla większości spraw
+- **30 dni** - przy większych należnościach lub skomplikowanych sprawach
+
+**Uwaga:** Termin powinien być liczony od daty doręczenia wezwania, a nie od daty jego wystawienia.
+
+## Co powinno zawierać wezwanie do zapłaty?
+
+Prawidłowo sporządzone wezwanie do zapłaty musi zawierać:
+
+### 1. Dane wierzyciela (Twoje)
+- Imię i nazwisko lub nazwa firmy
+- Adres zamieszkania/siedziby
+- NIP (jeśli dotyczy)
+- Numer konta bankowego do wpłaty
+
+### 2. Dane dłużnika
+- Imię i nazwisko lub nazwa firmy
+- Dokładny adres
+
+### 3. Tytuł dokumentu
+\`\`\`
+WEZWANIE DO ZAPŁATY
+\`\`\`
+
+### 4. Szczegółowy opis należności
+- **Kwota do zapłaty** (np. 5 000 zł)
+- **Tytuł długu** (np. faktura nr 123/2024, umowa pożyczki z dn. 15.10.2024)
+- **Data powstania zobowiązania**
+- **Pierwotny termin płatności**
+- **Podstawa prawna** (umowa, faktura, nota obciążeniowa)
+
+### 5. Żądanie zapłaty z terminem
+\`\`\`
+Na podstawie powyższego wzywam do zapłaty kwoty 5 000 zł
+w terminie 14 dni od otrzymania niniejszego pisma.
+\`\`\`
+
+### 6. Konsekwencje braku płatności
+\`\`\`
+W przypadku nieuregulowania należności w wyznaczonym terminie,
+skieruj sprawę na drogę postępowania sądowego, co wiąże się
+z dodatkowymi kosztami (opłata sądowa, koszty zastępstwa procesowego,
+odsetki za opóźnienie).
+\`\`\`
+
+### 7. Data i podpis
+- Miejscowość i data wystawienia
+- Własnoręczny podpis
+
+## Wzór wezwania do zapłaty
+
+\`\`\`
+[Twoje imię i nazwisko / Nazwa firmy]
+[Adres]
+[NIP - jeśli dotyczy]
+
+                                                [Miejscowość], [Data]
+
+[Imię i nazwisko dłużnika / Nazwa firmy dłużnika]
+[Adres dłużnika]
+
+
+WEZWANIE DO ZAPŁATY
+
+
+Szanowny Panie / Szanowna Pani,
+
+Niniejszym wzywam do zapłaty zaległej należności w kwocie 5 000 zł
+(słownie: pięć tysięcy złotych), wynikającej z faktury nr 123/2024
+z dnia 15 października 2024 roku.
+
+Zgodnie z zawartą umową, płatność powinna zostać uregulowana
+w terminie do 30 października 2024 roku. Mimo upływu tego terminu,
+należność pozostaje nieuregulowana.
+
+Na podstawie powyższego, wzywam do zapłaty kwoty 5 000 zł
+w terminie 14 dni od otrzymania niniejszego pisma na nr konta:
+
+12 3456 7890 1234 5678 9012 3456
+
+W przypadku nieuregulowania należności w wyznaczonym terminie,
+zmuszona/y będę skierować sprawę na drogę postępowania sądowego,
+co wiąże się z dodatkowymi kosztami:
+- opłata sądowa,
+- koszty zastępstwa procesowego,
+- odsetki ustawowe za opóźnienie.
+
+Proszę o traktowanie niniejszego pisma jako ostatecznego wezwania
+do polubownego uregulowania sprawy.
+
+Z poważaniem,
+
+..........................................
+[Podpis]
+\`\`\`
+
+## Jak wysłać wezwanie do zapłaty?
+
+### Rekomendowane sposoby doręczenia:
+
+1. **List polecony za potwierdzeniem odbioru** (najlepszy sposób!)
+   - Masz dowód doręczenia
+   - Znasz dokładną datę odbioru
+   - Koszt: ok. 15 zł
+
+2. **List polecony zwykły**
+   - Tańsza opcja
+   - Brak potwierdzenia odbioru
+   - Koszt: ok. 8 zł
+
+3. **Kurier z potwierdzeniem**
+   - Szybka opcja
+   - Potwierdzenie odbioru
+   - Droższe rozwiązanie
+
+4. **Osobiście za pokwitowaniem**
+   - Jeśli masz dobry kontakt z dłużnikiem
+   - Dłużnik potwierdza podpisem datę i fakt otrzymania
+
+**Unikaj:** Wysyłania wezwania zwykłym listem lub e-mailem (chyba że umowa przewiduje taką formę komunikacji) - w razie sprawy sądowej będzie trudno udowodnić, że dłużnik otrzymał pismo.
+
+## Co jeśli dłużnik nie płaci po wezwaniu?
+
+Jeśli dłużnik nie ureguluje należności w wyznaczonym terminie, możesz:
+
+### 1. Wysłać drugie wezwanie (opcjonalnie)
+- Z jeszcze krótszym terminem
+- Z wyraźnym ostrzeżeniem o konsekwencjach
+
+### 2. Skierować sprawę do sądu
+- **Pozew o zapłatę** (przy kwotach powyżej 20 000 zł)
+- **Elektroniczne postępowanie upominawcze** (EPU) - przy kwotach do 20 000 zł, szybsza i tańsza procedura
+
+### 3. Zlecić sprawę firmie windykacyjnej
+- Profesjonalna obsługa
+- Wyższe koszty (prowizja od odzyskanej kwoty)
+
+### 4. Sprzedać wierzytelność
+- Natychmiastowe odzyskanie części pieniędzy
+- Tracisz na wartości długu
+
+## Odsetki za opóźnienie
+
+Od dnia wymagalności należności (czyli od upływu pierwotnego terminu płatności) możesz doliczyć:
+
+- **Odsetki ustawowe** - obecnie 8,00% rocznie (2025)
+- **Odsetki maksymalne za opóźnienie** - obecnie 13,00% rocznie (2025)
+
+**Wskazówka:** W wezwaniu możesz zaznaczyć, że doliczasz odsetki za opóźnienie od dnia wymagalności.
+
+## Najczęstsze błędy w wezwaniach do zapłaty
+
+❌ **Zbyt krótki termin do zapłaty** (np. 3 dni) - sąd może uznać to za nieodpowiedni termin
+
+❌ **Brak podstawy prawnej** - nie podajesz, z czego wynika należność
+
+❌ **Nieprawidłowy adres dłużnika** - wezwanie nie dotrze
+
+❌ **Brak numeru konta** - dłużnik nie będzie wiedział, gdzie wpłacić pieniądze
+
+❌ **Wysłanie zwykłym listem** - brak dowodu doręczenia
+
+❌ **Emocjonalny język i groźby** - zachowaj profesjonalny ton
+
+## Ile kosztuje wezwanie do zapłaty?
+
+Jeśli tworzysz wezwanie samodzielnie:
+- **Koszt wysyłki listem poleconym za potwierdzeniem:** ok. 15 zł
+- **Koszt wydruku i koperty:** 1-2 zł
+
+**Łącznie: ok. 17 zł**
+
+Jeśli zlecasz prawnikowi:
+- **Koszt sporządzenia wezwania:** 200-500 zł (w zależności od kancelarii i skomplikowania sprawy)
+- **Plus koszty wysyłki**
+
+## Wezwanie do zapłaty - FAQ
+
+### Czy wezwanie musi być wysłane listem poleconym?
+Nie jest to obowiązkowe, ale **zdecydowanie zalecane**. List polecony za potwierdzeniem odbioru daje Ci dowód, że dłużnik otrzymał wezwanie i kiedy dokładnie się to stało.
+
+### Co jeśli dłużnik nie odbierze listu?
+Jeśli dłużnik dwukrotnie nie odbierze przesyłki, list zostanie zwrócony z adnotacją "niepodjęty". **To wystarczy** - możesz uznać, że wezwanie zostało doręczone i skierować sprawę do sądu.
+
+### Czy mogę wysłać wezwanie SMS-em lub e-mailem?
+E-mail lub SMS **nie są wystarczające**, chyba że umowa wyraźnie przewiduje taką formę komunikacji. Sąd może uznać, że wezwanie nie zostało skutecznie doręczone.
+
+### Ile wezwań powinienem wysłać?
+Wystarczy **jedno wezwanie** z odpowiednim terminem. Możesz wysłać drugie, ale nie jest to konieczne.
+
+### Co jeśli dłużnik oferuje płatność w ratach?
+Możesz się zgodzić na raty, ale **koniecznie sporządź pisemne porozumienie** określające harmonogram spłaty. Zachowaj prawo do dochodzenia całej kwoty, jeśli dłużnik nie będzie regulował rat.
+
+## Podsumowanie - Check lista przed wysłaniem wezwania
+
+✅ Wezwanie zawiera wszystkie niezbędne elementy (dane, kwota, termin, konsekwencje)
+
+✅ Kwota jest dokładna i poparta dokumentami (faktura, umowa)
+
+✅ Termin do zapłaty jest odpowiedni (7-30 dni)
+
+✅ Podałeś numer konta do wpłaty
+
+✅ Zachowałeś profesjonalny ton
+
+✅ Wyślesz list polecony za potwierdzeniem odbioru
+
+✅ Zachowasz kopię wezwania i dowód nadania
+
+## Wygeneruj wezwanie do zapłaty online
+
+Nie musisz tworzyć wezwania ręcznie. Skorzystaj z naszego **darmowego generatora wezwań do zapłaty** — odpowiedz tylko na kilka pytań, a pobierzesz gotowy dokument w formacie **PDF lub DOCX**, gotowy do wysłania listem poleconym.
+
+Generator automatycznie uzupełni wszystkie niezbędne dane i obliczy odsetki za opóźnienie.
+`
+  },
+  {
+    id: 'dowod-osobisty-wniosek-poradnik',
+    slug: 'dowod-osobisty-wniosek-poradnik',
+    title: 'Jak złożyć wniosek o dowód osobisty? Poradnik krok po kroku 2025',
+    metaDescription: 'Jak wymienić dowód osobisty? Sprawdź, jakie dokumenty są potrzebne, ile kosztuje i jak długo trwa oczekiwanie. Kompletny poradnik z wzorem wniosku.',
+    category: 'Administracja',
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-09',
+    readTime: '8 min',
+    keywords: 'wniosek o dowód osobisty, wymiana dowodu, dowód osobisty 2025, jak wymienić dowód, dokumenty do dowodu',
+    excerpt: 'Kończy Ci się ważność dowodu osobistego lub zgubiłeś dokument? Dowiedz się, jak krok po kroku złożyć wniosek o nowy dowód.',
+    content: `
+# Jak złożyć wniosek o dowód osobisty? Poradnik krok po kroku 2025
+
+Dowód osobisty to najważniejszy dokument tożsamości w Polsce. Czy wiesz, że jego wymiana jest bezpłatna, jeśli robisz to w odpowiednim czasie? W tym poradniku dowiesz się wszystkiego o składaniu wniosku o dowód osobisty.
+
+## Kiedy trzeba wymienić dowód osobisty?
+
+Dowód osobisty w Polsce jest ważny przez **10 lat** (dla osób pełnoletnich). Musisz go wymienić, gdy:
+
+- ⏰ **Upływa termin ważności** - sprawdź datę na dowodzie!
+- 🔍 **Zgubiłeś lub zniszczył się** dokument
+- 🏠 **Zmieniłeś dane osobowe** (np. po ślubie zmieniłeś nazwisko)
+- 👤 **Zmieniło się Twoje zdjęcie** w znaczący sposób (np. operacja plastyczna)
+- ❌ **Dowód został skradziony** - koniecznie zgłoś to na policji!
+
+**Ważne:** Dowód osobisty można wymienić **do 30 dni przed upływem terminu ważności** bez dodatkowych opłat.
+
+## Ile kosztuje wymiana dowodu osobistego?
+
+### Bezpłatna wymiana:
+- ✅ Wymiana z powodu upływu ważności (jeśli złożysz wniosek nie wcześniej niż 30 dni przed wygaśnięciem)
+- ✅ Pierwszemniej wydanie dowodu (dla osób kończących 18 lat)
+- ✅ Wymiana w związku ze zmianą danych osobowych
+
+### Płatna wymiana - 50 zł:
+- 💳 Wymiana z powodu zgubienia lub zniszczenia
+- 💳 Wymiana "przedwczesna" (jeśli jeszcze nie minęło 10 lat)
+- 💳 Wydanie tymczasowego dowodu osobistego (ważny 2 miesiące)
+
+**Uwaga:** Jeśli nie wymienisz dowodu w ciągu roku od utraty ważności, wymiana będzie płatna!
+
+## Jakie dokumenty są potrzebne?
+
+Do wymiany dowodu osobistego potrzebujesz:
+
+1. **Stary dowód osobisty** (jeśli posiadasz)
+2. **Jedna fotografia** (aktualny wygląd, wymiary 35x45 mm, biometryczna)
+3. **Akt urodzenia** (jeśli wymieniasz po raz pierwszy lub nie masz numeru PESEL w dowodzie)
+4. **Dokument potwierdzający zmianę danych** - jeśli zmieniałeś imię, nazwisko lub inne dane (np. akt małżeństwa)
+
+### Wymagania dotyczące zdjęcia:
+
+- 📏 Wymiar: 35 mm x 45 mm
+- 👤 Twarz zajmuje 70-80% kadru
+- 📸 Zdjęcie kolorowe, aktualne (nie starsze niż 6 miesięcy)
+- 🎨 Jednolite, jasne tło
+- 😐 Neutralny wyraz twarzy, usta zamknięte
+- 👓 Bez okularów przeciwsłonecznych (okulary korekcyjne dozwolone)
+
+**Wskazówka:** Zdjęcia możesz zrobić w fotobudce lub u fotografa - większość automatów do zdjęć ma funkcję "foto na dowód".
+
+## Gdzie złożyć wniosek?
+
+Wniosek o dowód osobisty składasz w **urzędzie gminy/miasta** właściwym dla Twojego miejsca zameldowania na pobyt stały lub czasowy.
+
+**Możesz też:**
+- Złożyć wniosek w **dowolnym urzędzie** w Polsce, ale wtedy czas oczekiwania może być dłuższy
+- Złożyć wniosek w konsulacie RP za granicą (jeśli przebywasz poza Polską)
+
+**Ważne:** Nie możesz złożyć wniosku online - musisz stawić się osobiście!
+
+## Jak wygląda procedura w urzędzie?
+
+### Krok 1: Przygotuj dokumenty
+- Stary dowód osobisty
+- Jedno zdjęcie biometryczne
+- Ewentualnie dodatkowe dokumenty (akt urodzenia, akt małżeństwa)
+
+### Krok 2: Udaj się do urzędu
+- Przyjdź do urzędu w godzinach urzędowania
+- W niektórych urzędach możesz umówić się online (sprawdź na stronie urzędu)
+
+### Krok 3: Wypełnij wniosek
+- Urząd ma gotowy formularz
+- Wypełnisz swoje dane osobowe
+- Podasz adres do korespondencji (opcjonalnie)
+
+### Krok 4: Złóż odciski palców
+- To wymóg prawny - Twoje odciski zostaną zapisane w elektronicznym chipie dowodu
+- Proces trwa kilka minut
+
+### Krok 5: Odbierz potwierdzenie
+- Urząd wyda Ci **potwierdzenie złożenia wniosku** z datą odbioru nowego dowodu
+- Zachowaj ten dokument!
+
+### Krok 6: Odbierz nowy dowód
+- Po ok. 30 dniach przyjdziesz po gotowy dowód
+- Musisz stawić się osobiście
+- Przy odbiorze zwracasz stary dowód (zostanie zniszczony)
+
+## Ile czeka się na nowy dowód?
+
+Standardowy czas oczekiwania to:
+- 📆 **30 dni** - standardowa procedura
+- 🔥 **24-48 godzin** - w razie udokumentowanej pilnej potrzeby (np. wyjazd służbowy) można przyspieszyć
+
+**Uwaga:** W większych miastach czas oczekiwania może być dłuższy w okresach wakacyjnych i przedświątecznych.
+
+## Co jeśli potrzebujesz dokumentu natychmiast?
+
+Jeśli potrzebujesz dokumentu tożsamości od razu (np. przed wyjazdem), możesz poprosić o:
+
+### Tymczasowy dowód osobisty
+- ⏱ Wydawany natychmiast (tego samego dnia)
+- 💰 Koszt: 50 zł
+- 📅 Ważny przez 2 miesiące
+- 🚫 Nie można z nim wyjeżdżać za granicę (poza UE)
+
+### Paszport tymczasowy
+- Jeśli planujesz wyjazd za granicę i nie masz dowodu
+- Ważny krócej niż zwykły paszport
+- Koszt wyższy
+
+## Zgubienie lub kradzież dowodu
+
+Jeśli zgubiłeś dowód lub został skradziony:
+
+1. **Zgłoś kradzież na policji** - otrzymasz zaświadczenie
+2. **Udaj się do urzędu** z zaświadczeniem z policji
+3. **Złóż wniosek o nowy dowód** - będzie to wymiana płatna (50 zł)
+4. Stary dowód zostanie **unieważniony** w systemie
+
+**Ważne:** Jeśli ktoś znajdzie Twój stary dowód i spróbuje go użyć, zostanie zatrzymany - dokument jest nieważny od momentu zgłoszenia.
+
+## Zmiana danych osobowych
+
+Jeśli zmieniłeś dane (np. nazwisko po ślubie), do wniosku o dowód dołącz:
+- **Akt małżeństwa** (w przypadku zmiany nazwiska)
+- **Akt zmiany imienia/nazwiska** (jeśli zmieniałeś urzędowo)
+
+Wymiana w takim przypadku jest **bezpłatna**.
+
+## Czy można mieć dwa dowody osobiste?
+
+**Nie!** W Polsce można posiadać tylko jeden ważny dowód osobisty. Stary dowód jest niszczony przy odbiorze nowego.
+
+Jeśli potrzebujesz drugiego dokumentu tożsamości (np. do podróży), możesz:
+- Wyrobić **paszport** (możesz mieć zarówno dowód, jak i paszport)
+- Wystąpić o **międzynarodowe prawo jazdy** (jeśli masz prawo jazdy)
+
+## Najczęstsze błędy przy składaniu wniosku
+
+❌ **Stare zdjęcie** - musi być aktualne (nie starsze niż 6 miesięcy)
+
+❌ **Zbyt wcześnie złożony wniosek** - jeśli wymienisz dowód zanim minie 30 dni przed wygaśnięciem, zapłacisz 50 zł
+
+❌ **Brak starego dowodu** - jeśli go masz, musisz przynieść (będzie zniszczony)
+
+❌ **Błędne dane we wniosku** - uważnie sprawdź pisownię imienia, nazwiska, daty urodzenia
+
+❌ **Nieodpowiednie ubranie na zdjęciu** - unikaj strojów zakrywających twarz (np. kaptury, szaliki)
+
+## Dowód osobisty dla dziecka
+
+Dzieci mogą mieć dowód osobisty od urodzenia, ale:
+- **Do 5 roku życia** - dowód ważny 5 lat
+- **Od 5 do 18 roku życia** - dowód ważny 5 lat
+- **Powyżej 18 lat** - dowód ważny 10 lat
+
+Wniosek o dowód dla dziecka składają **rodzice lub opiekunowie prawni**. Dziecko musi być obecne przy składaniu wniosku (także przy odciskach palców, jeśli ma powyżej 12 lat).
+
+## E-dowód - co to takiego?
+
+Od 2019 roku wszystkie nowe dowody osobiste w Polsce to **e-dowody**, czyli dowody z elektronicznym chipem.
+
+Co zawiera chip?
+- 🖼 Twoje zdjęcie
+- ✋ Odciski palców (dwa palce)
+- 📝 Dane osobowe
+
+Chip jest zabezpieczony i nie można go odczytać bez autoryzacji.
+
+## Wzór wniosku o dowód osobisty
+
+Wniosek wypełniasz w urzędzie, ale możesz wcześniej pobrać formularz ze strony urzędu i wypełnić w domu:
+
+\`\`\`
+WNIOSEK O WYDANIE DOWODU OSOBISTEGO
+
+1. Dane wnioskodawcy:
+   Imię (imiona): ............................
+   Nazwisko: ..................................
+   Data urodzenia: ............................
+   Miejsce urodzenia: .........................
+   PESEL: .....................................
+   Imiona rodziców: ...........................
+
+2. Adres zameldowania:
+   Ulica: ......................................
+   Numer domu/mieszkania: .....................
+   Kod pocztowy: ..............................
+   Miejscowość: ...............................
+
+3. Powód wymiany dowodu:
+   ☐ Upływ terminu ważności
+   ☐ Zmiana danych osobowych
+   ☐ Zgubienie/kradzież
+   ☐ Zniszczenie
+   ☐ Inne: ....................................
+
+4. Czy wnioskujesz o odbiór w innym urzędzie?
+   ☐ Tak  ☐ Nie
+
+.................................  .................................
+Data i miejsce                     Podpis wnioskodawcy
+\`\`\`
+
+## Podsumowanie - najważniejsze informacje
+
+✅ Dowód osobisty jest ważny 10 lat
+
+✅ Wymiana z powodu upływu ważności jest bezpłatna (jeśli złożysz wniosek w ciągu 30 dni przed wygaśnięciem)
+
+✅ Potrzebujesz jednego zdjęcia biometrycznego i starego dowodu
+
+✅ Wniosek składasz w urzędzie gminy/miasta
+
+✅ Czas oczekiwania: ok. 30 dni
+
+✅ Przy odbiorze musisz stawić się osobiście
+
+✅ Zgubienie dowodu = opłata 50 zł za wydanie nowego
+
+## Wygeneruj wniosek automatycznie
+
+Nie musisz samodzielnie wypełniać wniosku. Skorzystaj z naszego **generatora wniosków o dowód osobisty** — odpowiedz tylko na kilka pytań, a pobierzesz gotowy dokument w formacie **PDF lub DOCX**, który możesz zabrać do urzędu.
+`
+  }
 
   // Dodamy więcej artykułów w przyszłości
 ];
