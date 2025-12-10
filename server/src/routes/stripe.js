@@ -691,11 +691,31 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           else if (session.metadata.paymentType === 'guest_document') {
             const email = session.metadata.email;
             const documentId = session.metadata.documentId;
+            const customerId = session.customer;
 
             console.log('Processing guest document payment for email:', email, 'document:', documentId);
 
-            // Można tutaj zapisać płatność gościa w bazie, jeśli chcesz trackować
-            // Na razie po prostu logujemy - dokument będzie odblokowany po powrocie z checkout
+            // Check if record exists
+            const existingPurchase = await PurchasedDocument.findByPaymentIntentId(paymentIntent.id);
+
+            if (existingPurchase) {
+              // Update existing
+              await PurchasedDocument.updateStatus(paymentIntent.id, 'paid');
+              console.log('✔ Updated existing guest purchase record');
+            } else {
+              // Create new purchase record for guest (userId = null for guests)
+              await PurchasedDocument.create({
+                userId: null, // Guest purchase - no user ID
+                documentId: documentId,
+                documentType: 'generator_pism_guest',
+                stripePaymentIntentId: paymentIntent.id,
+                stripeCustomerId: customerId,
+                amountPaid: 200,
+                status: 'paid',
+                documentData: { email: email } // Store guest email in document_data
+              });
+              console.log('✔ Created new guest purchase record');
+            }
 
             console.log('✔ Guest document purchase confirmed for email:', email, 'document:', documentId);
           }
