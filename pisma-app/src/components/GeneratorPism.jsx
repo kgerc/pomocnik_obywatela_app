@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Wand2, FileText, Loader, Download, Check, ChevronRight, Lock, Search, ArrowLeft, ArrowRight  } from 'lucide-react';
+import { Wand2, FileText, Loader, Download, Check, ChevronRight, Lock, Search, ArrowLeft, ArrowRight, Menu, X  } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { DOSTEPNE_PISMA } from '../data/pisma';
 import html2canvas from "html2canvas";
@@ -47,6 +47,7 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showTerms, setShowTerms] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const ITEMS_PER_PAGE = 9;
 
   const categories = ['wszystkie', ...new Set(DOSTEPNE_PISMA.map(p => p.kategoria))];
@@ -798,32 +799,33 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
       <div style={{
         background: 'white',
         borderBottom: '2px solid #e1e8ed',
-        padding: '20px 0',
+        padding: '15px 0',
         position: 'sticky',
         top: 0,
         zIndex: 1000,
         boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-        height: '74px',
+        minHeight: '64px',
         boxSizing: 'border-box'
       }}>
         <div style={{
           maxWidth: '1200px',
           margin: '0 auto',
-          padding: '0 20px',
+          padding: '0 15px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '12px',
-          height: '100%'
+          gap: '10px',
+          flexWrap: 'wrap'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <FileText size={32} color="#2c5aa0" strokeWidth={2.5} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <FileText size={28} color="#2c5aa0" strokeWidth={2.5} />
             <h1 style={{
-              fontSize: '24px',
+              fontSize: 'clamp(18px, 5vw, 24px)',
               fontWeight: '700',
               color: '#2c3e50',
               margin: 0,
-              lineHeight: '1'
+              lineHeight: '1.2',
+              whiteSpace: 'nowrap'
             }}>
               Pomocnik Obywatela
             </h1>
@@ -835,15 +837,16 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
               background: 'white',
               color: '#2c5aa0',
               border: '2px solid #e1e8ed',
-              padding: '10px 20px',
+              padding: '8px 16px',
               borderRadius: '8px',
               fontWeight: '600',
-              fontSize: '14px',
+              fontSize: 'clamp(12px, 3vw, 14px)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
-              transition: 'all 0.2s'
+              gap: '6px',
+              transition: 'all 0.2s',
+              whiteSpace: 'nowrap'
             }}
             onMouseOver={(e) => {
               e.currentTarget.style.background = '#f8f9fb';
@@ -854,7 +857,7 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
               e.currentTarget.style.borderColor = '#e1e8ed';
             }}
           >
-            <ArrowLeft size={18} color="#2c5aa0" /> Powrót do strony głównej
+            <ArrowLeft size={16} color="#2c5aa0" /> <span className="mobile-hide-text">Powrót do strony głównej</span><span className="mobile-show-text" style={{ display: 'none' }}>Powrót</span>
           </button>
         </div>
       </div>
@@ -899,9 +902,9 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
             </p>
           </div>
 
-          {/* Progress Steps */}
+          {/* Progress Steps - Desktop */}
           {currentStep > 1 && (
-            <div style={{
+            <div className="progress-steps-desktop" style={{
               display: 'flex',
               alignItems: 'center',
               gap: '15px',
@@ -948,6 +951,75 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
                   </div>
                   {idx < 2 && (
                     <ChevronRight size={20} color="#5a6c7d" />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+
+          {/* Progress Steps - Mobile */}
+          {currentStep > 1 && (
+            <div className="progress-steps-mobile" style={{
+              display: 'none',
+              alignItems: 'center',
+              gap: '8px',
+              marginBottom: '30px',
+              padding: '15px',
+              background: '#f8f9fb',
+              borderRadius: '12px',
+              overflowX: 'auto',
+              flexWrap: 'nowrap'
+            }}>
+              {[
+                { num: 1, label: 'Wybór pisma', shortLabel: 'Wybór' },
+                { num: 2, label: 'Wypełnij dane', shortLabel: 'Dane' },
+                { num: 3, label: 'Pobierz dokument', shortLabel: 'Pobierz' }
+              ].map((step, idx) => (
+                <React.Fragment key={step.num}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    flex: '1 1 auto',
+                    minWidth: 'fit-content'
+                  }}>
+                    <div style={{
+                      width: '26px',
+                      height: '26px',
+                      minWidth: '26px',
+                      borderRadius: '50%',
+                      background: currentStep >= step.num
+                        ? 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)'
+                        : '#e1e8ed',
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: '700',
+                      fontSize: '12px'
+                    }}>
+                      {currentStep > step.num ? <Check size={16} /> : step.num}
+                    </div>
+                    <span className="step-label-full" style={{
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      color: currentStep >= step.num ? '#2c3e50' : '#5a6c7d',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      {step.label}
+                    </span>
+                    <span className="step-label-short" style={{
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      color: currentStep >= step.num ? '#2c3e50' : '#5a6c7d',
+                      whiteSpace: 'nowrap',
+                      display: 'none'
+                    }}>
+                      {step.shortLabel}
+                    </span>
+                  </div>
+                  {idx < 2 && (
+                    <ChevronRight size={16} color="#5a6c7d" style={{ flexShrink: 0 }} />
                   )}
                 </React.Fragment>
               ))}
@@ -1010,7 +1082,9 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
                 }}>
                   Wybierz kategorię
                 </h3>
-                <div style={{
+
+                {/* Desktop view - all categories visible */}
+                <div className="category-buttons-desktop" style={{
                   display: 'flex',
                   gap: '10px',
                   flexWrap: 'wrap'
@@ -1038,13 +1112,96 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
                     </button>
                   ))}
                 </div>
+
+                {/* Mobile view - burger menu */}
+                <div className="category-buttons-mobile" style={{ display: 'none', position: 'relative' }}>
+                  <button
+                    onClick={() => setShowCategoryMenu(!showCategoryMenu)}
+                    style={{
+                      width: '100%',
+                      background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+                      color: 'white',
+                      border: 'none',
+                      padding: '12px 20px',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontWeight: '600',
+                      fontSize: '14px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: '10px',
+                      textTransform: 'capitalize'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <Menu size={20} />
+                      <span>{selectedCategory}</span>
+                    </div>
+                    {showCategoryMenu ? <X size={20} /> : <ChevronRight size={20} style={{ transform: 'rotate(90deg)' }} />}
+                  </button>
+
+                  {/* Dropdown menu */}
+                  {showCategoryMenu && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      right: 0,
+                      marginTop: '5px',
+                      background: 'white',
+                      border: '2px solid #e1e8ed',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                      zIndex: 100,
+                      maxHeight: '300px',
+                      overflowY: 'auto'
+                    }}>
+                      {categories.map(cat => (
+                        <button
+                          key={cat}
+                          onClick={() => {
+                            setSelectedCategory(cat);
+                            setShowCategoryMenu(false);
+                          }}
+                          style={{
+                            width: '100%',
+                            background: selectedCategory === cat ? '#f0f4f8' : 'white',
+                            color: selectedCategory === cat ? '#2c5aa0' : '#2c3e50',
+                            border: 'none',
+                            borderBottom: '1px solid #e1e8ed',
+                            padding: '12px 20px',
+                            cursor: 'pointer',
+                            fontWeight: selectedCategory === cat ? '700' : '500',
+                            fontSize: '14px',
+                            textAlign: 'left',
+                            textTransform: 'capitalize',
+                            transition: 'background 0.2s'
+                          }}
+                          onMouseOver={(e) => {
+                            if (selectedCategory !== cat) {
+                              e.currentTarget.style.background = '#f8f9fb';
+                            }
+                          }}
+                          onMouseOut={(e) => {
+                            if (selectedCategory !== cat) {
+                              e.currentTarget.style.background = 'white';
+                            }
+                          }}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Pisma Grid */}
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                gap: '20px',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
+                gap: '15px',
                 marginBottom: '30px'
               }}>
                 {currentPisma.map(pismo => (
@@ -1117,71 +1274,96 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  gap: '10px',
-                  marginTop: '30px'
+                  gap: '8px',
+                  marginTop: '30px',
+                  flexWrap: 'wrap'
                 }}>
                   <button
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={currentPage === 1}
                     style={{
-                      padding: '10px 20px',
+                      padding: '10px 16px',
                       background: currentPage === 1 ? '#e1e8ed' : 'white',
                       color: currentPage === 1 ? '#a0a0a0' : '#2c5aa0',
                       border: '2px solid #e1e8ed',
                       borderRadius: '8px',
                       fontWeight: '600',
-                      fontSize: '14px',
+                      fontSize: 'clamp(12px, 3vw, 14px)',
                       cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-                      transition: 'all 0.2s'
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
                     }}
                   >
-                    <ArrowLeft size={16} color="#2c5aa0" style={{ verticalAlign: '-3px' }}/> Poprzednia
+                    <ArrowLeft size={14} color={currentPage === 1 ? '#a0a0a0' : '#2c5aa0'} /> <span className="pagination-text">Poprzednia</span>
                   </button>
 
                   <div style={{
                     display: 'flex',
-                    gap: '5px'
+                    gap: '5px',
+                    flexWrap: 'wrap',
+                    justifyContent: 'center'
                   }}>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                      <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        style={{
-                          padding: '10px 15px',
-                          background: currentPage === page
-                            ? 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)'
-                            : 'white',
-                          color: currentPage === page ? 'white' : '#2c5aa0',
-                          border: currentPage === page ? 'none' : '2px solid #e1e8ed',
-                          borderRadius: '8px',
-                          fontWeight: '600',
-                          fontSize: '14px',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                          minWidth: '40px'
-                        }}
-                      >
-                        {page}
-                      </button>
-                    ))}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(page => {
+                        // Na mobile pokaż tylko aktualne +/- 1 stronę
+                        if (totalPages <= 5) return true;
+                        return page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1;
+                      })
+                      .map((page, idx, arr) => {
+                        // Dodaj "..." między przeskokami
+                        const prevPage = arr[idx - 1];
+                        const showEllipsis = prevPage && page - prevPage > 1;
+
+                        return (
+                          <React.Fragment key={page}>
+                            {showEllipsis && (
+                              <span style={{ padding: '10px 5px', color: '#5a6c7d', fontWeight: '600' }}>...</span>
+                            )}
+                            <button
+                              onClick={() => setCurrentPage(page)}
+                              style={{
+                                padding: '10px 12px',
+                                background: currentPage === page
+                                  ? 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)'
+                                  : 'white',
+                                color: currentPage === page ? 'white' : '#2c5aa0',
+                                border: currentPage === page ? 'none' : '2px solid #e1e8ed',
+                                borderRadius: '8px',
+                                fontWeight: '600',
+                                fontSize: 'clamp(12px, 3vw, 14px)',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                minWidth: '40px'
+                              }}
+                            >
+                              {page}
+                            </button>
+                          </React.Fragment>
+                        );
+                      })}
                   </div>
 
                   <button
                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                     disabled={currentPage === totalPages}
                     style={{
-                      padding: '10px 20px',
+                      padding: '10px 16px',
                       background: currentPage === totalPages ? '#e1e8ed' : 'white',
                       color: currentPage === totalPages ? '#a0a0a0' : '#2c5aa0',
                       border: '2px solid #e1e8ed',
                       borderRadius: '8px',
                       fontWeight: '600',
-                      fontSize: '14px',
+                      fontSize: 'clamp(12px, 3vw, 14px)',
                       cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
-                      transition: 'all 0.2s'
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
                     }}
                   >
-                    Następna <ArrowRight size={16} color="#2c5aa0" style={{ verticalAlign: '-3px' }}/>
+                    <span className="pagination-text">Następna</span> <ArrowRight size={14} color={currentPage === totalPages ? '#a0a0a0' : '#2c5aa0'} />
                   </button>
                 </div>
               )}
@@ -1535,6 +1717,7 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
                             <div
                               ref={documentRef}
                               id="document-preview"
+                              className="document-preview"
                               style={{
                                 width: "794px",
                                 minHeight: "1123px",
@@ -1591,6 +1774,7 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
                         </>
                       ) : (
                         <div
+                        className="document-preview"
                         style={{
                           width: "794px",
                           minHeight: "1123px",
@@ -1610,7 +1794,7 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
                     </div>
                   </div>
 
-                  <div style={{
+                  <div className="document-action-buttons" style={{
                     display: 'flex',
                     gap: '10px',
                     justifyContent: 'space-between',

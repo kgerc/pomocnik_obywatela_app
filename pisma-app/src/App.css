@@ -256,3 +256,135 @@ input:-webkit-autofill:active {
   margin: 25px 0;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
+
+/* Mobile Responsive Styles for Generator Pism */
+
+/* Category buttons - use burger menu for both desktop and mobile */
+.category-buttons-desktop {
+  display: none !important;
+}
+
+.category-buttons-mobile {
+  display: block !important;
+  max-width: 300px;
+}
+
+/* Progress steps - show desktop version by default */
+.progress-steps-desktop {
+  display: flex !important;
+}
+
+.progress-steps-mobile {
+  display: none !important;
+}
+
+/* Progress steps labels - show full labels by default (desktop) */
+.step-label-full {
+  display: inline !important;
+}
+
+.step-label-short {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  /* Hide long text on mobile, show short version */
+  .mobile-hide-text {
+    display: inline;
+  }
+
+  .mobile-show-text {
+    display: none !important;
+  }
+
+  .pagination-text {
+    display: inline;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Switch to mobile progress steps */
+  .progress-steps-desktop {
+    display: none !important;
+  }
+
+  .progress-steps-mobile {
+    display: flex !important;
+  }
+
+  /* On very small screens, hide button text labels */
+  .mobile-hide-text {
+    display: none !important;
+  }
+
+  .mobile-show-text {
+    display: inline !important;
+  }
+
+  /* Hide pagination text on very small screens */
+  .pagination-text {
+    display: none !important;
+  }
+
+  /* Progress steps - show short labels on mobile with smaller sizes */
+  .step-label-full {
+    display: none !important;
+  }
+
+  .step-label-short {
+    display: inline !important;
+    font-size: 11px !important;
+  }
+
+  /* Document preview - responsive on mobile */
+  .document-preview {
+    max-width: 794px !important;
+    width: 100% !important;
+    padding: clamp(20px, 5vw, 40px) !important;
+    font-size: clamp(10pt, 2.5vw, 12pt) !important;
+  }
+
+  /* Document action buttons - responsive on mobile */
+  .document-action-buttons {
+    align-items: stretch !important;
+  }
+
+  .document-action-buttons > button {
+    padding: 12px 20px !important;
+    font-size: clamp(12px, 3vw, 14px) !important;
+    flex: 1 1 auto !important;
+    min-width: 150px !important;
+  }
+
+  .document-action-buttons > div {
+    flex-wrap: wrap !important;
+    flex: 1 1 auto !important;
+    justify-content: flex-end !important;
+  }
+
+  .document-action-buttons > div > button {
+    padding: 12px 20px !important;
+    font-size: clamp(12px, 3vw, 14px) !important;
+    flex: 1 1 auto !important;
+    min-width: 120px !important;
+    gap: 6px !important;
+    justify-content: center !important;
+  }
+
+  /* Reduce padding on containers */
+  body {
+    font-size: 14px;
+  }
+
+  /* Make sure buttons stack nicely */
+  button {
+    min-width: auto !important;
+  }
+}
+
+/* Extra small screens - make steps even more compact */
+@media (max-width: 380px) {
+  .step-label-short {
+    font-size: 9px !important;
+  }
+}
