@@ -385,6 +385,12 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         console.log('Processing checkout.session.completed for user:', userId);
         console.log('Session subscription ID:', session.subscription);
 
+        // Skip if no subscription - one-time payments (documents) don't have subscriptions
+        if (!session.subscription) {
+          console.log('No subscription in session - skipping checkout.session.completed for one-time payment');
+          break;
+        }
+
         // Pobierz subskrypcję z Stripe z dodatkowymi parametrami
         const stripeSubscription = await stripe.subscriptions.retrieve(
           session.subscription,
@@ -695,29 +701,34 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
             console.log('Processing guest document payment for email:', email, 'document:', documentId);
 
-            // Check if record exists
-            const existingPurchase = await PurchasedDocument.findByPaymentIntentId(paymentIntent.id);
+            try {
+              // Check if record exists
+              const existingPurchase = await PurchasedDocument.findByPaymentIntentId(paymentIntent.id);
 
-            if (existingPurchase) {
-              // Update existing
-              await PurchasedDocument.updateStatus(paymentIntent.id, 'paid');
-              console.log('✔ Updated existing guest purchase record');
-            } else {
-              // Create new purchase record for guest (userId = null for guests)
-              await PurchasedDocument.create({
-                userId: null, // Guest purchase - no user ID
-                documentId: documentId,
-                documentType: 'generator_pism_guest',
-                stripePaymentIntentId: paymentIntent.id,
-                stripeCustomerId: customerId,
-                amountPaid: 200,
-                status: 'paid',
-                documentData: { email: email } // Store guest email in document_data
-              });
-              console.log('✔ Created new guest purchase record');
+              if (existingPurchase) {
+                // Update existing
+                await PurchasedDocument.updateStatus(paymentIntent.id, 'paid');
+                console.log('✔ Updated existing guest purchase record');
+              } else {
+                // Create new purchase record for guest (userId = null for guests)
+                await PurchasedDocument.create({
+                  userId: null, // Guest purchase - no user ID
+                  documentId: documentId,
+                  documentType: 'generator_pism_guest',
+                  stripePaymentIntentId: paymentIntent.id,
+                  stripeCustomerId: customerId,
+                  amountPaid: 200,
+                  status: 'paid',
+                  documentData: { email: email }
+                });
+                console.log('✔ Created new guest purchase record');
+              }
+
+              console.log('✔ Guest document purchase confirmed for email:', email, 'document:', documentId);
+            } catch (guestError) {
+              console.error('❌ Error creating guest purchase record:', guestError.message);
+              throw guestError;
             }
-
-            console.log('✔ Guest document purchase confirmed for email:', email, 'document:', documentId);
           }
           // Sprawdź czy to płatność BLIK monthly
           else if (session.metadata.paymentType === 'blik_monthly') {

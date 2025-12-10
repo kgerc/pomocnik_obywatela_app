@@ -243,8 +243,8 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
     setGenerating(true);
     setCurrentStep(3);
 
-    // Generuj unikalny ID dla dokumentu
-    const newDocumentId = `doc_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    // Generuj unikalny ID dla dokumentu - używamy ID pisma + timestamp dla unikalności
+    const newDocumentId = `${selectedPismo.id}_${Date.now()}`;
     setDocumentId(newDocumentId);
 
     // Dokument jest zablokowany - wymaga płatności 2 zł
