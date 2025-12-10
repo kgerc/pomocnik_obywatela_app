@@ -1,11 +1,11 @@
 {
-  "name": "Generator Pism - Pomocnik Obywatela",
-  "short_name": "Generator Pism",
-  "description": "Generator ponad 100 typów pism urzędowych online",
+  "name": "Pomocnik Obywatela - Powiadomienia o świadczeniach",
+  "short_name": "Pomocnik Obywatela",
+  "description": "Otrzymuj powiadomienia o dostępnych świadczeniach społecznych i dotacjach",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#2c5aa0",
+  "theme_color": "#4F46E5",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -33,7 +33,7 @@
       "purpose": "any"
     }
   ],
-  "categories": ["productivity", "business", "utilities"],
+  "categories": ["productivity", "lifestyle", "utilities"],
   "lang": "pl",
   "dir": "ltr"
 }

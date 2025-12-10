@@ -1,0 +1,12 @@
+# Robots.txt for Pomocnik Obywatela - App
+# Allow all search engines to crawl all content
+
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://app.pomocnikobywatela.pl/sitemap.xml
+
+# Crawl-delay for responsible crawling
+Crawl-delay: 1
