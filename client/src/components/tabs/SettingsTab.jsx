@@ -20,6 +20,7 @@ const SettingsTab = () => {
   const [editMode, setEditMode] = useState(false);
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const [loadingPortal, setLoadingPortal] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -54,6 +55,16 @@ const SettingsTab = () => {
       });
     }
   }, [settings, user]);
+
+  // Obsługa responsywności
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSaveProfile = async () => {
     try {
@@ -287,7 +298,7 @@ const SettingsTab = () => {
       <div style={{
         background: 'white',
         borderRadius: '16px',
-        padding: '30px',
+        padding: isMobile ? '20px' : '30px',
         boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
       }}>
         <h2 style={{
@@ -299,49 +310,89 @@ const SettingsTab = () => {
           Ustawienia
         </h2>
 
-      <div style={{ display: 'flex', gap: '30px' }}>
-        {/* Sidebar */}
-        <div style={{ width: '220px', flexShrink: 0 }}>
-          {sections.map(section => (
-            <button
-              key={section.id}
-              onClick={() => setActiveSection(section.id)}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '12px 16px',
-                background: activeSection === section.id ? '#e8f4f8' : 'transparent',
-                border: 'none',
-                borderRadius: '8px',
-                marginBottom: '8px',
-                cursor: 'pointer',
-                color: activeSection === section.id ? '#2c5aa0' : '#5a6c7d',
-                fontWeight: activeSection === section.id ? '600' : '500',
-                fontSize: '15px',
-                textAlign: 'left',
-                transition: 'all 0.2s'
-              }}
-              onMouseOver={(e) => {
-                if (activeSection !== section.id) {
-                  e.currentTarget.style.background = '#f8f9fb';
-                }
-              }}
-              onMouseOut={(e) => {
-                if (activeSection !== section.id) {
-                  e.currentTarget.style.background = 'transparent';
-                }
-              }}
-            >
-              <section.icon size={20} />
-              {section.label}
-            </button>
-          ))}
-        </div>
+      <div style={{
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        gap: isMobile ? '20px' : '30px'
+      }}>
+        {/* Sidebar - na mobile jako dropdown/tabs */}
+        {isMobile ? (
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            overflowX: 'auto',
+            paddingBottom: '8px',
+            WebkitOverflowScrolling: 'touch'
+          }}>
+            {sections.map(section => (
+              <button
+                key={section.id}
+                onClick={() => setActiveSection(section.id)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '10px 16px',
+                  background: activeSection === section.id ? '#2c5aa0' : '#f8f9fb',
+                  color: activeSection === section.id ? 'white' : '#5a6c7d',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                  transition: 'all 0.2s'
+                }}
+              >
+                <section.icon size={18} />
+                {section.label}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div style={{ width: '220px', flexShrink: 0 }}>
+            {sections.map(section => (
+              <button
+                key={section.id}
+                onClick={() => setActiveSection(section.id)}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '12px 16px',
+                  background: activeSection === section.id ? '#e8f4f8' : 'transparent',
+                  border: 'none',
+                  borderRadius: '8px',
+                  marginBottom: '8px',
+                  cursor: 'pointer',
+                  color: activeSection === section.id ? '#2c5aa0' : '#5a6c7d',
+                  fontWeight: activeSection === section.id ? '600' : '500',
+                  fontSize: '15px',
+                  textAlign: 'left',
+                  transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => {
+                  if (activeSection !== section.id) {
+                    e.currentTarget.style.background = '#f8f9fb';
+                  }
+                }}
+                onMouseOut={(e) => {
+                  if (activeSection !== section.id) {
+                    e.currentTarget.style.background = 'transparent';
+                  }
+                }}
+              >
+                <section.icon size={20} />
+                {section.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Content */}
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
           {renderSection()}
         </div>
       </div>
@@ -355,14 +406,20 @@ const PersonalDataSection = ({ formData, setFormData, editMode, setEditMode, han
   <div>
     <div style={{
       display: 'flex',
+      flexDirection: window.innerWidth < 768 ? 'column' : 'row',
       justifyContent: 'space-between',
-      alignItems: 'center',
+      alignItems: window.innerWidth < 768 ? 'flex-start' : 'center',
+      gap: window.innerWidth < 768 ? '12px' : '0',
       marginBottom: '20px'
     }}>
       <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#2c3e50', margin: 0 }}>
         Dane osobowe
       </h3>
-      <div style={{ minWidth: '188px', display: 'flex', justifyContent: 'flex-end' }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: window.innerWidth < 768 ? 'flex-start' : 'flex-end',
+        width: window.innerWidth < 768 ? '100%' : 'auto'
+      }}>
         {!editMode ? (
           <button
             onClick={() => setEditMode(true)}
@@ -380,7 +437,7 @@ const PersonalDataSection = ({ formData, setFormData, editMode, setEditMode, han
             Edytuj
           </button>
         ) : (
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             <button
               onClick={() => setEditMode(false)}
               disabled={loading}
