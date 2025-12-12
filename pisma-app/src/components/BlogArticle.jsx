@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Calendar, Clock, User, Wand2 } from 'lucide-react';
 import { getArticleBySlug } from '../data/blogArticles';
 import ReactMarkdown from 'react-markdown';
+import CTABox from './CTABox';
+import { CTA_STRATEGIES, CATEGORY_UPSELLS, ARTICLE_TYPES } from '../data/blogConfig';
 
 const BlogArticle = ({ onGenerateClick }) => {
   const { slug } = useParams();
@@ -18,6 +20,15 @@ const BlogArticle = ({ onGenerateClick }) => {
       </div>
     );
   }
+
+  // Określ typ artykułu (domyślnie FIRE_FIGHTING dla starych artykułów)
+  const articleType = article.articleType || ARTICLE_TYPES.FIRE_FIGHTING;
+
+  // Pobierz strategię CTA dla tego typu artykułu
+  const ctaStrategy = CTA_STRATEGIES[articleType];
+
+  // Pobierz sugerowane korzyści dla kategorii artykułu
+  const relatedBenefits = CATEGORY_UPSELLS[article.category]?.relatedBenefits || null;
 
   return (
     <div style={{
@@ -166,54 +177,31 @@ const BlogArticle = ({ onGenerateClick }) => {
             <ReactMarkdown>{article.content}</ReactMarkdown>
           </div>
 
-          {/* CTA Section */}
-          <div style={{
-            marginTop: '60px',
-            padding: '40px',
-            background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-            borderRadius: '12px',
-            color: 'white',
-            textAlign: 'center'
-          }}>
-            <Wand2 size={48} style={{ marginBottom: '20px', margin: '0 auto' }} />
-            <h3 style={{
-              fontSize: '28px',
-              fontWeight: '700',
-              marginBottom: '15px'
-            }}>
-              Wygeneruj dokument automatycznie
-            </h3>
-            <p style={{
-              fontSize: '16px',
-              marginBottom: '30px',
-              opacity: 0.95
-            }}>
-              Nasz generator wypełni wszystkie wymagane pola i przygotuje profesjonalne pismo gotowe do wysłania.
-            </p>
-            <button
-              onClick={() => navigate('/?generator=true')}
-              style={{
-                padding: '16px 40px',
-                background: 'white',
-                color: '#2c5aa0',
-                border: 'none',
-                borderRadius: '8px',
-                fontSize: '16px',
-                fontWeight: '700',
-                cursor: 'pointer',
-                transition: 'transform 0.2s ease',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
-            >
-              Rozpocznij generowanie →
-            </button>
-          </div>
+          {/* CTA Section - Primary */}
+          <CTABox
+            strategy={ctaStrategy}
+            variant="primary"
+            relatedBenefits={relatedBenefits}
+            articleTitle={article.title}
+          />
+
+          {/* CTA Section - Secondary (Upsell) */}
+          {ctaStrategy.secondary && (
+            <CTABox
+              strategy={ctaStrategy}
+              variant="secondary"
+              articleTitle={article.title}
+            />
+          )}
+
+          {/* CTA Section - Upsell dla FIRE_FIGHTING */}
+          {articleType === ARTICLE_TYPES.FIRE_FIGHTING && ctaStrategy.upsell && (
+            <CTABox
+              strategy={{ secondary: ctaStrategy.upsell }}
+              variant="secondary"
+              articleTitle={article.title}
+            />
+          )}
         </article>
       </div>
     </div>

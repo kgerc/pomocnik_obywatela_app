@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Wand2, FileText, Loader, 
+import { Wand2, FileText, Loader,
   AlertCircle, Download, Sparkles, Check,
-  ChevronRight, Lock, ArrowLeft, ArrowRight } from 'lucide-react';
+  ChevronRight, Lock, ArrowLeft, ArrowRight, ChevronDown } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useAppData } from '../../contexts/AppDataContext';
 import { useAuth } from '../../contexts/AuthContext';
@@ -41,6 +41,8 @@ const GeneratorPismTab = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [verifyingPayment, setVerifyingPayment] = useState(false); // loading state for payment verification
   const [currentPage, setCurrentPage] = useState(1);
+  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const ITEMS_PER_PAGE = 9;
 
   const categories = ['wszystkie', ...new Set(DOSTEPNE_PISMA.map(p => p.kategoria))];
@@ -63,6 +65,16 @@ const GeneratorPismTab = () => {
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Obsługa responsywności
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Check if user returned from successful payment and restore document state
@@ -834,33 +846,111 @@ const handleDownloadDOCX = async () => {
             }}>
               Wybierz kategorię
             </h3>
-            <div style={{
-              display: 'flex',
-              gap: '10px',
-              flexWrap: 'wrap'
-            }}>
-              {categories.map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  style={{
-                    background: selectedCategory === cat
-                      ? 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)'
-                      : '#f8f9fb',
-                    color: selectedCategory === cat ? 'white' : '#2c5aa0',
-                    border: selectedCategory === cat ? 'none' : '2px solid #e1e8ed',
-                    padding: '10px 20px',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    fontWeight: '600',
-                    fontSize: '14px',
-                    transition: 'all 0.2s',
-                    textTransform: 'capitalize'
-                  }}
-                >
-                  {cat}
-                </button>
-              ))}
+
+            {/* Dropdown menu dla desktop i mobile */}
+            <div className="pismo-scroll" style={{ position: 'relative' }}>
+              <button
+                onClick={() => setShowCategoryMenu(!showCategoryMenu)}
+                style={{
+                  width: '100%',
+                  maxWidth: '280px',
+                  background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px 16px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  transition: 'all 0.2s',
+                  textTransform: 'capitalize'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <FileText size={18} />
+                  <span>{selectedCategory}</span>
+                </div>
+                <ChevronDown size={18} style={{
+                  transform: showCategoryMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.2s'
+                }} />
+              </button>
+
+              {/* Dropdown lista */}
+              {showCategoryMenu && (
+                <div style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  right: 0,
+                  marginTop: '8px',
+                  background: 'white',
+                  borderRadius: '8px',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+                  zIndex: 1000,
+                  maxWidth: '280px',
+                  maxHeight: '300px',
+                  overflowY: 'auto'
+                }}>
+                  {categories.map(cat => {
+                    const count = cat === 'wszystkie'
+                      ? DOSTEPNE_PISMA.length
+                      : DOSTEPNE_PISMA.filter(p => p.kategoria === cat).length;
+
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => {
+                          setSelectedCategory(cat);
+                          setShowCategoryMenu(false);
+                        }}
+                        style={{
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          background: selectedCategory === cat ? '#f0f7ff' : 'transparent',
+                          border: 'none',
+                          padding: '14px 16px',
+                          cursor: 'pointer',
+                          fontWeight: selectedCategory === cat ? '600' : '500',
+                          fontSize: '14px',
+                          color: selectedCategory === cat ? '#2c5aa0' : '#2c3e50',
+                          transition: 'background 0.2s',
+                          borderBottom: '1px solid #f0f0f0',
+                          textAlign: 'left',
+                          textTransform: 'capitalize'
+                        }}
+                        onMouseOver={(e) => {
+                          if (selectedCategory !== cat) {
+                            e.currentTarget.style.background = '#f8f9fb';
+                          }
+                        }}
+                        onMouseOut={(e) => {
+                          if (selectedCategory !== cat) {
+                            e.currentTarget.style.background = 'transparent';
+                          }
+                        }}
+                      >
+                        <span>{cat}</span>
+                        <span style={{
+                          background: selectedCategory === cat ? '#2c5aa0' : '#e1e8ed',
+                          color: selectedCategory === cat ? 'white' : '#5a6c7d',
+                          padding: '2px 8px',
+                          borderRadius: '12px',
+                          fontSize: '12px',
+                          fontWeight: '600'
+                        }}>
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
 
@@ -936,89 +1026,125 @@ const handleDownloadDOCX = async () => {
           </div>
 
           {/* Pagination */}
-          {totalPages > 1 && (
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '10px',
-              marginTop: '30px'
-            }}>
-              <button
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                disabled={currentPage === 1}
-                style={{
-                  padding: '10px 20px',
-                  background: currentPage === 1 ? '#e1e8ed' : 'white',
-                  color: currentPage === 1 ? '#a0a0a0' : '#2c5aa0',
-                  border: '2px solid #e1e8ed',
-                  borderRadius: '8px',
-                  fontWeight: '600',
-                  fontSize: '14px',
-                  cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                <ArrowLeft size={16} color="#2c5aa0" style={{ verticalAlign: '-3px' }}/>
-              </button>
-
-              <div style={{
-                display: 'flex',
-                gap: '5px'
-              }}>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+              {totalPages > 1 && (
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '8px',
+                  marginTop: '30px',
+                  flexWrap: 'wrap'
+                }}>
                   <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
+                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    disabled={currentPage === 1}
                     style={{
-                      padding: '10px 15px',
-                      background: currentPage === page
-                        ? 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)'
-                        : 'white',
-                      color: currentPage === page ? 'white' : '#2c5aa0',
-                      border: currentPage === page ? 'none' : '2px solid #e1e8ed',
+                      padding: '10px 16px',
+                      background: currentPage === 1 ? '#e1e8ed' : 'white',
+                      color: currentPage === 1 ? '#a0a0a0' : '#2c5aa0',
+                      border: '2px solid #e1e8ed',
                       borderRadius: '8px',
                       fontWeight: '600',
-                      fontSize: '14px',
-                      cursor: 'pointer',
+                      fontSize: 'clamp(12px, 3vw, 14px)',
+                      cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
                       transition: 'all 0.2s',
-                      minWidth: '40px'
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
                     }}
                   >
-                    {page}
+                    <ArrowLeft size={14} color={currentPage === 1 ? '#a0a0a0' : '#2c5aa0'} /> {!isMobile && <span className="pagination-text">Poprzednia</span>}
                   </button>
-                ))}
+
+                  <div style={{
+                    display: 'flex',
+                    gap: '5px',
+                    flexWrap: 'wrap',
+                    justifyContent: 'center'
+                  }}>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(page => {
+                        // Na mobile pokaż tylko aktualne +/- 1 stronę
+                        if (totalPages <= 5) return true;
+                        return page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1;
+                      })
+                      .map((page, idx, arr) => {
+                        // Dodaj "..." między przeskokami
+                        const prevPage = arr[idx - 1];
+                        const showEllipsis = prevPage && page - prevPage > 1;
+
+                        return (
+                          <React.Fragment key={page}>
+                            {showEllipsis && (
+                              <span style={{ padding: '10px 5px', color: '#5a6c7d', fontWeight: '600' }}>...</span>
+                            )}
+                            <button
+                              onClick={() => setCurrentPage(page)}
+                              style={{
+                                padding: '10px 12px',
+                                background: currentPage === page
+                                  ? 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)'
+                                  : 'white',
+                                color: currentPage === page ? 'white' : '#2c5aa0',
+                                border: currentPage === page ? 'none' : '2px solid #e1e8ed',
+                                borderRadius: '8px',
+                                fontWeight: '600',
+                                fontSize: 'clamp(12px, 3vw, 14px)',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s',
+                                minWidth: '40px'
+                              }}
+                            >
+                              {page}
+                            </button>
+                          </React.Fragment>
+                        );
+                      })}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    disabled={currentPage === totalPages}
+                    style={{
+                      padding: '10px 16px',
+                      background: currentPage === totalPages ? '#e1e8ed' : 'white',
+                      color: currentPage === totalPages ? '#a0a0a0' : '#2c5aa0',
+                      border: '2px solid #e1e8ed',
+                      borderRadius: '8px',
+                      fontWeight: '600',
+                      fontSize: 'clamp(12px, 3vw, 14px)',
+                      cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    {!isMobile && <span className="pagination-text">Następna</span>} <ArrowRight size={14} color={currentPage === totalPages ? '#a0a0a0' : '#2c5aa0'} />
+                  </button>
+                </div>
+              )}
+
+              {/* Info o liczbie pism */}
+              <div style={{
+                textAlign: 'center',
+                marginTop: '20px',
+                color: '#5a6c7d',
+                fontSize: '14px'
+              }}>
+                {filteredPisma.length > 0 ? (
+                  <>Pokazuję {startIndex + 1}-{Math.min(endIndex, filteredPisma.length)} z {filteredPisma.length} pism</>
+                ) : (
+                  <div style={{ padding: '40px 20px' }}>
+                    <p style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px' }}>
+                      Nie znaleziono pism
+                    </p>
+                    <p style={{ fontSize: '14px' }}>
+                      Spróbuj zmienić kategorię lub zapytanie wyszukiwania
+                    </p>
+                  </div>
+                )}
               </div>
-
-              <button
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                disabled={currentPage === totalPages}
-                style={{
-                  padding: '10px 20px',
-                  background: currentPage === totalPages ? '#e1e8ed' : 'white',
-                  color: currentPage === totalPages ? '#a0a0a0' : '#2c5aa0',
-                  border: '2px solid #e1e8ed',
-                  borderRadius: '8px',
-                  fontWeight: '600',
-                  fontSize: '14px',
-                  cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                <ArrowRight size={16} color="#2c5aa0" style={{ verticalAlign: '-3px' }}/>
-              </button>
-            </div>
-          )}
-
-          {/* Info o liczbie pism */}
-          <div style={{
-            textAlign: 'center',
-            marginTop: '20px',
-            color: '#5a6c7d',
-            fontSize: '14px'
-          }}>
-            Pokazuję {startIndex + 1}-{Math.min(endIndex, filteredPisma.length)} z {filteredPisma.length} pism
-          </div>
         </>
       )}
 

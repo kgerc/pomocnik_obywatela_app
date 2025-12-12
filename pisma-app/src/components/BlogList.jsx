@@ -123,7 +123,12 @@ const BlogList = () => {
                 e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
               }}
             >
-              <div style={{ padding: '30px' }}>
+              <div style={{
+                padding: '30px',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%'
+              }}>
                 <div style={{
                   display: 'inline-block',
                   padding: '6px 12px',
@@ -151,7 +156,8 @@ const BlogList = () => {
                   fontSize: '15px',
                   color: '#666',
                   lineHeight: '1.6',
-                  marginBottom: '20px'
+                  marginBottom: '20px',
+                  flexGrow: 1
                 }}>
                   {article.excerpt}
                 </p>
@@ -174,17 +180,34 @@ const BlogList = () => {
                   </div>
                 </div>
 
-                <div style={{
+                <button style={{
+                  width: '100%',
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: '8px',
-                  color: '#2c5aa0',
+                  color: 'white',
+                  background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
                   fontWeight: '600',
-                  fontSize: '14px'
-                }}>
+                  fontSize: '14px',
+                  padding: '12px 24px',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 90, 160, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                >
                   Czytaj artykuł
                   <ArrowRight size={16} />
-                </div>
+                </button>
               </div>
             </Link>
           ))}

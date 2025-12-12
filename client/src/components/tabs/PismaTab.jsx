@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Edit, Sparkles, Search, Loader, FileText, AlertCircle, Download, ExternalLink, Eraser } from 'lucide-react';
+import { Edit, Sparkles, Search, Loader, FileText, AlertCircle, Download, ExternalLink, Eraser, ChevronDown } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { usePisma } from '../../hooks/usePisma';
 import SaveDocumentButton from '../common/SaveDocumentButton';
@@ -7,6 +7,7 @@ import Pagination from '../common/Pagination';
 import PremiumFeatureTeaser from '../premium/PremiumFeatureTeaser';
 import { saveConversationToHistory } from '../../utils/saveToHistory';
 import ChatPreview from '../chat/ChatPreview';
+import { DOSTEPNE_PISMA } from '../../data/pisma/index'; // Import pism z generatora
 
 const ITEMS_PER_PAGE = 12;
 
@@ -18,6 +19,7 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
   const [categories, setCategories] = useState(['wszystkie']);
   const [filteredPisma, setFilteredPisma] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
 
   const { pisma, loading, error, fetchAll, getCategories } = usePisma();
   const [isVisible, setIsVisible] = useState(false);
@@ -80,14 +82,20 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
         return;
       }
 
-      // 1. Budujemy pełny kontekst RAG
-      const contextForAI = all
-        .map(m =>
-          `• Nazwa: ${m.nazwa}
+      // 1. Budujemy pełny kontekst RAG (pisma z bazy + pisma z generatora)
+      const allPismaWithGenerator = [...all, ...DOSTEPNE_PISMA];
+
+      const contextForAI = allPismaWithGenerator
+        .map(m => {
+          // Pisma z bazy mają slowa_kluczowe, pisma z generatora mają pytania
+          const isFromGenerator = !m.slowa_kluczowe && m.pytania;
+          const source = isFromGenerator ? '[GENERATOR]' : '[BAZA]';
+
+          return `• ${source} Nazwa: ${m.nazwa}
             Opis: ${m.opis}
             Słowa kluczowe: ${m.slowa_kluczowe?.join(', ') || 'brak'}
-            Kategoria: ${m.kategoria}`
-        )
+            Kategoria: ${m.kategoria}`;
+        })
         .join('\n\n');
 
       // 2. Konfiguracja Gemini
@@ -110,21 +118,33 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
         3. Zwróć wynik w formie krótkiej odpowiedzi (2–4 zdania):
           - nazwy najlepiej pasujących pism,
           - co użytkownik znajdzie w tych dokumentach,
-          - co użytkownik powinien zrobić dalej (sprawdzenie szczegółów w bazie).
+          - **WAŻNE**: jeśli pismo ma oznaczenie [GENERATOR], dodaj dokładną instrukcję nawigacji na podstawie kategorii pisma:
+            → Przejdź do zakładki 'Generator Pism' → [Kategoria z pisma]
 
-        ## LISTA PISM (baza danych)
+        ## LISTA PISM
+        Każde pismo jest oznaczone:
+        - [BAZA] = pismo informacyjne dostępne do odczytu
+        - [GENERATOR] = wzór pisma dostępny w generatorze do automatycznego wypełnienia
+
         ${contextForAI}
+
+        ## PRZYKŁAD ODPOWIEDZI dla pisma [GENERATOR]:
+        "Znalazłem dla Ciebie **Wniosek o zawieszenie działalności gospodarczej**. To pismo pozwala zawiesić działalność w CEIDG.
+        **Możesz je wygenerować:** Przejdź do zakładki 'Generator Pism' → Biznes"
 
         ## WAŻNE
         - Możesz korzystać z własnej wiedzy WYŁĄCZNIE do doprecyzowania lub wyjaśnień,
           ale NIE możesz dodawać pism spoza listy.
         - Odpowiadaj krótko, konkretnie i rzeczowo.
+        - **ZAWSZE** podawaj dokładną ścieżkę nawigacji (Generator Pism → Kategoria) dla pism [GENERATOR].
+        - **NIE wyświetlaj tagów [GENERATOR] ani [BAZA] w odpowiedzi dla użytkownika** - są one tylko dla Twojej orientacji.
       `;
 
       const result = await model.generateContent(prompt);
       const aiResponse = result.response.text();
 
       // 4. Wyciągamy faktyczne wyniki z listy (matchowanie nazw z odpowiedzi LLM)
+      // WAŻNE: tylko pisma z BAZY (nie z generatora) - bo tylko te mają PDFy do pobrania
       const matched = all.filter(p =>
         aiResponse.toLowerCase().includes(p.nazwa.toLowerCase())
       );
@@ -230,9 +250,7 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
       />
 
       {/* Category Filter */}
-      <div style={{
-        marginBottom: '20px'
-      }}>
+      <div style={{ marginBottom: '20px' }}>
         <h3 style={{
           fontSize: '18px',
           fontWeight: '700',
@@ -241,33 +259,111 @@ const PismaTab = ({ preloadedIsPremium = null }) => {
         }}>
           Przeglądaj po kategorii
         </h3>
-        <div style={{
-          display: 'flex',
-          gap: '10px',
-          flexWrap: 'wrap'
-        }}>
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              style={{
-                background: selectedCategory === cat 
-                  ? 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)' 
-                  : '#f8f9fb',
-                color: selectedCategory === cat ? 'white' : '#2c5aa0',
-                border: selectedCategory === cat ? 'none' : '2px solid #e1e8ed',
-                padding: '10px 20px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                fontSize: '14px',
-                transition: 'all 0.2s',
-                textTransform: 'capitalize'
-              }}
-            >
-              {cat} ({cat === 'wszystkie' ? pisma.length : pisma.filter(p => p.kategoria === cat).length})
-            </button>
-          ))}
+
+        {/* Dropdown menu dla desktop i mobile */}
+        <div className="pismo-scroll" style={{ position: 'relative' }}>
+          <button
+            onClick={() => setShowCategoryMenu(!showCategoryMenu)}
+            style={{
+              width: '100%',
+              background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '14px',
+              maxWidth: '280px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              transition: 'all 0.2s',
+              textTransform: 'capitalize'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <FileText size={18} />
+              <span>{selectedCategory}</span>
+            </div>
+            <ChevronDown size={18} style={{
+              transform: showCategoryMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s'
+            }} />
+          </button>
+
+          {/* Dropdown lista */}
+          {showCategoryMenu && (
+            <div style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              right: 0,
+              marginTop: '8px',
+              background: 'white',
+              borderRadius: '8px',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+              zIndex: 1000,
+              maxWidth: '280px',
+              maxHeight: '300px',
+              overflowY: 'auto'
+            }}>
+              {categories.map(cat => {
+                const count = cat === 'wszystkie'
+                  ? pisma.length
+                  : pisma.filter(p => p.kategoria === cat).length;
+
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      setShowCategoryMenu(false);
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      background: selectedCategory === cat ? '#f0f7ff' : 'transparent',
+                      border: 'none',
+                      padding: '14px 16px',
+                      cursor: 'pointer',
+                      fontWeight: selectedCategory === cat ? '600' : '500',
+                      fontSize: '14px',
+                      color: selectedCategory === cat ? '#2c5aa0' : '#2c3e50',
+                      transition: 'background 0.2s',
+                      borderBottom: '1px solid #f0f0f0',
+                      textAlign: 'left',
+                      textTransform: 'capitalize'
+                    }}
+                    onMouseOver={(e) => {
+                      if (selectedCategory !== cat) {
+                        e.currentTarget.style.background = '#f8f9fb';
+                      }
+                    }}
+                    onMouseOut={(e) => {
+                      if (selectedCategory !== cat) {
+                        e.currentTarget.style.background = 'transparent';
+                      }
+                    }}
+                  >
+                    <span>{cat}</span>
+                    <span style={{
+                      background: selectedCategory === cat ? '#2c5aa0' : '#e1e8ed',
+                      color: selectedCategory === cat ? 'white' : '#5a6c7d',
+                      padding: '2px 8px',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      fontWeight: '600'
+                    }}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 

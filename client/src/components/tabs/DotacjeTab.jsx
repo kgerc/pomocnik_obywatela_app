@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, Sparkles, Search, Loader, Building2, AlertCircle, ExternalLink, Eraser, Clock, AlertTriangle, XCircle } from 'lucide-react';
+import { TrendingUp, Sparkles, Search, Loader, Building2, AlertCircle, ExternalLink, Eraser, Clock, AlertTriangle, XCircle, CheckCircle2, Calendar, Menu, X, ChevronDown } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useDotacje } from '../../hooks/useDotacje';
 import { useAppData } from '../../contexts/AppDataContext';
@@ -17,9 +17,12 @@ const DotacjeTab = () => {
   const [dotacjeLoading, setDotacjeLoading] = useState(false);
   const [dotacjeResult, setDotacjeResult] = useState(null);
   const [selectedSektor, setSelectedSektor] = useState('wszystkie');
+  const [selectedStatus, setSelectedStatus] = useState('wszystkie');
   const [sektory, setSektory] = useState(['wszystkie']);
   const [filteredDotacje, setFilteredDotacje] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showSektorMenu, setShowSektorMenu] = useState(false);
+  const [showStatusMenu, setShowStatusMenu] = useState(false);
 
   const { dotacje, loading, error, fetchAll, getSektory } = useDotacje();
   const [isVisible, setIsVisible] = useState(false);
@@ -42,16 +45,26 @@ const DotacjeTab = () => {
     }
   }, [loading, dotacje]);
 
-  // Filtruj dotacje lokalnie gdy zmieni się sektor
+  // Filtruj dotacje lokalnie gdy zmieni się sektor LUB status
   useEffect(() => {
-    if (selectedSektor === 'wszystkie') {
-      setFilteredDotacje(dotacje);
-    } else {
-      const filtered = dotacje.filter(d => d.sektor === selectedSektor);
-      setFilteredDotacje(filtered);
+    let filtered = dotacje;
+
+    // Filtr po sektorze
+    if (selectedSektor !== 'wszystkie') {
+      filtered = filtered.filter(d => d.sektor === selectedSektor);
     }
-    setCurrentPage(1); // Reset do pierwszej strony przy zmianie sektora
-  }, [selectedSektor, dotacje]);
+
+    // Filtr po statusie
+    if (selectedStatus !== 'wszystkie') {
+      filtered = filtered.filter(d => {
+        const status = d.status || 'aktywna'; // domyślnie aktywna
+        return status === selectedStatus;
+      });
+    }
+
+    setFilteredDotacje(filtered);
+    setCurrentPage(1); // Reset do pierwszej strony przy zmianie filtru
+  }, [selectedSektor, selectedStatus, dotacje]);
 
   // Oblicz paginację
   const totalPages = Math.ceil(filteredDotacje.length / ITEMS_PER_PAGE);
@@ -232,32 +245,265 @@ const DotacjeTab = () => {
         renderCard={(dotacja, idx) => <DotacjaCard key={idx} dotacja={dotacja} />}
       />
 
-      {/* Filter by Sektor */}
+      {/* Filters Container - flexbox na desktop, kolumna na mobile */}
       <div style={{
         display: 'flex',
-        gap: '10px',
+        flexDirection: 'row',
+        gap: '15px',
+        marginBottom: '20px',
         flexWrap: 'wrap',
-        marginBottom: '25px'
+        maxWidth: '600px'
       }}>
-        {sektory.map(sektor => (
+        {/* Filter by Status */}
+        <div style={{ flex: '1', minWidth: '240px' }}>
+          <h3 style={{
+            fontSize: '14px',
+            fontWeight: '600',
+            color: '#2c3e50',
+            marginBottom: '10px'
+          }}>
+            Status naboru:
+          </h3>
+
+        {/* Dropdown menu dla desktop i mobile */}
+        <div className="pismo-scroll" style={{ position: 'relative' }}>
           <button
-            key={sektor}
-            onClick={() => setSelectedSektor(sektor)}
+            onClick={() => setShowStatusMenu(!showStatusMenu)}
             style={{
-              background: selectedSektor === sektor ? 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)' : '#f8f9fb',
-              color: selectedSektor === sektor ? 'white' : '#2c5aa0',
+              width: '100%',
+              maxWidth: '280px',
+              background: selectedStatus === 'aktywna'
+                ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+                : selectedStatus === 'planowana'
+                ? 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)'
+                : selectedStatus === 'zamknięty'
+                ? 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'
+                : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              color: 'white',
               border: 'none',
-              padding: '10px 16px',
+              padding: '12px 16px',
               borderRadius: '8px',
               cursor: 'pointer',
               fontWeight: '600',
               fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
               transition: 'all 0.2s'
             }}
           >
-            {sektor} ({sektor === 'wszystkie' ? dotacje.length : dotacje.filter(d => d.sektor === sektor).length})
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              {selectedStatus === 'aktywna' && <CheckCircle2 size={18} />}
+              {selectedStatus === 'planowana' && <Calendar size={18} />}
+              {selectedStatus === 'zamknięty' && <XCircle size={18} />}
+              {selectedStatus === 'wszystkie' && <Search size={18} />}
+              <span>
+                {selectedStatus === 'wszystkie' ? 'Wszystkie' : selectedStatus === 'aktywna' ? 'Otwarte' : selectedStatus === 'planowana' ? 'Planowane' : 'Zamknięte'}
+              </span>
+            </div>
+            <ChevronDown size={18} style={{
+              transform: showStatusMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s'
+            }} />
           </button>
-        ))}
+
+          {/* Dropdown lista */}
+          {showStatusMenu && (
+            <div style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              right: 0,
+              marginTop: '8px',
+              background: 'white',
+              borderRadius: '8px',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+              zIndex: 1000,
+              maxWidth: '280px',
+              maxHeight: '300px',
+              overflowY: 'auto'
+            }}>
+              {['wszystkie', 'aktywna', 'planowana', 'zamknięty'].map(status => {
+                const count = status === 'wszystkie'
+                  ? dotacje.length
+                  : dotacje.filter(d => (d.status || 'aktywna') === status).length;
+
+                const statusLabel = status === 'wszystkie' ? 'Wszystkie' : status === 'aktywna' ? 'Otwarte' : status === 'planowana' ? 'Planowane' : 'Zamknięte';
+
+                return (
+                  <button
+                    key={status}
+                    onClick={() => {
+                      setSelectedStatus(status);
+                      setShowStatusMenu(false);
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      background: selectedStatus === status ? '#f0f7ff' : 'transparent',
+                      border: 'none',
+                      padding: '14px 16px',
+                      cursor: 'pointer',
+                      fontWeight: selectedStatus === status ? '600' : '500',
+                      fontSize: '14px',
+                      color: selectedStatus === status ? '#2c5aa0' : '#2c3e50',
+                      transition: 'background 0.2s',
+                      borderBottom: '1px solid #f0f0f0',
+                      textAlign: 'left'
+                    }}
+                    onMouseOver={(e) => {
+                      if (selectedStatus !== status) {
+                        e.currentTarget.style.background = '#f8f9fb';
+                      }
+                    }}
+                    onMouseOut={(e) => {
+                      if (selectedStatus !== status) {
+                        e.currentTarget.style.background = 'transparent';
+                      }
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      {status === 'aktywna' && <CheckCircle2 size={16} />}
+                      {status === 'planowana' && <Calendar size={16} />}
+                      {status === 'zamknięty' && <XCircle size={16} />}
+                      {status === 'wszystkie' && <Search size={16} />}
+                      <span>{statusLabel}</span>
+                    </div>
+                    <span style={{
+                      background: selectedStatus === status ? '#2c5aa0' : '#e1e8ed',
+                      color: selectedStatus === status ? 'white' : '#5a6c7d',
+                      padding: '2px 8px',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      fontWeight: '600'
+                    }}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+        </div>
+
+        {/* Filter by Sektor */}
+        <div style={{ flex: '1', minWidth: '240px' }}>
+          <h3 style={{
+            fontSize: '14px',
+            fontWeight: '600',
+            color: '#2c3e50',
+            marginBottom: '10px'
+          }}>
+            Sektor:
+          </h3>
+
+        {/* Dropdown menu dla desktop i mobile */}
+        <div className="pismo-scroll" style={{ position: 'relative' }}>
+          <button
+            onClick={() => setShowSektorMenu(!showSektorMenu)}
+            style={{
+              width: '100%',
+              maxWidth: '280px',
+              background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              transition: 'all 0.2s'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Building2 size={18} />
+              <span>{selectedSektor}</span>
+            </div>
+            <ChevronDown size={18} style={{
+              transform: showSektorMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s'
+            }} />
+          </button>
+
+          {/* Dropdown lista */}
+          {showSektorMenu && (
+            <div style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              right: 0,
+              marginTop: '8px',
+              background: 'white',
+              borderRadius: '8px',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+              zIndex: 1000,
+              maxWidth: '280px',
+              maxHeight: '300px',
+              overflowY: 'auto'
+            }}>
+              {sektory.map(sektor => {
+                const count = sektor === 'wszystkie'
+                  ? dotacje.length
+                  : dotacje.filter(d => d.sektor === sektor).length;
+
+                return (
+                  <button
+                    key={sektor}
+                    onClick={() => {
+                      setSelectedSektor(sektor);
+                      setShowSektorMenu(false);
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      background: selectedSektor === sektor ? '#f0f7ff' : 'transparent',
+                      border: 'none',
+                      padding: '14px 16px',
+                      cursor: 'pointer',
+                      fontWeight: selectedSektor === sektor ? '600' : '500',
+                      fontSize: '14px',
+                      color: selectedSektor === sektor ? '#2c5aa0' : '#2c3e50',
+                      transition: 'background 0.2s',
+                      borderBottom: '1px solid #f0f0f0',
+                      textAlign: 'left'
+                    }}
+                    onMouseOver={(e) => {
+                      if (selectedSektor !== sektor) {
+                        e.currentTarget.style.background = '#f8f9fb';
+                      }
+                    }}
+                    onMouseOut={(e) => {
+                      if (selectedSektor !== sektor) {
+                        e.currentTarget.style.background = 'transparent';
+                      }
+                    }}
+                  >
+                    <span>{sektor}</span>
+                    <span style={{
+                      background: selectedSektor === sektor ? '#2c5aa0' : '#e1e8ed',
+                      color: selectedSektor === sektor ? 'white' : '#5a6c7d',
+                      padding: '2px 8px',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      fontWeight: '600'
+                    }}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+        </div>
       </div>
 
       {/* Dotacje Grid */}

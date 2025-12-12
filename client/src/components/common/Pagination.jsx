@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, totalItems }) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const handlePrevious = () => {
     if (currentPage > 1) {
       onPageChange(currentPage - 1);
@@ -128,7 +138,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, total
           }}
         >
           <ChevronLeft size={18} />
-          Poprzednia
+          {!isMobile && 'Poprzednia'}
         </button>
 
         {/* Numery stron */}
@@ -223,7 +233,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, total
             }
           }}
         >
-          Następna
+          {!isMobile && 'Następna'}
           <ChevronRight size={18} />
         </button>
       </div>

@@ -55,9 +55,7 @@ const RegisterForm = () => {
     }
 
     setSuccess(true);
-    setTimeout(() => {
-      navigate('/login');
-    }, 2000);
+    setLoading(false);
   };
 
   if (success) {
@@ -74,7 +72,7 @@ const RegisterForm = () => {
           background: 'white',
           borderRadius: '16px',
           padding: '40px',
-          maxWidth: '450px',
+          maxWidth: '500px',
           width: '100%',
           boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
           textAlign: 'center'
@@ -98,13 +96,76 @@ const RegisterForm = () => {
             color: '#2c3e50',
             marginBottom: '10px'
           }}>
-            Rejestracja pomyślna!
+            Konto utworzone pomyślnie!
           </h2>
-          <p style={{
-            color: '#5a6c7d',
-            marginBottom: '20px'
+          <div style={{
+            background: '#e8f4f8',
+            border: '2px solid #2c5aa0',
+            borderRadius: '12px',
+            padding: '20px',
+            marginBottom: '20px',
+            textAlign: 'left'
           }}>
-            Przekierowanie do logowania...
+            <div style={{ marginBottom: '12px' }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '8px'
+              }}>
+                <Mail size={20} color="#2c5aa0" />
+                <h3 style={{
+                  fontSize: '16px',
+                  fontWeight: '700',
+                  color: '#2c5aa0',
+                  margin: 0
+                }}>
+                  Sprawdź swoją skrzynkę email
+                </h3>
+              </div>
+              <p style={{
+                color: '#2c3e50',
+                fontSize: '14px',
+                lineHeight: '1.6',
+                margin: 0
+              }}>
+                Wysłaliśmy wiadomość z linkiem aktywacyjnym na adres <strong>{formData.email}</strong>
+              </p>
+            </div>
+            <div style={{
+              background: '#fff3cd',
+              borderRadius: '8px',
+              padding: '12px',
+              fontSize: '13px',
+              color: '#856404',
+              lineHeight: '1.5'
+            }}>
+              <strong>⚠️ Ważne:</strong> Musisz kliknąć w link w emailu, aby aktywować konto i móc się zalogować.
+            </div>
+          </div>
+          <button
+            onClick={() => navigate('/login')}
+            style={{
+              width: '100%',
+              background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '14px',
+              borderRadius: '8px',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              marginBottom: '20px'
+            }}
+          >
+            Przejdź do logowania
+          </button>
+          <p style={{
+            color: '#999',
+            fontSize: '12px',
+            lineHeight: '1.5'
+          }}>
+            Nie widzisz emaila? Sprawdź folder SPAM lub skontaktuj się z nami.
           </p>
         </div>
       </div>

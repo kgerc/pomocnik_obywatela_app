@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Sparkles, Search, Loader, Shield, AlertCircle, Info, CheckCircle, Eraser } from 'lucide-react';
+import { Heart, Sparkles, Search, Loader, Shield, AlertCircle, Info, CheckCircle, Eraser, ChevronDown } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useSwiadczenia } from '../../hooks/useSwiadczenia';
 import { useAppData } from '../../contexts/AppDataContext';
@@ -25,6 +25,7 @@ const SwiadczeniaTab = () => {
   const [filteredSwiadczenia, setFilteredSwiadczenia] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedSwiadczenie, setSelectedSwiadczenie] = useState(null);
+  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
 
   const { swiadczenia, loading, error, fetchAll, getCategories } = useSwiadczenia();
   const [isVisible, setIsVisible] = useState(false);
@@ -247,9 +248,7 @@ const SwiadczeniaTab = () => {
 
 
       {/* Category Filter */}
-      <div style={{
-        marginBottom: '20px'
-      }}>
+      <div style={{ marginBottom: '20px' }}>
         <h3 style={{
           fontSize: '18px',
           fontWeight: '700',
@@ -258,33 +257,111 @@ const SwiadczeniaTab = () => {
         }}>
           Przeglądaj po kategorii
         </h3>
-        <div style={{
-          display: 'flex',
-          gap: '10px',
-          flexWrap: 'wrap'
-        }}>
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              style={{
-                background: selectedCategory === cat
-                  ? 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)'
-                  : '#f8f9fb',
-                color: selectedCategory === cat ? 'white' : '#2c5aa0',
-                border: selectedCategory === cat ? 'none' : '2px solid #e1e8ed',
-                padding: '10px 20px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                fontSize: '14px',
-                transition: 'all 0.2s',
-                textTransform: 'capitalize'
-              }}
-            >
-              {cat} ({cat === 'wszystkie' ? swiadczenia.length : swiadczenia.filter(s => s.kategoria === cat).length})
-            </button>
-          ))}
+
+        {/* Dropdown menu dla desktop i mobile */}
+        <div className="pismo-scroll" style={{ position: 'relative' }}>
+          <button
+            onClick={() => setShowCategoryMenu(!showCategoryMenu)}
+            style={{
+              width: '100%',
+              background: 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '12px 16px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              transition: 'all 0.2s',
+              maxWidth: '280px',
+              textTransform: 'capitalize'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Shield size={18} />
+              <span>{selectedCategory}</span>
+            </div>
+            <ChevronDown size={18} style={{
+              transform: showCategoryMenu ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s'
+            }} />
+          </button>
+
+          {/* Dropdown lista */}
+          {showCategoryMenu && (
+            <div style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              right: 0,
+              marginTop: '8px',
+              background: 'white',
+              borderRadius: '8px',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+              zIndex: 1000,
+              maxHeight: '300px',
+              maxWidth: '280px',
+              overflowY: 'auto'
+            }}>
+              {categories.map(cat => {
+                const count = cat === 'wszystkie'
+                  ? swiadczenia.length
+                  : swiadczenia.filter(s => s.kategoria === cat).length;
+
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      setShowCategoryMenu(false);
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      background: selectedCategory === cat ? '#f0f7ff' : 'transparent',
+                      border: 'none',
+                      padding: '14px 16px',
+                      cursor: 'pointer',
+                      fontWeight: selectedCategory === cat ? '600' : '500',
+                      fontSize: '14px',
+                      color: selectedCategory === cat ? '#2c5aa0' : '#2c3e50',
+                      transition: 'background 0.2s',
+                      borderBottom: '1px solid #f0f0f0',
+                      textAlign: 'left',
+                      textTransform: 'capitalize'
+                    }}
+                    onMouseOver={(e) => {
+                      if (selectedCategory !== cat) {
+                        e.currentTarget.style.background = '#f8f9fb';
+                      }
+                    }}
+                    onMouseOut={(e) => {
+                      if (selectedCategory !== cat) {
+                        e.currentTarget.style.background = 'transparent';
+                      }
+                    }}
+                  >
+                    <span>{cat}</span>
+                    <span style={{
+                      background: selectedCategory === cat ? '#2c5aa0' : '#e1e8ed',
+                      color: selectedCategory === cat ? 'white' : '#5a6c7d',
+                      padding: '2px 8px',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      fontWeight: '600'
+                    }}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 

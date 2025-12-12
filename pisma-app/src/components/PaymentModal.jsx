@@ -178,13 +178,13 @@ const PaymentModal = ({ isOpen, onClose, documentId, userEmail, onPaymentSuccess
           />
         </div>
 
-        {/* Payment Option */}
+        {/* Payment Option - One-time */}
         <div style={{
-          border: '2px solid #2c5aa0',
+          border: '2px solid #e1e8ed',
           borderRadius: '12px',
           padding: '20px',
           background: '#f8f9fb',
-          marginBottom: '20px'
+          marginBottom: '15px'
         }}>
           <div style={{
             display: 'flex',
@@ -221,16 +221,16 @@ const PaymentModal = ({ isOpen, onClose, documentId, userEmail, onPaymentSuccess
             lineHeight: '1.5',
             marginBottom: '15px'
           }}>
-            Jednorazowa płatność.
+            Jednorazowa płatność za to pismo.
           </p>
           <button
             onClick={handlePayForDocument}
             disabled={loading}
             style={{
               width: '100%',
-              background: loading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
-              color: 'white',
-              border: 'none',
+              background: loading ? '#ccc' : 'white',
+              color: '#2c5aa0',
+              border: '2px solid #2c5aa0',
               padding: '12px 24px',
               borderRadius: '8px',
               fontSize: '16px',
@@ -243,6 +243,138 @@ const PaymentModal = ({ isOpen, onClose, documentId, userEmail, onPaymentSuccess
           >
             {loading ? 'Przekierowywanie...' : 'Zapłać 2 zł'}
           </button>
+        </div>
+
+        {/* UPSELL - Subscription Option */}
+        <div style={{
+          border: '3px solid #2c5aa0',
+          borderRadius: '12px',
+          padding: '20px',
+          background: 'linear-gradient(135deg, #f0f7ff 0%, #e8f4ff 100%)',
+          marginBottom: '20px',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '12px'
+          }}>
+            <div>
+              <h3 style={{
+                fontSize: '20px',
+                fontWeight: '700',
+                color: '#2c5aa0',
+                margin: '0 0 5px 0'
+              }}>
+                Subskrypcja Pomocnik Obywatela
+              </h3>
+              <div style={{
+                fontSize: '13px',
+                color: '#666',
+                fontWeight: '600'
+              }}>
+                To pismo + WSZYSTKIE pisma + dotacje
+              </div>
+            </div>
+            <div style={{
+              textAlign: 'right'
+            }}>
+              <div style={{
+                fontSize: '28px',
+                fontWeight: '700',
+                color: '#2c5aa0',
+                lineHeight: '1'
+              }}>
+                5 zł
+              </div>
+              <div style={{
+                fontSize: '12px',
+                color: '#666'
+              }}>
+                /miesiąc
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            background: 'white',
+            borderRadius: '8px',
+            padding: '15px',
+            marginBottom: '15px',
+            fontSize: '13px',
+            lineHeight: '1.8'
+          }}>
+            <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+              <span style={{ color: '#2c5aa0', fontWeight: '700' }}>✓</span>
+              <span><strong>Pobierz to pismo ZA DARMO</strong> (już oszczędzasz 2 zł!)</span>
+            </div>
+            <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+              <span style={{ color: '#2c5aa0', fontWeight: '700' }}>✓</span>
+              <span>Dostęp do <strong>50+ gotowych pism</strong> (wartość 100 zł)</span>
+            </div>
+            <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+              <span style={{ color: '#2c5aa0', fontWeight: '700' }}>✓</span>
+              <span><strong>Baza wszystkich dotacji i świadczeń 2025</strong></span>
+            </div>
+            <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+              <span style={{ color: '#2c5aa0', fontWeight: '700' }}>✓</span>
+              <span>Powiadomienia o <strong>nowych świadczeniach</strong></span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+              <span style={{ color: '#2c5aa0', fontWeight: '700' }}>✓</span>
+              <span><strong>Kalkulator uprawnień</strong> (sprawdź co Ci się należy)</span>
+            </div>
+          </div>
+
+          <div style={{
+            background: '#fff3cd',
+            border: '1px solid #ffc107',
+            borderRadius: '8px',
+            padding: '10px',
+            fontSize: '13px',
+            color: '#856404',
+            marginBottom: '15px',
+            textAlign: 'center',
+            fontWeight: '600'
+          }}>
+            💡 Po wygenerowaniu 3 pism wychodzisz na plus!
+          </div>
+
+          <button
+            onClick={() => {
+              // Redirect to app.pomocnikobywatela.pl registration
+              window.location.href = `https://app.pomocnikobywatela.pl/register?source=payment_modal&email=${encodeURIComponent(email)}`;
+            }}
+            disabled={loading || !email}
+            style={{
+              width: '100%',
+              background: loading || !email ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '14px 24px',
+              borderRadius: '8px',
+              fontSize: '17px',
+              fontWeight: '700',
+              cursor: loading || !email ? 'not-allowed' : 'pointer',
+              transition: 'transform 0.2s',
+              boxShadow: '0 4px 12px rgba(44, 90, 160, 0.3)'
+            }}
+            onMouseOver={(e) => !loading && email && (e.currentTarget.style.transform = 'translateY(-2px)')}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+          >
+            Aktywuj subskrypcję 5 zł/msc →
+          </button>
+
+          <div style={{
+            textAlign: 'center',
+            fontSize: '11px',
+            color: '#666',
+            marginTop: '10px'
+          }}>
+            Możesz anulować w każdej chwili. Bez ukrytych opłat.
+          </div>
         </div>
 
         {/* Info */}

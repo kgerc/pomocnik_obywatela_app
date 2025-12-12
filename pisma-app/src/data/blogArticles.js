@@ -1,4 +1,6 @@
 // 10 artykułów edukacyjnych SEO
+import { ARTICLE_TYPES } from './blogConfig';
+
 export const BLOG_ARTICLES = [
   {
     id: 'jak-napisac-reklamacje-telefonu',
@@ -6,6 +8,7 @@ export const BLOG_ARTICLES = [
     title: 'Jak napisać reklamację telefonu komórkowego - Wzór i Poradnik 2025',
     metaDescription: 'Kompletny poradnik jak napisać reklamację telefonu krok po kroku. Wzór pisma, terminy, prawa konsumenta. Darmowy generator reklamacji online.',
     category: 'Telekomunikacja',
+    articleType: ARTICLE_TYPES.FIRE_FIGHTING, // Artykuł typu "Gaszenie Pożarów"
     author: 'Zespół Pomocnik Obywatela',
     publishDate: '2025-12-06',
     readTime: '8 min',
@@ -211,6 +214,7 @@ Jeśli masz problem z telefonem - nie czekaj. Im szybciej złożysz reklamację,
     title: 'Odwołanie od mandatu karnego - Kompletny przewodnik 2025',
     metaDescription: 'Jak odwołać się od mandatu? Wzór odwołania, terminy, procedura krok po kroku. Mandat z fotoradaru, parkingowy - wszystko co musisz wiedzieć.',
     category: 'Motoryzacja',
+    articleType: ARTICLE_TYPES.FIRE_FIGHTING, // Artykuł typu "Gaszenie Pożarów"
     author: 'Zespół Pomocnik Obywatela',
     publishDate: '2025-12-06',
     readTime: '10 min',
@@ -489,6 +493,7 @@ Jeśli uważasz, że mandat jest niesłuszny - odwołaj się. System sądowy jes
     title: 'Wniosek o zasiłek okresowy - Kompletny przewodnik OPS 2025',
     metaDescription: 'Jak złożyć wniosek o zasiłek okresowy? Kto może dostać, ile wynosi, jakie dokumenty? Wzór wniosku i generator online.',
     category: 'Pomoc społeczna',
+    articleType: ARTICLE_TYPES.FIRE_FIGHTING, // Artykuł typu "Gaszenie Pożarów" - ale z silnym upsell do Pomocnika
     author: 'Zespół Pomocnik Obywatela',
     publishDate: '2025-12-06',
     readTime: '12 min',
@@ -3461,6 +3466,1035 @@ Data i miejsce                     Podpis wnioskodawcy
 ## Wygeneruj wniosek automatycznie
 
 Nie musisz samodzielnie wypełniać wniosku. Skorzystaj z naszego **generatora wniosków o dowód osobisty** — odpowiedz tylko na kilka pytań, a pobierzesz gotowy dokument w formacie **PDF lub DOCX**, który możesz zabrać do urzędu.
+`
+  },
+
+  // === NOWE ARTYKUŁY - HUB CONTENT (Przewodniki kompleksowe) ===
+
+  {
+    id: 'kompletny-przewodnik-zasilki-rodzinne-2025',
+    slug: 'kompletny-przewodnik-zasilki-rodzinne-2025',
+    title: 'Kompletny przewodnik po zasiłkach rodzinnych 2025 - Wszystko co musisz wiedzieć',
+    metaDescription: 'Pełny przewodnik po zasiłkach rodzinnych w 2025. Jakie zasiłki przysługują rodzinom? Jak je uzyskać? Wzory wniosków, kalkulatory, terminy.',
+    category: 'Pomoc społeczna',
+    articleType: ARTICLE_TYPES.HUB_CONTENT, // Artykuł zbiorczy
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-10',
+    readTime: '15 min',
+    keywords: 'zasiłki rodzinne 2025, świadczenia rodzinne, 800+, becikowe, zasiłek na dziecko, dodatki rodzinne',
+    excerpt: 'Kompleksowy przewodnik po wszystkich zasiłkach i świadczeniach rodzinnych w 2025 roku. Dowiedz się, co Ci się należy i jak to uzyskać.',
+    content: `
+# Kompletny przewodnik po zasiłkach rodzinnych 2025
+
+Państwo polskie oferuje szereg świadczeń wspierających rodziny z dziećmi. W tym przewodniku znajdziesz **kompleksowe zestawienie wszystkich zasiłków rodzinnych** dostępnych w 2025 roku.
+
+## Spis treści
+1. Świadczenie 800+ (Rodzina 800+)
+2. Becikowe (Jednorazowa zapomoga z tytułu urodzenia dziecka)
+3. Zasiłek rodzinny i dodatki
+4. Dobry Start (300+)
+5. Kosiniakowe (Świadczenie wspierające)
+6. Świadczenie wychowawcze dla rodzin zastępczych
+7. Jak złożyć wnioski - praktyczny przewodnik
+
+---
+
+## 1. Świadczenie 800+ (Rodzina 800+)
+
+### Ile wynosi?
+**800 zł miesięcznie** na każde dziecko do ukończenia 18. roku życia.
+
+### Dla kogo?
+- **Bez kryterium dochodowego** - przysługuje wszystkim rodzicom
+- Na każde dziecko do 18. roku życia
+- Również dla obywateli UE pracujących w Polsce
+
+### Jak złożyć wniosek?
+- **Online:** Portal Emp@tia, bankowość elektroniczna, PUE ZUS
+- **Osobiście:** W urzędzie gminy/miasta
+- **Termin:** Do 30 kwietnia (kontynuacja) lub w ciągu 3 miesięcy od urodzenia dziecka
+
+### Kiedy trafia wypłata?
+Zazwyczaj do **ostatniego dnia miesiąca**.
+
+**💡 Wskazówka:** Jeśli nie złożysz wniosku do 30 kwietnia, możesz stracić wypłaty za kilka miesięcy!
+
+---
+
+## 2. Becikowe - Jednorazowa zapomoga
+
+### Ile wynosi?
+**1000 zł jednorazowo** na każde narodzone dziecko.
+
+### Dla kogo?
+Rodziny, które spełniają **kryterium dochodowe**:
+- **1922 zł netto** na osobę w rodzinie
+
+### Warunki:
+- Matka pozostawała pod opieką medyczną **nie później niż od 10. tygodnia ciąży**
+- Wniosek należy złożyć **w ciągu 12 miesięcy** od urodzenia dziecka
+
+### Jak złożyć wniosek?
+Podobnie jak 800+ - online lub osobiście w urzędzie gminy.
+
+---
+
+## 3. Zasiłek rodzinny i dodatki
+
+### Ile wynosi zasiłek rodzinny?
+- **95 zł/mies.** - dziecko do 5. roku życia
+- **124 zł/mies.** - dziecko od 6. do 18. roku życia
+- **135 zł/mies.** - dziecko od 18. do 24. roku życia (jeśli uczy się)
+
+### Kryterium dochodowe:
+- **674 zł** netto na osobę w rodzinie
+- **764 zł** jeśli w rodzinie jest dziecko niepełnosprawne
+
+### Dodatki do zasiłku rodzinnego:
+
+| Dodatek | Kwota | Dla kogo |
+|---------|-------|----------|
+| Z tytułu urodzenia dziecka | 1000 zł (jednorazowo) | Przy spełnieniu kryterium dochodowego |
+| Z tytułu opieki nad dzieckiem w okresie korzystania z urlopu wychowawczego | 400 zł/mies. | Rodzic na urlopie wychowawczym |
+| Z tytułu samotnego wychowywania dziecka | 193 zł/mies. (max. 386 zł na wszystkie dzieci) | Samotny rodzic |
+| Z tytułu wychowywania dziecka w rodzinie wielodzietnej | 95 zł/mies. | Trzecie i kolejne dziecko |
+| Z tytułu kształcenia i rehabilitacji dziecka niepełnosprawnego | 90 zł (do 5 lat) / 110 zł (od 5 do 24 lat) | Dziecko niepełnosprawne |
+| Z tytułu rozpoczęcia roku szkolnego | 100 zł (jednorazowo) | Dziecko uczące się |
+| Z tytułu podjęcia przez dziecko nauki w szkole poza miejscem zamieszkania | 69 zł - 113 zł/mies. | W zależności od formy zakwaterowania |
+
+---
+
+## 4. Dobry Start (300+)
+
+### Ile wynosi?
+**300 zł jednorazowo** na dziecko.
+
+### Dla kogo?
+- Każde dziecko uczące się w szkole (od klasy 1 do końca szkoły ponadpodstawowej)
+- **Bez kryterium dochodowego**
+- Nie dotyczy przedszkolaków i studentów
+
+### Kiedy złożyć wniosek?
+- **Od 1 lipca do 30 listopada** każdego roku
+
+### Jak złożyć wniosek?
+Portal Emp@tia, PUE ZUS lub bankowość elektroniczna.
+
+**💡 Wskazówka:** Jeśli złożysz wniosek do końca sierpnia, pieniądze dostajesz do 30 września!
+
+---
+
+## 5. Kosiniakowe - Świadczenie wspierające
+
+### Ile wynosi?
+Od **220 zł do 1780 zł miesięcznie** (w zależności od poziomu potrzeby wsparcia).
+
+### Dla kogo?
+Osoby z niepełnosprawnościami (dzieci i dorośli) wymagające wsparcia w codziennym funkcjonowaniu.
+
+### Jak uzyskać?
+Decyzja o przyznaniu wydawana przez ZUS na podstawie **orzeczenia o niepełnosprawności**.
+
+---
+
+## 6. Świadczenie wychowawcze dla rodzin zastępczych
+
+### Ile wynosi?
+- **1000 zł/mies.** na dziecko w rodzinie zastępczej spokrewnionej
+- **2000 zł/mies.** na dziecko w rodzinie zastępczej niezawodowej niespokrewnionej
+- **3000 zł/mies.** na dziecko w rodzinie zastępczej zawodowej
+
+---
+
+## 7. Jak złożyć wnioski - praktyczny przewodnik
+
+### Gdzie składać wnioski?
+- **Świadczenia rodzinne (zasiłek rodzinny, becikowe):** Urząd Gminy/Miasta
+- **800+ i Dobry Start:** Portal Emp@tia, PUE ZUS, bankowość elektroniczna
+- **Kosiniakowe:** ZUS
+
+### Dokumenty, które mogą być potrzebne:
+✅ Dowód osobisty
+✅ Zaświadczenie o dochodach (jeśli dotyczy)
+✅ Akt urodzenia dziecka
+✅ Zaświadczenie ze szkoły (Dobry Start)
+✅ Zaświadczenie od lekarza (becikowe)
+✅ Orzeczenie o niepełnosprawności (jeśli dotyczy)
+
+### Terminy wypłat:
+- **800+:** Ostatni dzień miesiąca
+- **Dobry Start:** Do 30 września (wnioski do końca sierpnia) lub w ciągu 2 miesięcy
+- **Zasiłek rodzinny:** Co miesiąc (zazwyczaj między 25. a ostatnim dniem miesiąca)
+
+---
+
+## Co jeszcze Ci przysługuje? - Sprawdź w Pomocniku Obywatela
+
+To dopiero początek. Poza świadczeniami rodzinnymi możesz mieć prawo do:
+
+🏠 **Dodatku mieszkaniowego**
+⚡ **Dodatku energetycznego**
+🔥 **Dodatku węglowego**
+🏥 **Świadczeń zdrowotnych dla dzieci**
+🎓 **Stypendiów szkolnych**
+📚 **Dofinansowań do podręczników**
+
+**Nie trać pieniędzy!** Pomocnik Obywatela przeskanuje Twoją sytuację i znajdzie **wszystkie świadczenia**, które możesz uzyskać.
+
+---
+
+## Podsumowanie
+
+System świadczeń rodzinnych w Polsce jest rozbudowany. Kluczowe punkty:
+
+✅ **800+** - bez kryterium dochodowego na każde dziecko
+✅ **Becikowe** - 1000 zł jednorazowo (z kryterium)
+✅ **Zasiłek rodzinny** - od 95 do 135 zł/mies. (z kryterium + dodatki)
+✅ **Dobry Start** - 300 zł na początek roku szkolnego (bez kryterium)
+✅ **Kosiniakowe** - do 1780 zł dla osób niepełnosprawnych
+
+**Pamiętaj:** Świadczenia nie są przyznawane automatycznie - **musisz złożyć wniosek!**
+
+**💡 Protip:** Zapisz się do Pomocnika Obywatela, a dostaniesz **powiadomienie, gdy pojawią się nowe świadczenia** lub zmienią się przepisy!
+`
+  },
+
+  // === ARTYKUŁ LIFE_OPPORTUNITIES (Życiowe Okazje) ===
+
+  {
+    id: 'dotacje-budowa-domu-2025',
+    slug: 'dotacje-budowa-domu-2025',
+    title: 'Dotacje i dofinansowania do budowy domu w 2025 - Pełna lista',
+    metaDescription: 'Jakie dotacje można dostać budując dom w 2025? Fotowoltaika, pompy ciepła, Czyste Powietrze, ulga termomodernizacyjna. Sprawdź co Ci przysługuje!',
+    category: 'Budownictwo',
+    articleType: ARTICLE_TYPES.LIFE_OPPORTUNITIES, // Artykuł o "Życiowych Okazjach"
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-10',
+    readTime: '12 min',
+    keywords: 'dotacje budowa domu 2025, fotowoltaika dofinansowanie, pompy ciepła dotacje, czyste powietrze, ulga termomodernizacyjna',
+    excerpt: 'Budujesz lub remontujesz dom? Możesz stracić dziesiątki tysięcy złotych nie znając dostępnych dotacji! Sprawdź pełną listę dofinansowań na 2025 rok.',
+    content: `
+# Dotacje i dofinansowania do budowy domu w 2025
+
+Budujesz lub remontujesz dom? **Możesz dostać nawet 100 000 zł dofinansowania!** Problem w tym, że większość ludzi nie wie o wszystkich dostępnych programach. W tym artykule znajdziesz **kompletną listę dotacji na 2025 rok**.
+
+## ⚠️ Ostrzeżenie: Tracisz pieniądze każdego dnia
+
+Jeśli:
+- Już zbudowałeś dom bez fotowoltaiki - straciłeś **20 000 - 30 000 zł** dotacji
+- Wymieniłeś piec bez sprawdzenia programu "Czyste Powietrze" - straciłeś **30 000 zł**
+- Nie skorzystałeś z ulgi termomodernizacyjnej - straciłeś **53 000 zł** zwrotu podatku
+
+**Nie popełnij tego błędu!** Sprawdź, co Ci przysługuje **ZANIM** podejmiesz decyzje inwestycyjne.
+
+---
+
+## 1. 🌞 Dotacja na fotowoltaikę - do 30 000 zł
+
+### Program "Mój Prąd 6.0"
+
+**Wysokość dotacji:** Do **7 000 zł** (maks. 50% kosztów)
+
+**Dla kogo:**
+- Właściciele domów jednorodzinnych
+- Instalacja musi mieć moc od 2 kW do 10 kW
+- Pierwszy wniosek o przyłączenie złożony po 23.07.2024
+
+**Jak uzyskać:**
+1. Zainstaluj fotowoltaikę (firma z certyfikatem)
+2. Złóż wniosek online na stronie NFOŚiGW
+3. Otrzymaj dofinansowanie na konto
+
+**Dodatkowe korzyści:**
+- Magazyn energii: dodatkowe **16 000 zł**
+- Całkowita dotacja może wynieść **23 000 zł**!
+
+---
+
+## 2. 🔥 Program "Czyste Powietrze" - do 69 000 zł
+
+### Wymiana pieca i termomodernizacja
+
+**Wysokość dotacji:**
+- **Do 37 000 zł** (podstawowy próg dochodowy)
+- **Do 55 500 zł** (średni próg dochodowy)
+- **Do 69 000 zł** (niski dochód)
+
+**Co można dofinansować:**
+✅ Wymianę starego pieca na:
+   - Pompę ciepła
+   - Kocioł gazowy kondensacyjny
+   - Piec na biomasę klasy 5
+✅ Ocieplenie domu (ściany, dach, podłoga)
+✅ Wymianę okien i drzwi
+✅ Instalację fotowoltaiki
+✅ Instalację wentylacji mechanicznej
+
+**Kryterium dochodowe (2025):**
+- Podstawowy: **2 500 zł/os** - dotacja do 60%
+- Średni: **1 850 zł/os** - dotacja do 75%
+- Niski: **1 400 zł/os** - dotacja do 100%!
+
+**Ważne:** Dom musi być zgłoszony do użytkowania przed 2009 rokiem.
+
+---
+
+## 3. 💨 Pompa ciepła - dotacje do 75 000 zł
+
+### Program "Ciepłe Mieszkanie"
+
+**Wysokość dotacji:** Do **75 000 zł** (w tym 30 000 zł na pompę ciepła)
+
+**Dla kogo:**
+- Właściciele domów jednorodzinnych
+- Budynki oddane do użytku przed 2009 rokiem
+
+**Co można dostać:**
+- **30 000 zł** na pompę ciepła
+- **45 000 zł** na termomodernizację
+
+**Warunki:**
+- Zdemontowanie starego źródła ogrzewania (węgiel, koks)
+- Osiągnięcie określonego standardu energetycznego
+
+---
+
+## 4. 🏡 Ulga termomodernizacyjna - zwrot do 53 000 zł
+
+### Odliczenie w PIT
+
+**Ile możesz odzyskać?**
+Możesz **odliczyć od podatku** 19% kosztów (max. 53 000 zł zwrotu z 280 000 zł wydatków)
+
+**Co można odliczyć:**
+✅ Ocieplenie ścian, dachu, podłóg
+✅ Wymianę okien i drzwi
+✅ Wymianę źródła ciepła
+✅ Instalację fotowoltaiki
+✅ Instalację rekuperacji
+
+**Jak to działa?**
+Wydałeś **100 000 zł** na termomodernizację?
+- Odliczasz w PIT: **19 000 zł** (zwrot podatku)
+
+**Warunki:**
+- Dom musi być starszy niż 3 lata
+- Prace muszą poprawić efektywność energetyczną
+- Masz 6 lat na rozliczenie
+
+---
+
+## 5. 🌳 Ulga dla Rodzin 4+ - dodatkowe możliwości
+
+Jeśli masz **4 lub więcej dzieci**, możesz dodatkowo odliczyć w PIT:
+- Spłatę kredytu hipotecznego
+- Budowę domu (materiały i robocizna)
+
+**Max. 1 000 000 zł** ulgi w skali życia rodziny.
+
+---
+
+## 6. 💧 Dotacje na przydomową oczyszczalnię ścieków
+
+**Wysokość dotacji:** Do **80% kosztów** (max. 10 000 - 20 000 zł w zależności od gminy)
+
+**Programy:**
+- Gminne/Wojewódzkie programy ochrony środowiska
+- NFOŚiGW "Moja Woda"
+
+**Dla kogo:**
+- Właściciele domów bez dostępu do kanalizacji
+- Zgodnie z warunkami gminy
+
+---
+
+## 7. 💡 Bon energetyczny 2025
+
+**Nowość!** Rządowy program wsparcia dla osób z niskimi dochodami.
+
+**Wysokość bonu:**
+- **300 zł** - gospodarstwa 1-osobowe
+- **400 zł** - gospodarstwa 2-3 osobowe
+- **500 zł** - gospodarstwa 4-5 osobowych
+- **600 zł** - gospodarstwa 6+ osobowych
+
+**Dodatkowy bon (ogrzewanie węglowe):** +500 zł
+
+**Dla kogo:**
+- Gospodarstwa z dochodem do **2500 zł/os** (w mieście powyżej 100 tys. mieszkańców)
+- Gospodarstwa z dochodem do **1900 zł/os** (poza miastem)
+
+---
+
+## Jak nie stracić dotacji? - Krok po kroku
+
+### Błędy, które kosztują Cię dziesiątki tysięcy:
+
+❌ **Błąd 1:** Zaczynasz budowę/remont PRZED złożeniem wniosku
+- Większość dotacji wymaga, aby wniosek był **przed** rozpoczęciem prac
+
+❌ **Błąd 2:** Nie sprawdzasz wszystkich programów
+- Możesz łączyć różne dotacje (np. "Czyste Powietrze" + ulga termomodernizacyjna)
+
+❌ **Błąd 3:** Brak audytu energetycznego
+- Potrzebny do większości programów
+
+❌ **Błąd 4:** Zatrudnienie nieuprawnionych wykonawców
+- Tylko certyfikowane firmy (np. w "Mój Prąd")
+
+### ✅ Prawidłowy plan działania:
+
+1. **Sprawdź, na co masz prawo** (wszystkie programy)
+2. **Zrób audyt energetyczny** budynku
+3. **Złóż wnioski** (PRZED rozpoczęciem prac!)
+4. **Zatrudnij certyfikowanych wykonawców**
+5. **Zrealizuj inwestycję**
+6. **Odbierz dotację**
+7. **Rozlicz ulgę w PIT** (rok później)
+
+---
+
+## Ile możesz realnie zyskać? - Przykład
+
+**Sytuacja:** Budujesz dom energooszczędny (200 m²)
+
+| Pozycja | Dotacja/Ulga | Kwota |
+|---------|--------------|-------|
+| Fotowoltaika (8 kW) | Mój Prąd + magazyn | **23 000 zł** |
+| Pompa ciepła | Ciepłe Mieszkanie | **30 000 zł** |
+| Termomodernizacja (ocieplenie) | Czyste Powietrze | **20 000 zł** |
+| Ulga termomodernizacyjna (PIT) | 19% z 200 000 zł | **38 000 zł** |
+| **SUMA** | | **111 000 zł** |
+
+**Nie żartuję - możesz zyskać ponad 100 000 zł!**
+
+---
+
+## Co dalej? Nie trać tych pieniędzy!
+
+Teraz wiesz, ile możesz zyskać. Problem? **Przepisy się zmieniają**, programy mają terminy naboru, a warunki bywają skomplikowane.
+
+**Pomocnik Obywatela** to aplikacja, która:
+✅ Przeskanuje Twoją sytuację i **pokaże dokładnie, co Ci przysługuje**
+✅ Powiadomi Cię, **gdy otworzy się nabór** do nowych programów
+✅ Podpowie, **jak łączyć dotacje**, aby zmaksymalizować zysk
+✅ Przygotuje **gotowe wnioski** do pobrania
+
+**Za jedyne 5 zł/msc** oszczędzisz dziesiątki tysięcy złotych.
+
+---
+
+## Podsumowanie
+
+Jeśli budujesz lub remontujesz dom w 2025 roku, **sprawdź dotacje PRZED** podjęciem decyzji. Większość ludzi traci dziesiątki tysięcy złotych, bo:
+
+❌ Nie wiedzą o wszystkich programach
+❌ Rozpoczynają prace przed złożeniem wniosku
+❌ Nie łączą dotacji z ulgami podatkowymi
+
+**Nie popełnij tego błędu!**
+
+✅ Sprawdź, co Ci przysługuje (Pomocnik Obywatela)
+✅ Złóż wnioski PRZED rozpoczęciem prac
+✅ Łącz dotacje i ulgi, aby zmaksymalizować zysk
+
+**Powodzenia i mądrych inwestycji! 🏡**
+`
+  },
+
+  // === ARTYKUŁ FIRE_FIGHTING - Jak zwolnić się z pracy ===
+
+  {
+    id: 'jak-zwolnic-sie-z-pracy-wzor-wypowiedzenia',
+    slug: 'jak-zwolnic-sie-z-pracy-wzor-wypowiedzenia',
+    title: 'Jak zwolnić się z pracy? Wzór wypowiedzenia i poradnik krok po kroku 2025',
+    metaDescription: 'Kompletny przewodnik jak zwolnić się z pracy. Wzór wypowiedzenia, okresy wypowiedzenia, prawa pracownika, urlop wypoczynkowy. Darmowy generator wypowiedzenia.',
+    category: 'Praca',
+    articleType: ARTICLE_TYPES.FIRE_FIGHTING,
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-10',
+    readTime: '12 min',
+    keywords: 'jak zwolnić się z pracy, wypowiedzenie umowy o pracę wzór, okres wypowiedzenia, wypowiedzenie za porozumieniem stron, rezygnacja z pracy',
+    excerpt: 'Planujesz zwolnienie się z pracy? Dowiedz się jak to zrobić krok po kroku, jakie są okresy wypowiedzenia i jak napisać prawidłowe wypowiedzenie.',
+    content: `
+# Jak zwolnić się z pracy? Wzór wypowiedzenia i poradnik krok po kroku 2025
+
+Decyzja o odejściu z pracy to ważny moment w karierze. W tym przewodniku dowiesz się **dokładnie jak zwolnić się z pracy**, jakie są okresy wypowiedzenia i jak napisać wypowiedzenie, które jest zgodne z prawem.
+
+## ⚠️ Najczęstsze błędy przy wypowiadaniu umowy
+
+❌ **Złożenie wypowiedzenia ustnie** (nie ma mocy prawnej!)
+❌ **Brak daty i podpisu** na wypowiedzeniu
+❌ **Niewłaściwe obliczenie okresu wypowiedzenia**
+❌ **Nieodebranie świadectwa pracy**
+
+**Nie popełnij tych błędów!** Przeczytaj ten poradnik, zanim złożysz wypowiedzenie.
+
+---
+
+## 1. Rodzaje wypowiedzenia umowy o pracę
+
+### A. Wypowiedzenie przez pracownika (zwykłe)
+- **Klasyczne wypowiedzenie** - ze wskazaniem okresu wypowiedzenia
+- Musisz przestrzegać okresu wypowiedzenia (od 2 tygodni do 3 miesięcy)
+- Pracodawca musi przyjąć wypowiedzenie
+
+### B. Wypowiedzenie za porozumieniem stron
+- **Najszybsza opcja** - możesz odejść nawet od razu
+- Wymaga zgody pracodawcy
+- Ustalasz indywidualnie datę zakończenia pracy
+
+### C. Rozwiązanie umowy bez wypowiedzenia (z winy pracodawcy)
+- Gdy pracodawca:
+  - Narusza podstawowe obowiązki (np. nie płaci wynagrodzenia)
+  - Dopuszcza się mobbingu
+  - Nie zapewnia bezpiecznych warunków pracy
+- **Odchodzisz natychmiast** + prawo do odszkodowania
+
+---
+
+## 2. Okresy wypowiedzenia - ile musisz przepracować?
+
+Okres wypowiedzenia zależy od **stażu pracy u danego pracodawcy**:
+
+| Staż u pracodawcy | Okres wypowiedzenia |
+|-------------------|---------------------|
+| **Mniej niż 6 miesięcy** | **2 tygodnie** |
+| **Od 6 miesięcy do 3 lat** | **1 miesiąc** |
+| **Powyżej 3 lat** | **3 miesiące** |
+
+### Ważne zasady:
+
+✅ Okres wypowiedzenia **liczy się od pierwszego dnia miesiąca** następującego po miesiącu, w którym złożyłeś wypowiedzenie
+
+**Przykład:**
+- Złożyłeś wypowiedzenie **15 stycznia**
+- Okres wypowiedzenia: **1 miesiąc**
+- Ostatni dzień pracy: **28 lutego** (nie 15 lutego!)
+
+### Umowa na okres próbny:
+
+| Długość okresu próbnego | Wypowiedzenie |
+|-------------------------|---------------|
+| **Do 2 tygodni** | **3 dni robocze** |
+| **Powyżej 2 tygodni** | **1 tydzień** |
+| **3 miesiące** | **2 tygodnie** |
+
+---
+
+## 3. Krok po kroku: Jak zwolnić się z pracy?
+
+### Krok 1: Sprawdź swoją umowę o pracę
+- Jaki masz staż u pracodawcy?
+- Jaki typ umowy masz podpisany?
+- Czy są dodatkowe klauzule (np. zakaz konkurencji)?
+
+### Krok 2: Oblicz okres wypowiedzenia
+Użyj tabeli powyżej, aby określić ile musisz przepracować.
+
+### Krok 3: Napisz wypowiedzenie
+Wypowiedzenie musi zawierać:
+
+**Obowiązkowe elementy:**
+- Twoje dane (imię, nazwisko, adres)
+- Dane pracodawcy
+- Data i miejsce
+- Wyraźne oświadczenie: **"Składam wypowiedzenie umowy o pracę"**
+- Wskazanie okresu wypowiedzenia
+- Podpis własnoręczny
+
+**Opcjonalne (ale polecane):**
+- Podziękowanie za współpracę
+- Prośba o wystawienie świadectwa pracy
+
+### Krok 4: Złóż wypowiedzenie
+- **Osobiście** - najlepsza opcja (poproś o potwierdzenie przyjęcia)
+- **Listem poleconym** - zachowasz dowód nadania
+- **E-mail** - tylko jeśli regulamin pracy na to pozwala
+
+**Ważne:** Wypowiedzenie **musi być na piśmie**! Ustne wypowiedzenie nie ma mocy prawnej.
+
+### Krok 5: Przepracuj okres wypowiedzenia
+- Wykonuj swoje obowiązki normalnie
+- Możesz wykorzystać urlop w okresie wypowiedzenia (jeśli zgodzi się pracodawca)
+
+### Krok 6: Odbierz dokumenty
+W ostatnim dniu pracy odbierz:
+- **Świadectwo pracy** (pracodawca ma obowiązek wydać w ostatnim dniu)
+- Rozliczenie (ewentualne należności, niewykorzystany urlop)
+
+---
+
+## 4. Wzór wypowiedzenia umowy o pracę
+
+\`\`\`
+[Twoje imię i nazwisko]
+[Twój adres]
+[Kod pocztowy i miasto]
+
+                                        [Miasto], [Data]
+
+[Nazwa firmy]
+[Imię i nazwisko pracodawcy/osoby uprawnionej]
+[Adres firmy]
+[Kod pocztowy i miasto]
+
+WYPOWIEDZENIE UMOWY O PRACĘ
+
+Niniejszym składam wypowiedzenie umowy o pracę zawartej w dniu [data zawarcia umowy]
+na stanowisku [nazwa stanowiska] z zachowaniem [okres wypowiedzenia]-miesięcznego
+okresu wypowiedzenia.
+
+Proszę o wystawienie świadectwa pracy w ostatnim dniu zatrudnienia.
+
+Dziękuję za dotychczasową współpracę.
+
+Z poważaniem,
+[Podpis]
+\`\`\`
+
+---
+
+## 5. Wypowiedzenie za porozumieniem stron - jak negocjować?
+
+### Co możesz negocjować?
+✅ **Datę zakończenia pracy** (możesz odejść szybciej niż okres wypowiedzenia)
+✅ **Odprawę** (ekwiwalent za urlop, dodatkowe wynagrodzenie)
+✅ **Referencje** (pozytywne świadectwo pracy)
+✅ **Zakaz konkurencji** (możesz poprosić o zwolnienie z zakazu)
+
+### Jak to wygląda w praktyce?
+
+**Krok 1:** Umów się na rozmowę z pracodawcą/HR
+**Krok 2:** Zaproponuj datę odejścia
+**Krok 3:** Ustal warunki na piśmie (porozumienie)
+**Krok 4:** Podpisz porozumienie
+
+**Przykład:**
+Masz 3-miesięczny okres wypowiedzenia, ale znalazłeś nową pracę zaczynającą się za miesiąc. Możesz zaproponować pracodawcy:
+- Odejście za miesiąc (zamiast 3)
+- Pomoc w wdrożeniu nowej osoby
+- Elastyczność w ostatnim miesiącu
+
+---
+
+## 6. Urlop wypoczynkowy przy wypowiedzeniu
+
+### Czy możesz iść na urlop w okresie wypowiedzenia?
+
+✅ **TAK** - ale tylko za zgodą pracodawcy
+✅ Pracodawca może udzielić Ci urlopu w okresie wypowiedzenia
+❌ Pracodawca **nie musi** zgodzić się na urlop
+
+### Co z niewykorzystanym urlopem?
+
+Jeśli nie wykorzystasz całego urlopu przed odejściem:
+- Otrzymasz **ekwiwalent pieniężny** za niewykorzystany urlop
+- Ekwiwalent wypłacany w ostatnim dniu pracy
+
+**Obliczanie ekwiwalentu:**
+Ekwiwalent = (Wynagrodzenie miesięczne / 26 dni roboczych) × Liczba dni urlopu
+
+**Przykład:**
+- Wynagrodzenie: 5000 zł brutto
+- Niewykorzystany urlop: 10 dni
+- Ekwiwalent: (5000 / 26) × 10 = **1923 zł brutto**
+
+---
+
+## 7. Rozwiązanie umowy bez wypowiedzenia
+
+### Kiedy możesz rozwiązać umowę natychmiast?
+
+Możesz odejść **bez wypowiedzenia**, gdy pracodawca:
+
+❌ **Nie wypłaca wynagrodzenia** (opóźnienie powyżej 1 miesiąca)
+❌ **Dopuszcza się mobbingu** lub dyskryminacji
+❌ **Narusza przepisy BHP** (zagrożenie zdrowia)
+❌ **Nie odprowadza składek ZUS** (zaświadczenie z ZUS)
+
+**Co musisz zrobić:**
+1. Napisz pismo o rozwiązaniu umowy bez wypowiedzenia
+2. Wskaż konkretny powód (z art. 55 § 1¹ Kodeksu pracy)
+3. Złóż pracodawcy
+4. **Masz prawo do odszkodowania** (równowartość wynagrodzenia za okres wypowiedzenia)
+
+**Wzór:**
+"Na podstawie art. 55 § 1¹ Kodeksu pracy rozwiązuję umowę o pracę bez wypowiedzenia z powodu [konkretny powód]. Jednocześnie żądam wypłaty odszkodowania."
+
+---
+
+## 8. Świadectwo pracy - co musisz wiedzieć?
+
+### Co pracodawca musi uwzględnić?
+✅ Dane pracownika i pracodawcy
+✅ Daty zatrudnienia (od-do)
+✅ Stanowisko/stanowiska
+✅ Podstawa rozwiązania umowy
+✅ Wymiar urlopu i wykorzystane dni
+
+### Gdy świadectwo jest błędne:
+
+Masz **7 dni** na zgłoszenie pracodawcy, że świadectwo zawiera błędy.
+Pracodawca ma **7 dni** na poprawienie lub wydanie sprostowania.
+
+---
+
+## 9. Najczęstsze pytania (FAQ)
+
+### Czy pracodawca może odmówić przyjęcia wypowiedzenia?
+**NIE.** Pracodawca musi przyjąć wypowiedzenie. Nie może odmówić.
+
+### Czy mogę wycofać wypowiedzenie?
+**TAK**, ale tylko za zgodą pracodawcy. Jeśli pracodawca się nie zgodzi, wypowiedzenie pozostaje w mocy.
+
+### Co jeśli pracodawca mnie zwolni przed końcem okresu wypowiedzenia?
+To nielegalne. Możesz domagać się wynagrodzenia za cały okres wypowiedzenia.
+
+### Czy muszę podawać przyczynę wypowiedzenia?
+**NIE.** Pracownik nie musi podawać przyczyny wypowiedzenia.
+
+---
+
+## 10. Wygeneruj wypowiedzenie automatycznie
+
+Nie masz czasu na pisanie wypowiedzenia? Skorzystaj z naszego **generatora wypowiedzeń**!
+
+**Generator wypełni za Ciebie:**
+✅ Wszystkie wymagane dane
+✅ Prawidłowe formułowanie prawne
+✅ Obliczenie okresu wypowiedzenia
+✅ Format gotowy do wydruku i podpisania
+
+---
+
+## Podsumowanie
+
+Zwolnienie się z pracy to proces wymagający:
+
+✅ **Pisemnego wypowiedzenia** (ustne nie ma mocy!)
+✅ **Przestrzegania okresu wypowiedzenia** (2 tygodnie - 3 miesiące)
+✅ **Odebrania świadectwa pracy** w ostatnim dniu
+✅ **Ekwiwalentu za niewykorzystany urlop**
+
+**Pamiętaj:**
+- Wypowiedzenie działa od pierwszego dnia następnego miesiąca
+- Zawsze proś o potwierdzenie przyjęcia wypowiedzenia
+- Możesz negocjować porozumienie stron (szybsze odejście)
+
+**Powodzenia w nowej pracy! 💼**
+`
+  },
+
+  // === ARTYKUŁ LIFE_OPPORTUNITIES - Świadczenia dla osób niepełnosprawnych ===
+
+  {
+    id: 'swiadczenia-dla-osob-niepelnosprawnych-2025',
+    slug: 'swiadczenia-dla-osob-niepelnosprawnych-2025',
+    title: 'Świadczenia dla osób niepełnosprawnych 2025 - Kompletna lista',
+    metaDescription: 'Pełna lista świadczeń dla osób niepełnosprawnych w 2025. Kosiniakowe, renta, zasiłki, ulgi, dofinansowania. Sprawdź ile możesz otrzymać!',
+    category: 'Pomoc społeczna',
+    articleType: ARTICLE_TYPES.LIFE_OPPORTUNITIES,
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-10',
+    readTime: '15 min',
+    keywords: 'świadczenia dla niepełnosprawnych 2025, kosiniakowe, renta z tytułu niezdolności do pracy, zasiłek pielęgnacyjny, świadczenie wspierające',
+    excerpt: 'Nie trać pieniędzy! Osoby niepełnosprawne mogą otrzymać nawet kilka tysięcy złotych miesięcznie. Sprawdź pełną listę świadczeń na 2025 rok.',
+    content: `
+# Świadczenia dla osób niepełnosprawnych 2025 - Kompletna lista
+
+System wsparcia dla osób niepełnosprawnych w Polsce jest rozbudowany. Problem? **Większość osób nie wie o wszystkich świadczeniach**, które im przysługują. W tym przewodniku znajdziesz **kompletną listę świadczeń na 2025 rok**.
+
+## ⚠️ Ile tracisz nie znając swoich praw?
+
+Osoba z orzeczeniem o znacznym stopniu niepełnosprawności może otrzymać:
+- **Kosiniakowe:** do 1780 zł/mies.
+- **Zasiłek pielęgnacyjny:** 215,84 zł/mies.
+- **Ulgi rehabilitacyjne w PIT:** bez limitu
+- **Dofinansowania PFRON:** do 50 000 zł
+
+**Łącznie nawet 2000+ zł miesięcznie + ulgi!**
+
+**Nie trać tych pieniędzy!** Sprawdź co Ci przysługuje.
+
+---
+
+## Spis treści
+1. Świadczenie wspierające (Kosiniakowe)
+2. Renta z tytułu niezdolności do pracy
+3. Zasiłek pielęgnacyjny
+4. Specjalny zasiłek opiekuńczy
+5. Świadczenie pielęgnacyjne
+6. Ulgi i zwolnienia podatkowe
+7. Dofinansowania z PFRON
+8. Karta parkingowa i inne uprawnienia
+9. Jak złożyć wnioski?
+
+---
+
+## 1. Świadczenie wspierające (Kosiniakowe)
+
+### Ile wynosi?
+Od **220 zł** do **1780 zł miesięcznie** (w zależności od poziomu potrzeby wsparcia)
+
+### Poziomy wsparcia:
+
+| Poziom | Punkty | Kwota miesięczna |
+|--------|--------|------------------|
+| 70-74 | 70-74 | 220 zł |
+| 75-79 | 75-79 | 440 zł |
+| 80-84 | 80-84 | 820 zł |
+| 85-89 | 85-89 | 1220 zł |
+| 90-94 | 90-94 | 1540 zł |
+| 95-100 | 95-100 | 1780 zł |
+
+### Dla kogo?
+- Osoby niepełnosprawne **wymagające wsparcia w codziennym funkcjonowaniu**
+- Dzieci i dorośli
+- **Bez kryterium dochodowego!**
+
+### Jak uzyskać?
+1. Złóż wniosek do ZUS (RS-41)
+2. ZUS przeprowadzi wywiad środowiskowy
+3. Lekarz orzecznik ZUS określi poziom potrzeby wsparcia (70-100 punktów)
+4. Decyzja wydawana w ciągu 30 dni
+
+**Ważne:** Świadczenie wypłacane **od miesiąca złożenia wniosku**!
+
+---
+
+## 2. Renta z tytułu niezdolności do pracy
+
+### Ile wynosi?
+- **Całkowita niezdolność:** Minimum **1780,96 zł** (2025)
+- **Częściowa niezdolność:** Minimum **1335,72 zł** (2025)
+
+**Wysokość zależy od:**
+- Twojego stażu ubezpieczeniowego
+- Podstawy wymiaru składek
+- Stopnia niezdolności
+
+### Dla kogo?
+Osoby, które:
+- Utraciły całkowicie lub częściowo zdolność do pracy
+- Mają orzeczenie lekarskie o niezdolności do pracy (od ZUS)
+- Mają wymagany staż ubezpieczeniowy
+
+### Jak uzyskać?
+1. Złóż wniosek do ZUS (RSI lub RSC)
+2. Dołącz dokumentację medyczną
+3. Lekarz orzecznik ZUS przeprowadzi badanie
+4. Decyzja o przyznaniu/odmowie
+
+---
+
+## 3. Zasiłek pielęgnacyjny
+
+### Ile wynosi?
+**215,84 zł miesięcznie** (2025)
+
+### Dla kogo?
+- **Dzieci niepełnosprawne** do 16. roku życia
+- **Osoby dorosłe** z orzeczeniem o **znacznym stopniu niepełnosprawności**
+- **Osoby niewidome**
+
+### Ważne:
+- **Bez kryterium dochodowego**
+- Nie łączy się ze świadczeniem pielęgnacyjnym
+- Można łączyć z kosiniakowym!
+
+### Jak uzyskać?
+Złóż wniosek w MOPS/GOPS z orzeczeniem o niepełnosprawności.
+
+---
+
+## 4. Specjalny zasiłek opiekuńczy
+
+### Ile wynosi?
+**620 zł miesięcznie** (2025)
+
+### Dla kogo?
+Opiekun osoby niepełnosprawnej, który:
+- Zrezygnował z pracy/nie pracuje
+- Opiekuje się osobą z orzeczeniem o **znacznym stopniu niepełnosprawności**
+- Spełnia kryterium dochodowe: **764 zł netto/osobę** w rodzinie
+
+### Jak uzyskać?
+Złóż wniosek w MOPS/GOPS.
+
+---
+
+## 5. Świadczenie pielęgnacyjne
+
+### Ile wynosi?
+**2988 zł miesięcznie** (2025)
+
+### Dla kogo?
+Rodzic/opiekun, który:
+- Nie pracuje z powodu konieczności sprawowania opieki
+- Opiekuje się:
+  - Dzieckiem niepełnosprawnym (**orzeczenie o niepełnosprawności**)
+  - Osobą z orzeczeniem o **znacznym stopniu niepełnosprawności**
+
+### Kryterium dochodowe:
+**764 zł netto/osobę** w rodzinie
+
+### Jak uzyskać?
+Złóż wniosek w MOPS/GOPS.
+
+---
+
+## 6. Ulgi i zwolnienia podatkowe (PIT)
+
+### Ulga rehabilitacyjna - bez limitu!
+
+**Co można odliczyć:**
+✅ Zakup leków (na receptę)
+✅ Sprzęt rehabilitacyjny (wózki, protezy, aparaty słuchowe, okulary)
+✅ Opiekę pielęgniarską/osobę do pomocy
+✅ Turnusy rehabilitacyjne
+✅ Kolonie/obozy dla dzieci niepełnosprawnych
+✅ Adaptację mieszkania (podjazdy, poręcze, windy)
+✅ Psa asystującego
+✅ Samochód (do 70% kosztów leasingu/kredytu, max. limit)
+
+### Przykład:
+Wydałeś w 2024 roku:
+- Leki: 5 000 zł
+- Wózek inwalidzki: 10 000 zł
+- Opieka pielęgniarska: 15 000 zł
+
+**Łącznie:** 30 000 zł
+**Zwrot w PIT (19%):** **5 700 zł**
+
+### Wyższa kwota wolna od podatku:
+
+Osoby z I lub II grupą inwalidzką:
+- **Zwykła kwota wolna:** 30 000 zł
+- **Podwyższona kwota (I/II grupa):** **85 528 zł**
+
+---
+
+## 7. Dofinansowania z PFRON
+
+### A. Likwidacja barier architektonicznych
+**Do 95 000 zł** (zwykle 80% kosztów, max. 15-20 tys. zł)
+
+**Na co:**
+- Podjazdy
+- Platformy/windy
+- Przebudowa łazienki
+- Poszerzenie drzwi
+
+### B. Dofinansowanie do zakupu samochodu
+**Do 60% ceny** (limit zmienny, zwykle ok. 30-40 tys. zł)
+
+**Warunki:**
+- Orzeczenie o znacznym stopniu niepełnosprawności
+- Samochód niezbędny do poruszania się
+
+### C. Dofinansowanie do sprzętu rehabilitacyjnego
+**Do 100% ceny** (w zależności od dochodu)
+
+**Przykłady:**
+- Wózek inwalidzki
+- Aparat słuchowy
+- Protezy
+- Podnośniki
+
+### D. Dofinansowanie do przedszkola/żłobka
+**Do 100% kosztów** (dla dzieci niepełnosprawnych)
+
+### Jak uzyskać dofinansowania PFRON?
+1. Złóż wniosek w PFRON (okręgowy oddział)
+2. Dołącz dokumenty (orzeczenie, kosztorys, faktura pro-forma)
+3. Czekaj na decyzję (30-60 dni)
+
+---
+
+## 8. Karta parkingowa i inne uprawnienia
+
+### Karta parkingowa
+- **Dla kogo:** Osoby z orzeczeniem o **znacznym** lub **umiarkowanym** stopniu niepełnosprawności (z symbolem R)
+- **Uprawnienia:** Parkowanie w miejscach dla niepełnosprawnych, wjazd do stref ograniczonego ruchu
+- **Jak uzyskać:** Wniosek do starostwa powiatowego
+
+### Inne uprawnienia:
+✅ **Bezpłatne przejazdy komunikacją miejską** (niektóre miasta)
+✅ **Ulgi na przejazdy PKP** (37-49% zniżki dla I st., 37% dla II st.)
+✅ **Bezpłatne leki** (na receptę, przy niektórych schorzeniach)
+✅ **Prawo do urlopu dodatkowego** (10 dni roboczych rocznie)
+✅ **Skrócony czas pracy** (35h/tydzień bez zmniejszenia wynagrodzenia, I/II st.)
+
+---
+
+## 9. Jak złożyć wnioski?
+
+### Krok 1: Uzyskaj orzeczenie
+- **Dzieci:** Powiatowy Zespół ds. Orzekania o Niepełnosprawności
+- **Dorośli:** ZUS (orzeczenie o stopniu niepełnosprawności)
+
+### Krok 2: Złóż wnioski
+**Gdzie składać:**
+- **Kosiniakowe:** ZUS (wniosek RS-41)
+- **Renta:** ZUS
+- **Zasiłek pielęgnacyjny:** MOPS/GOPS
+- **Świadczenie pielęgnacyjne:** MOPS/GOPS
+- **Dofinansowania PFRON:** PFRON (okręgowy oddział)
+
+### Krok 3: Zbieraj faktury przez cały rok
+Aby odliczyć koszty rehabilitacji w PIT, **zachowaj wszystkie faktury**:
+- Leki (recepty)
+- Sprzęt rehabilitacyjny
+- Opieka
+- Turnusy
+
+---
+
+## Ile możesz realnie otrzymać? - Przykład
+
+**Sytuacja:** Osoba z orzeczeniem o **znacznym stopniu niepełnosprawności**, wymagająca wsparcia (85-89 pkt), wydatki na rehabilitację 20 000 zł rocznie.
+
+| Świadczenie | Kwota miesięczna | Rocznie |
+|-------------|------------------|---------|
+| Kosiniakowe (85-89 pkt) | 1220 zł | 14 640 zł |
+| Zasiłek pielęgnacyjny | 215,84 zł | 2 590 zł |
+| Ulga rehabilitacyjna (PIT) | - | 3 800 zł (zwrot) |
+| **SUMA** | **1435,84 zł/mies.** | **21 030 zł** |
+
+**Plus:**
+- Dofinansowania PFRON (jednorazowo): do 95 000 zł
+- Ulgi na przejazdy, leki, itp.
+
+---
+
+## Pomocnik Obywatela - Sprawdź co Ci się należy!
+
+Nie wiesz, które świadczenia Ci przysługują? **Pomocnik Obywatela** automatycznie:
+
+✅ **Przeskanuje Twoją sytuację** i pokaże wszystkie świadczenia
+✅ **Obliczy ile możesz otrzymać** (rocznie i miesięcznie)
+✅ **Podpowie jak złożyć wnioski** (krok po kroku)
+✅ **Przypomni o terminach** i zmianach w przepisach
+✅ **Przygotuje gotowe wnioski** do pobrania
+
+**Za jedyne 5 zł/msc przestań tracić pieniądze!**
+
+---
+
+## Podsumowanie
+
+System świadczeń dla osób niepełnosprawnych jest rozbudowany:
+
+✅ **Kosiniakowe** - do 1780 zł/mies. (bez kryterium dochodowego)
+✅ **Renta** - minimum 1781 zł/mies.
+✅ **Zasiłek pielęgnacyjny** - 215,84 zł/mies.
+✅ **Ulga rehabilitacyjna** - bez limitu (zwrot 19% w PIT)
+✅ **Dofinansowania PFRON** - do 95 000 zł
+
+**Pamiętaj:** Świadczenia nie są przyznawane automatycznie - **musisz złożyć wniosek!**
+
+**💡 Protip:** Zapisz się do Pomocnika Obywatela, a dostaniesz **powiadomienie o wszystkich świadczeniach**, które możesz otrzymać!
 `
   }
 
