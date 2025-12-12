@@ -104,9 +104,51 @@
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/blog/zmiana-nazwiska-usc</loc>
-    <lastmod>2025-12-07</lastmod>
+    <lastmod>2025-11-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/wezwanie-do-zaplaty-wzor</loc>
+    <lastmod>2025-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/dowod-osobisty-wniosek-poradnik</loc>
+    <lastmod>2025-12-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/kompletny-przewodnik-zasilki-rodzinne-2025</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/dotacje-budowa-domu-2025</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/jak-zwolnic-sie-z-pracy-wzor-wypowiedzenia</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/swiadczenia-dla-osob-niepelnosprawnych-2025</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
 
   <!-- Category Pages (Virtual URLs for SEO) -->
