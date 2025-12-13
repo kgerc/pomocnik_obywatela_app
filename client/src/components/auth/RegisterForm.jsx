@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, Loader, AlertCircle, User, UserPlus } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import TermsOfService from '../TermsOfService';
+import PrivacyPolicy from '../PrivacyPolicy';
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -15,6 +17,9 @@ const RegisterForm = () => {
     confirmPassword: '',
     fullName: '',
   });
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -30,6 +35,12 @@ const RegisterForm = () => {
     setError('');
 
     // Validation
+    if (!termsAccepted) {
+      setError('Musisz zaakceptować Regulamin i Politykę Prywatności');
+      setLoading(false);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError('Hasła nie są identyczne');
       setLoading(false);
@@ -387,19 +398,88 @@ const RegisterForm = () => {
             </div>
           </div>
 
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '10px',
+              cursor: 'pointer',
+              padding: '12px',
+              background: '#f8f9fb',
+              borderRadius: '8px',
+              border: termsAccepted ? '2px solid #2c5aa0' : '2px solid #e1e8ed',
+              transition: 'all 0.2s'
+            }}>
+              <input
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                style={{
+                  marginTop: '4px',
+                  cursor: 'pointer',
+                  width: '16px',
+                  height: '16px'
+                }}
+              />
+              <span style={{ fontSize: '14px', color: '#2c3e50', lineHeight: '1.6' }}>
+                Akceptuję{' '}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowTerms(true);
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#2c5aa0',
+                    fontWeight: '600',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    padding: 0,
+                    font: 'inherit'
+                  }}
+                >
+                  Regulamin
+                </button>
+                {' '}oraz{' '}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowPrivacy(true);
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#2c5aa0',
+                    fontWeight: '600',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    padding: 0,
+                    font: 'inherit'
+                  }}
+                >
+                  Politykę Prywatności
+                </button>
+                {' '}<span style={{ color: '#e74c3c' }}>*</span>
+              </span>
+            </label>
+          </div>
+
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !termsAccepted}
             style={{
               width: '100%',
-              background: loading ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
+              background: (loading || !termsAccepted) ? '#ccc' : 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)',
               color: 'white',
               border: 'none',
               padding: '14px',
               borderRadius: '8px',
               fontSize: '16px',
               fontWeight: '600',
-              cursor: loading ? 'not-allowed' : 'pointer',
+              cursor: (loading || !termsAccepted) ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -436,6 +516,10 @@ const RegisterForm = () => {
           </div>
         </form>
       </div>
+
+      {/* Modals */}
+      {showTerms && <TermsOfService onClose={() => setShowTerms(false)} />}
+      {showPrivacy && <PrivacyPolicy onClose={() => setShowPrivacy(false)} />}
     </div>
   );
 };
