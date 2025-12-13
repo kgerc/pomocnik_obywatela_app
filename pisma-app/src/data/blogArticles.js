@@ -5,8 +5,8 @@ export const BLOG_ARTICLES = [
   {
     id: 'jak-napisac-reklamacje-telefonu',
     slug: 'jak-napisac-reklamacje-telefonu',
-    title: 'Jak napisać reklamację telefonu komórkowego - Wzór i Poradnik 2025',
-    metaDescription: 'Kompletny poradnik jak napisać reklamację telefonu krok po kroku. Wzór pisma, terminy, prawa konsumenta. Darmowy generator reklamacji online.',
+    title: 'Jak napisać reklamację telefonu? Gotowy wzór PDF',
+    metaDescription: 'Reklamacja telefonu w 5 minut. Gotowy wzór PDF do pobrania, generator online i porady krok po kroku. Rękojmia vs gwarancja - co wybrać?',
     category: 'Telekomunikacja',
     articleType: ARTICLE_TYPES.FIRE_FIGHTING, // Artykuł typu "Gaszenie Pożarów"
     author: 'Zespół Pomocnik Obywatela',
@@ -15,7 +15,9 @@ export const BLOG_ARTICLES = [
     keywords: 'reklamacja telefonu, jak napisać reklamację, wzór reklamacji, reklamacja Orange, reklamacja Play',
     excerpt: 'Czy Twój telefon komórkowy działa nieprawidłowo? Dowiedz się, jak skutecznie złożyć reklamację i dochodzić swoich praw jako konsument.',
     content: `
-# Jak napisać reklamację telefonu komórkowego - Wzór i Poradnik 2025
+# Jak napisać reklamację telefonu? Gotowy wzór PDF
+
+**SZYBKA POMOC:** Nie wiesz jak napisać reklamację? Użyj naszego generatora - w 5 minut otrzymasz gotowy dokument PDF do wydruku i wysłania.
 
 Telefon komórkowy to urządzenie, z którego korzystamy każdego dnia. Co jednak zrobić, gdy nagle przestaje działać prawidłowo? W tym poradniku dowiesz się, jak krok po kroku napisać skuteczną reklamację telefonu.
 
@@ -1112,16 +1114,25 @@ Prawidłowe wypowiedzenie najmu pozwoli Ci uniknąć problemów i odzyskać kauc
   {
     id: 'reklamacja-przesylki-inpost',
     slug: 'reklamacja-przesylki-inpost',
-    title: 'Reklamacja przesyłki InPost - Jak złożyć i co zrobić w 2025',
-    metaDescription: 'Zgubiona, uszkodzona lub opóźniona paczka InPost? Dowiedz się jak skutecznie złożyć reklamację krok po kroku. Wzór pisma i terminy.',
+    title: 'Reklamacja InPost 2025: Ile mają czasu? Wzór i Porady',
+    metaDescription: 'InPost ma 30 dni na rozpatrzenie reklamacji. Zgubiona, uszkodzona paczka? Wzór pisma, skarga na kuriera i wszystko co musisz wiedzieć.',
     category: 'Kurierzy',
     author: 'Zespół Pomocnik Obywatela',
     publishDate: '2025-12-04',
     readTime: '6 min',
-    keywords: 'reklamacja InPost, zgubiona paczka InPost, uszkodzona przesyłka, reklamacja Paczkomat',
-    excerpt: 'Paczka InPost nie dotarła, jest uszkodzona lub opóźniona? Zobacz jak krok po kroku złożyć skuteczną reklamację i odzyskać pieniądze.',
+    keywords: 'reklamacja InPost, ile czasu ma InPost na rozpatrzenie reklamacji, skarga na kuriera InPost, zgubiona paczka InPost, uszkodzona przesyłka',
+    excerpt: 'InPost ma 30 dni na reklamację. Paczka nie dotarła lub uszkodzona? Wzór pisma, skarga na kuriera i szczegółowy poradnik krok po kroku.',
     content: `
-# Reklamacja przesyłki InPost - Jak złożyć i co zrobić w 2025
+# Reklamacja InPost 2025: Ile mają czasu? Wzór i Porady
+
+**NAJWAŻNIEJSZE:** InPost ma **30 dni** na rozpatrzenie reklamacji (może wydłużyć do 60 dni w skomplikowanych sprawach). Brak odpowiedzi = reklamacja uznana.
+
+## Szybka odpowiedź: Ile dni na odpowiedź od InPost?
+
+- ✅ **30 dni** - standardowy termin na rozpatrzenie reklamacji
+- ✅ **60 dni** - maksymalny termin (w wyjątkowych przypadkach, InPost musi poinformować)
+- ✅ **24-48h** - zwykle pierwsza odpowiedź od obsługi klienta
+- ✅ Po 30 dniach bez odpowiedzi - reklamacja uznana za uwzględnioną
 
 Paczka nie dotarła do Paczkomatu? Przesyłka jest uszkodzona? W tym poradniku dowiesz się, jak skutecznie złożyć reklamację w InPost i dochodzić swoich praw.
 
@@ -1340,20 +1351,44 @@ Z poważaniem,
 
 ## Najczęstsze pytania (FAQ)
 
-**Ile czasu mam na złożenie reklamacji InPost?**
-Najszybciej jak to możliwe, najlepiej od razu. Formalnie - nie dłużej niż 12 miesięcy od zdarzenia.
+### Ile czasu ma InPost na rozpatrzenie reklamacji?
+**30 dni** od daty otrzymania reklamacji. W wyjątkowych przypadkach może wydłużyć do 60 dni, ale musi Cię o tym poinformować. Jeśli po 30 dniach nie dostaniesz odpowiedzi - reklamacja jest automatycznie uznana za uwzględnioną.
 
-**Czy mogę złożyć reklamację jako odbiorca?**
-Tak, ale InPost może wymagać pełnomocnictwa od nadawcy.
+### Ile czasu mam na złożenie reklamacji InPost?
+Najszybciej jak to możliwe, najlepiej od razu po odkryciu problemu. Formalnie masz **12 miesięcy** od zdarzenia, ale im wcześniej tym lepiej - dowody są świeże.
 
-**Co jeśli nie mam paragonu za zawartość?**
-Spróbuj udowodnić wartość inaczej - zrzut ekranu z zakupu online, wycena podobnych produktów.
+### Czy mogę złożyć reklamację jako odbiorca?
+Tak, ale InPost może wymagać pełnomocnictwa od nadawcy. W praktyce - jeśli jesteś odbiorcą i masz problem z paczką, śmiało składaj reklamację. InPost rozpatrzy ją, a ewentualnie poprosi o dodatkowe dokumenty.
 
-**Czy mogę zażądać odszkodowania za szkody moralne?**
-Teoretycznie tak (np. nie dotarły kwiaty na urodziny), ale w praktyce bardzo trudno to udowodnić.
+### Jak napisać skargę na kuriera InPost?
+Skargę na kuriera składasz tak samo jak reklamację - przez formularz online na inpost.pl/kontakt lub emailem na reklamacje@inpost.pl. Opisz dokładnie zachowanie kuriera (data, godzina, miejsce, numer przesyłki) i dołącz dowody (zdjęcia, nagrania).
 
-**Co jeśli paczka zaginęła podczas zwrotu do sprzedawcy?**
-Złóż reklamację jako nadawca. Sprzedawca musi zwrócić Ci pieniądze lub wysłać nowy towar.
+### Co jeśli InPost nie odpowie na reklamację?
+Po upływie 30 dni od złożenia reklamacji bez odpowiedzi - reklamacja jest uznana za uwzględnioną. Możesz wtedy:
+1. Wysłać wezwanie do zapłaty odszkodowania
+2. Skierować sprawę do UKE (Urząd Komunikacji Elektronicznej)
+3. Złożyć pozew do sądu
+
+### Co jeśli nie mam paragonu za zawartość?
+Spróbuj udowodnić wartość inaczej:
+- Zrzut ekranu z zakupu online (Allegro, OLX)
+- Email z potwierdzeniem zamówienia
+- Wycena podobnych produktów w internecie
+- Oświadczenie sprzedawcy o wartości
+
+### Ile wynosi odszkodowanie z InPost?
+Bez dodatkowego ubezpieczenia: **maksymalnie 20 zł za kg wagi przesyłki** (nie więcej niż rzeczywista wartość). Z ubezpieczeniem (np. przez Allegro): do zadeklarowanej wartości przesyłki.
+
+### Czy mogę zażądać odszkodowania za szkody moralne?
+Teoretycznie tak (np. nie dotarły kwiaty na urodziny), ale w praktyce bardzo trudno to udowodnić w sądzie. Możesz spróbować, ale szanse są niewielkie.
+
+### Co jeśli paczka zaginęła podczas zwrotu do sprzedawcy?
+Złóż reklamację jako nadawca (czyli Ty). Jednocześnie zgłoś problem sprzedawcy - on musi zwrócić Ci pieniądze lub wysłać nowy towar. To nie Twoja wina, że paczka zaginęła.
+
+### Gdzie wysłać reklamację InPost?
+- **Online (najszybsze):** https://inpost.pl/kontakt → Reklamacje i skargi
+- **Email:** reklamacje@inpost.pl
+- **Pocztą:** InPost Paczkomaty sp. z o.o., ul. Malborska 130, 30-624 Kraków
 
 ## Podsumowanie
 
