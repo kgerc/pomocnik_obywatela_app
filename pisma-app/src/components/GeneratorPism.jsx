@@ -48,6 +48,7 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
   const [showTerms, setShowTerms] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const ITEMS_PER_PAGE = 9;
 
   const categories = ['wszystkie', ...new Set(DOSTEPNE_PISMA.map(p => p.kategoria))];
@@ -219,6 +220,7 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
     setGeneratedDocument(null);
     setDocumentId(null);
     setDocumentUnlocked(false);
+    setTermsAccepted(false);
   };
 
   const handleInputChange = (questionId, value) => {
@@ -229,6 +231,12 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
   };
 
   const handleGenerateDocument = async () => {
+    // Walidacja akceptacji regulaminu
+    if (!termsAccepted) {
+      alert('Musisz zaakceptować oświadczenie i regulamin przed wygenerowaniem dokumentu.');
+      return;
+    }
+
     // Google Analytics: Track document generation start
     if (window.gtag) {
       window.gtag('event', 'generate_document', {
@@ -759,6 +767,7 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
     setDocumentId(null);
     setDocumentUnlocked(false);
     setShowPaymentModal(false);
+    setTermsAccepted(false);
 
     // Reset SEO meta tags to default
     updateMetaTags(DEFAULT_META);
@@ -1539,6 +1548,83 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
                 </div>
               </div>
 
+              {/* Checkbox akceptacji regulaminu i disclaimera */}
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '10px',
+                  cursor: 'pointer',
+                  padding: '16px',
+                  background: '#fff3cd',
+                  borderRadius: '8px',
+                  border: termsAccepted ? '2px solid #ffc107' : '2px solid #e1e8ed',
+                  transition: 'all 0.2s'
+                }}>
+                  <input
+                    type="checkbox"
+                    checked={termsAccepted}
+                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                    style={{
+                      marginTop: '4px',
+                      cursor: 'pointer',
+                      width: '16px',
+                      height: '16px',
+                      flexShrink: 0
+                    }}
+                  />
+                  <span style={{ fontSize: '14px', color: '#856404', lineHeight: '1.6' }}>
+                    <strong>Oświadczam, że:</strong>
+                    <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px' }}>
+                      <li>Akceptuję{' '}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setShowTerms(true);
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#2c5aa0',
+                            fontWeight: '700',
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                            padding: 0,
+                            font: 'inherit'
+                          }}
+                        >
+                          Regulamin
+                        </button>
+                        {' '}i{' '}
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setShowPrivacy(true);
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#2c5aa0',
+                            fontWeight: '700',
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                            padding: 0,
+                            font: 'inherit'
+                          }}
+                        >
+                          Politykę Prywatności
+                        </button>
+                      </li>
+                      <li>Rozumiem, że dokument ma charakter <strong>pomocniczy i wspierający</strong>, nie zastępuje profesjonalnej porady prawnej</li>
+                      <li>Zobowiązuję się <strong>zweryfikować</strong> wygenerowany dokument przed wysłaniem do urzędu</li>
+                      <li>Ponoszę pełną odpowiedzialność za treść wprowadzonych danych i wykorzystanie dokumentu</li>
+                    </ul>
+                  </span>
+                </label>
+              </div>
+
               <div style={{
                 display: 'flex',
                 gap: '10px',
@@ -1562,10 +1648,10 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
 
                 <button
                   onClick={handleGenerateDocument}
-                  disabled={!allFieldsFilled}
+                  disabled={!allFieldsFilled || !termsAccepted}
                   style={{
                     padding: '12px 24px',
-                    background: allFieldsFilled
+                    background: (allFieldsFilled && termsAccepted)
                       ? 'linear-gradient(135deg, #2c5aa0 0%, #4a7dc9 100%)'
                       : '#ccc',
                     color: 'white',
@@ -1573,7 +1659,7 @@ const GeneratorPism = ({ onBackToLanding, initialCategory = null }) => {
                     borderRadius: '8px',
                     fontWeight: '600',
                     fontSize: '14px',
-                    cursor: allFieldsFilled ? 'pointer' : 'not-allowed',
+                    cursor: (allFieldsFilled && termsAccepted) ? 'pointer' : 'not-allowed',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px'
