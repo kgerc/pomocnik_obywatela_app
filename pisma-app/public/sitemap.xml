@@ -151,6 +151,48 @@
     <priority>0.9</priority>
   </url>
 
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/800-plus-2025-kompletny-przewodnik</loc>
+    <lastmod>2025-12-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/bon-energetyczny-2025</loc>
+    <lastmod>2025-12-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/babciowe-2025-swiadczenie-aktywnie-w-zlobku</loc>
+    <lastmod>2025-12-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/kredyt-nastart-2025</loc>
+    <lastmod>2025-12-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/czyste-powietrze-2025-dofinansowanie</loc>
+    <lastmod>2025-12-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/blog/reklamacja-towaru-wadliwego-2025</loc>
+    <lastmod>2025-12-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Category Pages (Virtual URLs for SEO) -->
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/administracja</loc>
@@ -175,7 +217,14 @@
 
   <url>
     <loc>https://pisma.pomocnikobywatela.pl/kategoria/konsumenckie</loc>
-    <lastmod>2025-12-06</lastmod>
+    <lastmod>2025-12-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://pisma.pomocnikobywatela.pl/kategoria/konsument</loc>
+    <lastmod>2025-12-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
