@@ -4534,6 +4534,1268 @@ System świadczeń dla osób niepełnosprawnych jest rozbudowany:
   }
 
   // Dodamy więcej artykułów w przyszłości
+  ,
+  {
+    id: '800-plus-2025-kompletny-przewodnik',
+    slug: '800-plus-2025-kompletny-przewodnik',
+    title: '800+ w 2025 - Kompletny przewodnik: Komu przysługuje, jak złożyć wniosek',
+    metaDescription: '800+ w 2025 - pełny przewodnik. Sprawdź komu przysługuje, jakie warunki trzeba spełnić, jak złożyć wniosek online i kiedy otrzymasz pieniądze. Wszystkie zmiany w programie Rodzina 800+.',
+    category: 'Pomoc społeczna',
+    articleType: ARTICLE_TYPES.HUB_CONTENT,
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-14',
+    readTime: '12 min',
+    keywords: '800+, rodzina 800+, świadczenie wychowawcze, wniosek 800+, komu przysługuje 800+, jak złożyć wniosek 800+',
+    excerpt: 'Kompletny przewodnik po programie 800+ w 2025. Dowiedz się komu przysługuje świadczenie, jak złożyć wniosek online i offline, kiedy otrzymasz pieniądze oraz jakie są najnowsze zmiany w programie.',
+    content: `
+# 800+ w 2025 - Kompletny przewodnik
+
+Program **Rodzina 800+** (dawniej 500+) to jedno z najpopularniejszych świadczeń w Polsce. W 2025 roku świadczenie wynosi **800 zł miesięcznie na każde dziecko** do 18. roku życia. W tym przewodniku znajdziesz wszystko, co musisz wiedzieć o 800+.
+
+## Najważniejsze informacje o 800+ w 2025
+
+✅ **Kwota:** 800 zł miesięcznie na dziecko
+✅ **Wiek dziecka:** Od urodzenia do 18. roku życia
+✅ **Kryterium dochodowe:** BRAK (świadczenie przysługuje wszystkim)
+✅ **Sposób złożenia:** Online przez bankowość elektroniczną, PUE ZUS, portal Emp@tia lub osobiście
+✅ **Termin wypłaty:** Do 30. dnia miesiąca (dla wniosków złożonych do 30. czerwca danego okresu)
+
+---
+
+## Komu przysługuje 800+ w 2025?
+
+Świadczenie 800+ przysługuje **wszystkim rodzicom i opiekunom prawnym dzieci** do 18. roku życia, bez względu na dochód rodziny.
+
+### Warunki otrzymania 800+:
+
+1. **Dziecko do 18. roku życia** - świadczenie przysługuje do ostatniego dnia miesiąca, w którym dziecko kończy 18 lat
+2. **Miejsce zamieszkania w Polsce** - zarówno rodzic jak i dziecko muszą mieszkać w Polsce
+3. **Obywatelstwo** - obywatele Polski lub UE (lub osoby legalnie przebywające w Polsce)
+
+### Kto może złożyć wniosek?
+
+- Rodzice biologiczni
+- Opiekunowie prawni
+- Rodzice zastępczy
+- Osoby prowadzące rodzinny dom dziecka
+- Dyrektor placówki opiekuńczo-wychowawczej (w niektórych przypadkach)
+
+---
+
+## Ile wynosi 800+ w 2025?
+
+### Podstawowa kwota:
+- **800 zł miesięcznie** na każde dziecko
+- **9 600 zł rocznie** na dziecko
+- Wypłata co miesiąc, bezpośrednio na konto
+
+### Przykłady:
+
+**Rodzina z 1 dzieckiem:**
+800 zł/mies. × 12 = **9 600 zł rocznie**
+
+**Rodzina z 2 dziećmi:**
+1 600 zł/mies. × 12 = **19 200 zł rocznie**
+
+**Rodzina z 3 dziećmi:**
+2 400 zł/mies. × 12 = **28 800 zł rocznie**
+
+**Rodzina z 4 dziećmi:**
+3 200 zł/mies. × 12 = **38 400 zł rocznie**
+
+---
+
+## Jak złożyć wniosek o 800+ w 2025?
+
+Wniosek o 800+ możesz złożyć na **4 sposoby:**
+
+### 1. Online przez bankowość elektroniczną (najszybszy sposób)
+
+Większość banków umożliwia złożenie wniosku przez aplikację lub stronę internetową:
+- **PeKaO**
+- **mBank**
+- **ING Bank Śląski**
+- **Millennium**
+- **Santander**
+- I wiele innych
+
+**Jak złożyć:**
+1. Zaloguj się do bankowości elektronicznej
+2. Znajdź zakładkę "Wnioski" lub "e-Administracja"
+3. Wybierz "Wniosek 800+"
+4. Wypełnij formularz
+5. Podpisz profilem zaufanym lub podpisem elektronicznym
+
+⏱️ **Czas realizacji:** 5-10 minut
+
+### 2. Online przez Portal Emp@tia
+
+Portal Emp@tia to rządowy system do składania wniosków:
+
+🔗 **Link:** [https://empatia.mpips.gov.pl](https://empatia.mpips.gov.pl)
+
+**Jak złożyć:**
+1. Zaloguj się profilem zaufanym
+2. Wybierz "Świadczenie wychowawcze 800+"
+3. Wypełnij wniosek
+4. Podpisz i wyślij
+
+### 3. Online przez PUE ZUS
+
+Jeśli masz konto w ZUS, możesz złożyć wniosek przez Platformę Usług Elektronicznych:
+
+🔗 **Link:** [https://www.zus.pl](https://www.zus.pl)
+
+### 4. Osobiście w urzędzie
+
+Możesz złożyć wniosek papierowy:
+- **W urzędzie gminy/miasta** (tam gdzie mieszkasz)
+- Wypełnij druk **SR** (świadczenie rodzinne)
+- Załącz wymagane dokumenty
+
+📄 **Druk do pobrania:** Dostępny na stronie ZUS lub w urzędzie
+
+---
+
+## Jakie dokumenty są potrzebne do wniosku 800+?
+
+### Podstawowe dokumenty:
+
+1. **Wniosek SR** (świadczenie rodzinne) - wypełniony online lub papierowo
+2. **Numer PESEL dziecka**
+3. **Numer rachunku bankowego** - na który ma być wypłacane świadczenie
+
+### Dodatkowe dokumenty (w niektórych przypadkach):
+
+- **Akt urodzenia dziecka** - jeśli dziecko urodziło się za granicą
+- **Orzeczenie o niepełnosprawności** - jeśli dziecko ma niepełnosprawność (dla świadczeń dodatkowych)
+- **Dokument potwierdzający opiekę prawną** - dla opiekunów prawnych
+- **Postanowienie sądu** - dla rodzin zastępczych
+
+---
+
+## Kiedy złożyć wniosek o 800+?
+
+### Nowe wnioski na okres 2025/2026:
+
+Okres świadczeniowy trwa od **1 czerwca do 31 maja** następnego roku.
+
+**Najlepszy czas na złożenie wniosku:**
+
+✅ **1 lutego - 30 kwietnia** - aby otrzymać pierwsze pieniądze w czerwcu
+✅ **Do 30 czerwca** - aby otrzymać wyrównanie za czerwiec (jeśli złożysz później)
+
+### Kiedy otrzymam pieniądze?
+
+| Termin złożenia wniosku | Pierwsza wypłata |
+|------------------------|------------------|
+| Do 30 kwietnia | Czerwiec (pełna kwota) |
+| 1-30 maja | Lipiec (+ wyrównanie za czerwiec) |
+| 1-30 czerwca | Sierpień (+ wyrównanie za czerwiec-lipiec) |
+| Po 30 czerwca | 2 miesiące po złożeniu (bez wyrównania) |
+
+**Kolejne wypłaty:** Do 30. dnia każdego miesiąca
+
+---
+
+## Ile czasu trwa rozpatrzenie wniosku 800+?
+
+- **Wniosek online:** Zazwyczaj 1-3 dni robocze
+- **Wniosek papierowy:** Do 2 miesięcy
+
+**Decyzja:** Otrzymasz decyzję pocztą lub online (jeśli masz konto na portalu)
+
+---
+
+## Czy 800+ jest opodatkowane?
+
+**NIE** - świadczenie 800+ jest **wolne od podatku**.
+
+- Nie musisz rozliczać 800+ w PIT
+- Nie wpływa na wysokość innych świadczeń (z wyjątkiem niektórych)
+- Nie jest wliczane do dochodu rodziny
+
+---
+
+## Czy 800+ można łączyć z innymi świadczeniami?
+
+**TAK** - 800+ można łączyć z większością świadczeń:
+
+✅ **Zasiłek rodzinny** (z dodatkami)
+✅ **Świadczenie "Dobry Start" (300+)**
+✅ **Becikowe**
+✅ **Zasiłek pielęgnacyjny**
+✅ **Kosiniakowe** (świadczenie wspierające)
+✅ **Bon energetyczny**
+✅ **Dodatek mieszkaniowy** (ale 800+ wlicza się do dochodu!)
+
+❌ **NIE** łączy się z funduszem alimentacyjnym - 800+ pomniejsza wysokość świadczeń z funduszu
+
+---
+
+## Najczęstsze pytania o 800+
+
+### 1. Czy 800+ przysługuje na każde dziecko?
+
+**TAK** - nawet jeśli masz 5 dzieci, otrzymasz 4 000 zł miesięcznie (5 × 800 zł).
+
+### 2. Co jeśli dziecko kończy 18 lat w trakcie roku?
+
+Świadczenie przysługuje **do końca miesiąca**, w którym dziecko kończy 18 lat.
+
+**Przykład:** Dziecko kończy 18 lat 15 marca - otrzymasz 800+ za cały marzec.
+
+### 3. Czy można otrzymać 800+ za granicą?
+
+**NIE** - zarówno rodzic jak i dziecko muszą mieszkać w Polsce. Wyjazd za granicę na dłużej niż 3 miesiące = utrata prawa do świadczenia.
+
+### 4. Co jeśli rodzice są rozwiedzeni?
+
+Świadczenie otrzymuje rodzic, z którym dziecko faktycznie mieszka. Jeśli opiekę sprawują oboje na przemian (50/50), muszą uzgodnić, kto będzie pobierał świadczenie.
+
+### 5. Czy można dostać 800+ wstecz?
+
+**TAK** - ale tylko za 3 miesiące wstecz od daty złożenia wniosku.
+
+### 6. Co jeśli zmienią się dane (numer konta, adres)?
+
+Musisz zgłosić zmianę w ciągu **14 dni**:
+- Online (przez ten sam portal, gdzie składałeś wniosek)
+- Osobiście w urzędzie
+
+---
+
+## Wygeneruj wniosek o 800+ automatycznie
+
+Nie masz czasu na samodzielne wypełnianie wniosku? Skorzystaj z naszego generatora!
+
+**Generator automatycznie:**
+✅ Wypełni wszystkie wymagane pola
+✅ Sprawdzi poprawność danych
+✅ Przygotuje dokument gotowy do wysłania
+✅ Podpowie kiedy i gdzie złożyć wniosek
+
+[Przycisk: Wygeneruj wniosek 800+ →]
+
+---
+
+## Wszystkie świadczenia rodzinne w jednym miejscu
+
+800+ to tylko jeden z wielu programów wsparcia dla rodzin. W **Pomocniku Obywatela** znajdziesz:
+
+✅ **Pełną bazę świadczeń** (800+, zasiłki rodzinne, 300+, becikowe, babciowe)
+✅ **Kalkulator uprawnień** - sprawdź ile możesz otrzymać
+✅ **Gotowe wnioski** do pobrania
+✅ **Powiadomienia** o zmianach i nowych świadczeniach
+✅ **Instrukcje krok po kroku**
+
+**Za jedyne 5 zł/msc nie przegap żadnych pieniędzy!**
+
+---
+
+## Zmiany w 800+ w 2025 roku
+
+### Co się zmieniło w 2025?
+
+1. **Kwota:** Wzrosła z 500 zł do 800 zł (zmiana od czerwca 2024)
+2. **Digitalizacja:** Więcej banków umożliwia złożenie wniosku online
+3. **Uproszczony wniosek:** Mniej dokumentów do załączenia
+
+### Co się NIE zmieniło?
+
+- Brak kryterium dochodowego (wszyscy otrzymują)
+- Wiek dziecka (do 18 lat)
+- Termin wypłaty (do 30. dnia miesiąca)
+
+---
+
+## Podsumowanie - 800+ w 2025
+
+✅ **800 zł miesięcznie** na każde dziecko do 18 lat
+✅ **Brak kryterium dochodowego** - przysługuje wszystkim
+✅ **Wniosek online** w 5 minut (bankowość elektroniczna)
+✅ **Wypłata co miesiąc** - do 30. dnia
+✅ **Wolne od podatku** - nie rozliczasz w PIT
+✅ **Łączy się z innymi świadczeniami**
+
+**Pamiętaj:** Złóż wniosek do 30 kwietnia, aby otrzymać pierwsze pieniądze w czerwcu!
+
+**💡 Protip:** Zapisz się do Pomocnika Obywatela i otrzymaj **przypomnienie o terminie złożenia wniosku** oraz **powiadomienie o wszystkich świadczeniach**, które możesz otrzymać dla swojej rodziny!
+`
+  }
+  ,
+  {
+    id: 'bon-energetyczny-2025',
+    slug: 'bon-energetyczny-2025',
+    title: 'Bon energetyczny 2025 - Komu przysługuje 300-400 zł? Jak złożyć wniosek',
+    metaDescription: 'Bon energetyczny 2025 - sprawdź komu przysługuje, jakie są progi dochodowe, ile wynosi świadczenie i jak złożyć wniosek. Pełny przewodnik krok po kroku.',
+    category: 'Pomoc społeczna',
+    articleType: ARTICLE_TYPES.LIFE_OPPORTUNITIES,
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-14',
+    readTime: '10 min',
+    keywords: 'bon energetyczny, bon energetyczny 2025, komu przysługuje bon energetyczny, wniosek o bon energetyczny, kryterium dochodowe bon energetyczny',
+    excerpt: 'Bon energetyczny 2025 - jednorazowe wsparcie dla gospodarstw domowych. Sprawdź czy spełniasz kryterium dochodowe, ile możesz otrzymać i jak złożyć wniosek.',
+    content: `
+# Bon energetyczny 2025 - Kompletny przewodnik
+
+**Bon energetyczny** to jednorazowe wsparcie finansowe dla gospodarstw domowych o niższych dochodach, mające pomóc w opłaceniu rachunków za energię elektryczną. W 2025 roku świadczenie wynosi od **300 zł do 400 zł** w zależności od liczby osób w gospodarstwie.
+
+## Najważniejsze informacje o bonie energetycznym 2025
+
+✅ **Kwota:** 300-400 zł (jednorazowo)
+✅ **Kryterium dochodowe:** TAK - do 2500 zł/os (gospodarstwo 1-os.) lub 1700 zł/os (gospodarstwo wieloosobowe)
+✅ **Okres:** Świadczenie jednorazowe na rok 2025
+✅ **Wniosek:** Przez gminę (osobiście lub online)
+✅ **Termin:** Do 30 września 2025
+
+---
+
+## Komu przysługuje bon energetyczny w 2025?
+
+Bon energetyczny przysługuje gospodarstwom domowym, które **spełniają kryterium dochodowe**.
+
+### Progi dochodowe na 2025:
+
+| Gospodarstwo domowe | Dochód na osobę |
+|---------------------|-----------------|
+| **Jednoosobowe** | Do 2 500 zł netto/mies. |
+| **Wieloosobowe** | Do 1 700 zł netto/mies. |
+
+**Jak liczyć dochód?**
+Dochód to suma przychodów netto wszystkich członków gospodarstwa podzielona przez liczbę osób.
+
+### Przykłady:
+
+**Przykład 1: Gospodarstwo jednoosobowe**
+- Pani Anna zarabia 2 300 zł netto
+- **2 300 zł < 2 500 zł** ✅ Bon przysługuje
+
+**Przykład 2: Rodzina 2+2 (4 osoby)**
+- Mama: 3 000 zł, Tata: 3 500 zł = 6 500 zł łącznie
+- Dochód na osobę: 6 500 zł ÷ 4 = **1 625 zł/os.**
+- **1 625 zł < 1 700 zł** ✅ Bon przysługuje
+
+**Przykład 3: Rodzina 2+1 (3 osoby)**
+- Mama: 2 500 zł, Tata: 3 500 zł = 6 000 zł łącznie
+- Dochód na osobę: 6 000 zł ÷ 3 = **2 000 zł/os.**
+- **2 000 zł > 1 700 zł** ❌ Bon NIE przysługuje
+
+---
+
+## Ile wynosi bon energetyczny w 2025?
+
+Wysokość bonu energetycznego zależy od **liczby osób w gospodarstwie domowym:**
+
+| Liczba osób | Kwota bonu |
+|-------------|------------|
+| **1 osoba** | 300 zł |
+| **2-3 osoby** | 400 zł |
+| **4-5 osób** | 500 zł |
+| **6+ osób** | 600 zł |
+
+**Bon jest jednorazowy** - otrzymasz go tylko raz w 2025 roku.
+
+---
+
+## Jakie dochody są wliczane do kryterium?
+
+### Dochody WLICZANE:
+
+✅ Wynagrodzenie z umowy o pracę (netto)
+✅ Emerytura i renta
+✅ Świadczenia przedemerytalne
+✅ Zasiłek dla bezrobotnych
+✅ Zasiłek macierzyński
+✅ Zasiłek chorobowy
+✅ Alimenty otrzymane
+✅ Dochód z działalności gospodarczej
+✅ Dochód z najmu (po odliczeniu kosztów)
+✅ Stypendia (naukowe, sportowe)
+
+### Dochody NIE wliczane:
+
+❌ **800+** (świadczenie wychowawcze)
+❌ **300+** (Dobry Start)
+❌ Becikowe
+❌ Jednorazowe zapomogi losowe
+❌ Kosiniakowe (świadczenie wspierające)
+❌ Zasiłek pielęgnacyjny
+❌ Dodatek energetyczny (dla osób z dodatkiem mieszkaniowym)
+
+---
+
+## Jak złożyć wniosek o bon energetyczny?
+
+Wniosek składasz **w urzędzie gminy/miasta**, gdzie masz miejsce zameldowania.
+
+### Sposób 1: Osobiście w urzędzie
+
+1. Pobierz formularz wniosku (dostępny na stronie urzędu lub w urzędzie)
+2. Wypełnij wniosek
+3. Załącz wymagane dokumenty
+4. Złóż w urzędzie (otrzymasz potwierdzenie przyjęcia)
+
+### Sposób 2: Online (jeśli urząd udostępnia)
+
+Niektóre gminy umożliwiają złożenie wniosku przez:
+- Portal Emp@tia
+- Platformę e-PUAP
+- Lokalny system ePUAP gminy
+
+**Sprawdź na stronie swojego urzędu**, czy możesz złożyć wniosek elektronicznie.
+
+---
+
+## Jakie dokumenty potrzebne do wniosku o bon energetyczny?
+
+### Dokumenty wymagane:
+
+1. **Wniosek o bon energetyczny** (formularz z urzędu)
+2. **Dowód osobisty** (kopia)
+3. **Zaświadczenia o dochodach** za ostatnie 3 miesiące:
+   - Zaświadczenie z pracy (o wynagrodzeniu netto)
+   - Decyzja ZUS o emeryturze/rencie
+   - Zaświadczenie z Urzędu Pracy (dla bezrobotnych)
+   - PIT-11 (dla osób zatrudnionych)
+4. **Oświadczenie o składzie gospodarstwa domowego**
+5. **Numer rachunku bankowego** (na który ma być wypłacony bon)
+
+### Dokumenty dodatkowe (w zależności od sytuacji):
+
+- **Umowa najmu/użyczenia** - jeśli mieszkasz w wynajmowanym mieszkaniu
+- **Wyrok sądowy** - w sprawie alimentów
+- **Oświadczenie o braku dochodów** - jeśli ktoś w gospodarstwie nie ma dochodów
+
+---
+
+## Kiedy złożyć wniosek o bon energetyczny?
+
+### Termin składania wniosków:
+
+📅 **Od 1 stycznia do 30 września 2025**
+
+**Najlepiej złożyć jak najszybciej!** Gminy mają ograniczony budżet - wnioski rozpatrywane są w kolejności wpływu.
+
+### Kiedy otrzymam pieniądze?
+
+- **Termin rozpatrzenia:** Do 60 dni od złożenia wniosku
+- **Wypłata:** Na konto bankowe wskazane we wniosku
+
+---
+
+## Bon energetyczny a inne świadczenia
+
+### Czy bon energetyczny można łączyć z innymi świadczeniami?
+
+**TAK** - bon energetyczny można łączyć z:
+
+✅ **800+** (świadczenie wychowawcze)
+✅ **Zasiłek rodzinny**
+✅ **Dodatek mieszkaniowy**
+✅ **Becikowe**
+✅ **Kosiniakowe**
+✅ **Zasiłek pielęgnacyjny**
+
+### Czy bon energetyczny wpływa na inne świadczenia?
+
+**NIE** - bon energetyczny:
+- Jest jednorazowy
+- Nie wlicza się do dochodu rodziny
+- Nie wpływa na wysokość innych świadczeń
+
+---
+
+## Czy bon energetyczny jest opodatkowany?
+
+**NIE** - bon energetyczny jest **wolny od podatku**.
+
+- Nie musisz rozliczać bonu w PIT
+- Nie jest wliczany do dochodu
+
+---
+
+## Najczęstsze pytania o bon energetyczny
+
+### 1. Czy bon energetyczny przysługuje emerytom?
+
+**TAK** - jeśli emerytura nie przekracza progu dochodowego (2 500 zł dla gospodarstwa 1-osobowego).
+
+### 2. Czy bon energetyczny przysługuje studentom?
+
+**TAK** - jeśli student mieszka sam i ma dochód poniżej 2 500 zł/mies.
+
+### 3. Czy bon energetyczny przysługuje bezrobotnym?
+
+**TAK** - jeśli zasiłek dla bezrobotnych + inne dochody nie przekraczają progu.
+
+### 4. Co jeśli przekroczę próg dochodowy o kilkadziesiąt złotych?
+
+Niestety, **nie otrzymasz bonu**. Próg jest sztywny - nawet przekroczenie o 1 zł dyskwalifikuje.
+
+### 5. Czy mogę dostać bon energetyczny więcej niż raz?
+
+**NIE** - bon energetyczny to jednorazowe wsparcie na 2025 rok.
+
+### 6. Co jeśli zmienią się moje dochody po złożeniu wniosku?
+
+Musisz zgłosić zmiany do urzędu w ciągu **14 dni**. Jeśli przekroczysz próg dochodowy, bon może zostać cofnięty.
+
+---
+
+## Różnica: Bon energetyczny vs Dodatek energetyczny
+
+| Świadczenie | Bon energetyczny | Dodatek energetyczny |
+|-------------|------------------|---------------------|
+| **Kwota** | 300-600 zł (jednorazowo) | Ryczałt (różnie) |
+| **Kryterium** | Dochód do 1700-2500 zł/os | Dodatek mieszkaniowy |
+| **Gdzie składać** | Gmina | Gmina |
+| **Częstotliwość** | Jednorazowo | Co miesiąc razem z dodatkiem mieszkaniowym |
+
+**Nie możesz otrzymać obu świadczeń jednocześnie!**
+
+---
+
+## Sprawdź wszystkie świadczenia, które Ci przysługują
+
+Bon energetyczny to tylko jedno z wielu świadczeń. W **Pomocniku Obywatela** znajdziesz:
+
+✅ **Pełną bazę świadczeń** (bon energetyczny, dodatek mieszkaniowy, zasiłki, dotacje)
+✅ **Kalkulator dochodów** - sprawdź czy spełniasz kryterium
+✅ **Gotowe wnioski** do pobrania
+✅ **Powiadomienia** o zmianach i nowych świadczeniach
+✅ **Instrukcje krok po kroku**
+
+**Za jedyne 5 zł/msc nie przegap żadnych pieniędzy!**
+
+---
+
+## Podsumowanie - Bon energetyczny 2025
+
+✅ **300-600 zł jednorazowo** (w zależności od liczby osób)
+✅ **Kryterium dochodowe:** 2500 zł/os (1-os) lub 1700 zł/os (wieloosobowe)
+✅ **Wniosek do 30 września 2025**
+✅ **Składaj w urzędzie gminy**
+✅ **Wolny od podatku**
+✅ **Łączy się z innymi świadczeniami**
+
+**Pamiętaj:** Złóż wniosek jak najszybciej - gminy mają ograniczony budżet!
+
+**💡 Protip:** Sprawdź w Pomocniku Obywatela, **jakie inne świadczenia możesz otrzymać** oprócz bonu energetycznego!
+`
+  }
+  ,
+  {
+    id: 'babciowe-2025-swiadczenie-aktywnie-w-zlobku',
+    slug: 'babciowe-2025-swiadczenie-aktywnie-w-zlobku',
+    title: 'Babciowe 2025 - Komu przysługuje 1500 zł? Jak złożyć wniosek o "Aktywnie w żłobku"',
+    metaDescription: 'Babciowe 2025 (Aktywnie w żłobku) - sprawdź komu przysługuje świadczenie do 1500 zł miesięcznie, jakie są warunki i jak złożyć wniosek. Kompletny przewodnik.',
+    category: 'Pomoc społeczna',
+    articleType: ARTICLE_TYPES.LIFE_OPPORTUNITIES,
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-14',
+    readTime: '11 min',
+    keywords: 'babciowe, aktywnie w żłobku, dofinansowanie do żłobka, babciowe 2025, wniosek babciowe, ile wynosi babciowe',
+    excerpt: 'Babciowe (Aktywnie w żłobku) 2025 - nowe świadczenie do 1500 zł miesięcznie na dziecko w żłobku. Sprawdź komu przysługuje, jak złożyć wniosek i kiedy otrzymasz pieniądze.',
+    content: `
+# Babciowe 2025 - Kompletny przewodnik
+
+**"Babciowe"** (oficjalna nazwa: **"Aktywnie w żłobku"**) to nowe świadczenie wprowadzone w 2022 roku, które dofinansowuje pobyt dziecka w żłobku, klubie dziecięcym lub u dziennego opiekuna. W 2025 roku możesz otrzymać **do 1500 zł miesięcznie** na dziecko.
+
+## Najważniejsze informacje o babciowym 2025
+
+✅ **Kwota:** Do 1500 zł miesięcznie (lub do 2000 zł dla dzieci z niepełnosprawnością)
+✅ **Wiek dziecka:** Od ukończenia 12. miesiąca do 35. miesiąca życia
+✅ **Kryterium dochodowe:** BRAK
+✅ **Warunek:** Dziecko musi uczęszczać do żłobka, klubu dziecięcego lub do dziennego opiekuna
+✅ **Sposób złożenia:** Online przez ZUS (PUE ZUS) lub osobiście w ZUS
+
+---
+
+## Komu przysługuje babciowe w 2025?
+
+Babciowe przysługuje **rodzicom i opiekunom** dzieci, które:
+
+1. **Ukończyły 12 miesięcy** (1 rok)
+2. **Nie ukończyły 36 miesięcy** (3 lat) - do końca miesiąca przed ukończeniem 3 lat
+3. **Uczęszczają do:**
+   - Żłobka (publicznego lub prywatnego)
+   - Klubu dziecięcego
+   - Dziennego opiekuna (wpisanego do rejestru)
+
+### Ważne:
+- **Brak kryterium dochodowego** - świadczenie przysługuje wszystkim, bez względu na dochód
+- Dziecko musi faktycznie uczęszczać do placówki (nie wystarczy być zapisanym)
+
+---
+
+## Ile wynosi babciowe w 2025?
+
+Wysokość babciowego zależy od **rzeczywistych kosztów opieki**:
+
+### Dla dzieci zdrowych:
+
+**Maksymalna kwota:** 1 500 zł/mies.
+
+**Jak to działa?**
+- Jeśli żłobek kosztuje 1 200 zł/mies. → otrzymasz 1 200 zł
+- Jeśli żłobek kosztuje 1 800 zł/mies. → otrzymasz tylko 1 500 zł (max)
+- Jeśli żłobek kosztuje 800 zł/mies. → otrzymasz 800 zł
+
+### Dla dzieci z niepełnosprawnością:
+
+**Maksymalna kwota:** 2 000 zł/mies.
+
+**Warunek:** Dziecko musi posiadać orzeczenie o niepełnosprawności
+
+---
+
+## Przykłady - ile otrzymasz?
+
+**Przykład 1: Żłobek publiczny - 600 zł/mies.**
+- Koszt: 600 zł
+- Babciowe: **600 zł**
+- Twój koszt: **0 zł**
+
+**Przykład 2: Żłobek prywatny - 1 300 zł/mies.**
+- Koszt: 1 300 zł
+- Babciowe: **1 300 zł**
+- Twój koszt: **0 zł**
+
+**Przykład 3: Żłobek prywatny - 2 000 zł/mies.**
+- Koszt: 2 000 zł
+- Babciowe: **1 500 zł** (max)
+- Twój koszt: **500 zł**
+
+**Przykład 4: Dziecko z niepełnosprawnością - żłobek 1 800 zł/mies.**
+- Koszt: 1 800 zł
+- Babciowe: **1 800 zł**
+- Twój koszt: **0 zł**
+
+---
+
+## Jak działa babciowe?
+
+Babciowe **NIE jest wypłacane rodzicom** bezpośrednio!
+
+### Sposób wypłaty:
+
+1. **Rodzic składa wniosek** do ZUS
+2. **ZUS zatwierdza wniosek**
+3. **ZUS płaci bezpośrednio do żłobka/opiekuna** co miesiąc
+4. **Rodzic płaci różnicę** (jeśli koszt > 1500 zł)
+
+**Przykład:**
+- Żłobek kosztuje 1 800 zł/mies.
+- ZUS płaci żłobkowi: 1 500 zł
+- Rodzic płaci żłobkowi: 300 zł
+
+---
+
+## Jak złożyć wniosek o babciowe?
+
+Wniosek składasz **w ZUS** (nie w żłobku!).
+
+### Sposób 1: Online przez PUE ZUS (najszybszy)
+
+🔗 **Link:** [https://www.zus.pl](https://www.zus.pl)
+
+**Jak złożyć:**
+1. Zaloguj się do PUE ZUS (Platforma Usług Elektronicznych)
+2. Wybierz: "Świadczenia rodzinne" → "Aktywnie w żłobku"
+3. Wypełnij wniosek **RSR-DB**
+4. Załącz wymagane dokumenty (skan)
+5. Podpisz profilem zaufanym lub e-podpisem
+6. Wyślij wniosek
+
+⏱️ **Czas realizacji:** 5-10 minut
+
+### Sposób 2: Osobiście w oddziale ZUS
+
+1. Pobierz druk **RSR-DB** (dostępny na zus.pl lub w oddziale)
+2. Wypełnij wniosek
+3. Załącz wymagane dokumenty
+4. Złóż w dowolnym oddziale ZUS
+
+📄 **Druk RSR-DB:** [https://www.zus.pl/documents/10182/167567/RSR-DB.pdf](https://www.zus.pl/documents/10182/167567/RSR-DB.pdf)
+
+---
+
+## Jakie dokumenty są potrzebne do wniosku o babciowe?
+
+### Podstawowe dokumenty:
+
+1. **Wniosek RSR-DB** (druk ZUS)
+2. **Umowa z żłobkiem/opiekunem** - kopia podpisanej umowy
+3. **Numer PESEL dziecka**
+4. **Dane żłobka/opiekuna:**
+   - Nazwa placówki
+   - NIP lub REGON
+   - Numer rachunku bankowego żłobka
+
+### Dodatkowe dokumenty (w niektórych przypadkach):
+
+- **Orzeczenie o niepełnosprawności** - jeśli dziecko ma niepełnosprawność (dla wyższego świadczenia 2000 zł)
+- **Dokument potwierdzający opiekę prawną** - dla opiekunów prawnych
+
+---
+
+## Kiedy złożyć wniosek o babciowe?
+
+### Najlepszy czas:
+
+✅ **Od razu po zapisaniu dziecka do żłobka**
+
+Babciowe przysługuje od miesiąca, w którym:
+- Dziecko **rozpoczęło** pobyt w żłobku
+- **ORAZ** złożono wniosek
+
+### Przykłady:
+
+**Przykład 1:**
+- Dziecko poszło do żłobka: 1 września
+- Wniosek złożony: 5 września
+- **Babciowe od:** września (pełny miesiąc)
+
+**Przykład 2:**
+- Dziecko poszło do żłobka: 1 września
+- Wniosek złożony: 15 października
+- **Babciowe od:** października (stracisz wrzesień!)
+
+**⚠️ WAŻNE:** Babciowe **NIE jest wypłacane wstecz**! Złóż wniosek jak najszybciej po zapisaniu dziecka do żłobka.
+
+---
+
+## Do kiedy przysługuje babciowe?
+
+Babciowe przysługuje **do końca miesiąca przed ukończeniem przez dziecko 3 lat**.
+
+**Przykład:**
+- Dziecko urodziło się: 15 marca 2022
+- Kończy 3 lata: 15 marca 2025
+- Ostatnie babciowe: **luty 2025**
+
+---
+
+## Ile czasu trwa rozpatrzenie wniosku?
+
+- **Wniosek online (PUE ZUS):** 1-7 dni roboczych
+- **Wniosek papierowy:** Do 30 dni
+
+**Decyzja:** Otrzymasz decyzję pocztą lub online (jeśli masz konto PUE ZUS)
+
+---
+
+## Czy babciowe jest opodatkowane?
+
+**NIE** - babciowe jest **wolne od podatku**.
+
+- Nie musisz rozliczać babciowego w PIT
+- Nie wpływa na wysokość innych świadczeń
+- Nie jest wliczane do dochodu rodziny
+
+---
+
+## Czy babciowe można łączyć z innymi świadczeniami?
+
+**TAK** - babciowe można łączyć z:
+
+✅ **800+** (świadczenie wychowawcze)
+✅ **Zasiłek rodzinny** (z dodatkami)
+✅ **Becikowe**
+✅ **Bon energetyczny**
+✅ **Kosiniakowe**
+✅ **Zasiłek pielęgnacyjny**
+✅ **Świadczenie "Dobry Start" (300+)**
+
+**Babciowe NIE wpływa na inne świadczenia.**
+
+---
+
+## Co jeśli dziecko przestanie chodzić do żłobka?
+
+Musisz **natychmiast zgłosić** do ZUS zakończenie pobytu w żłobku.
+
+**Konsekwencje braku zgłoszenia:**
+- ZUS będzie nadal płacił żłobkowi
+- Będziesz musiał **zwrócić nienależnie pobrane świadczenie**
+
+**Jak zgłosić?**
+- Online przez PUE ZUS
+- Osobiście w oddziale ZUS
+
+---
+
+## Najczęstsze pytania o babciowe
+
+### 1. Czy babciowe przysługuje na żłobek prywatny?
+
+**TAK** - babciowe przysługuje zarówno na żłobek publiczny, jak i prywatny.
+
+### 2. Czy babciowe przysługuje na nianię?
+
+**NIE** - babciowe przysługuje tylko na:
+- Żłobek (publiczny/prywatny)
+- Klub dziecięcy
+- Dziennego opiekuna (wpisanego do rejestru gminy)
+
+Niania prywatna **nie kwalifikuje się**.
+
+### 3. Czy babciowe przysługuje na dziecko poniżej 1 roku życia?
+
+**NIE** - dziecko musi ukończyć **12 miesięcy** (1 rok).
+
+### 4. Co jeśli dziecko ma 11 miesięcy i chodzi do żłobka?
+
+Musisz poczekać do ukończenia 12. miesiąca życia. Babciowe przysługuje dopiero od miesiąca, w którym dziecko ukończy rok.
+
+### 5. Czy babciowe przysługuje na przedszkole?
+
+**NIE** - babciowe przysługuje tylko do 3. roku życia. Przedszkola są dla dzieci 3+ lat.
+
+### 6. Co jeśli mam bliźniaki w żłobku?
+
+Otrzymasz **babciowe na każde dziecko osobno** - nawet 2× 1500 zł = 3000 zł/mies.!
+
+### 7. Czy babciowe przysługuje cudzoziemcom?
+
+**TAK** - pod warunkiem legalnego pobytu w Polsce i podlegania ubezpieczeniom społecznym.
+
+---
+
+## Różnica: Babciowe vs 800+
+
+| Świadczenie | Babciowe | 800+ |
+|-------------|----------|------|
+| **Kwota** | Do 1500 zł/mies. | 800 zł/mies. |
+| **Wiek dziecka** | 12-36 mies. (1-3 lata) | 0-18 lat |
+| **Warunek** | Dziecko w żłobku | BRAK |
+| **Wypłata** | Do żłobka | Do rodzica |
+| **Można łączyć?** | TAK ✅ | TAK ✅ |
+
+**Możesz otrzymać oba świadczenia jednocześnie!**
+
+**Przykład:**
+- Dziecko 2-letnie w żłobku za 1200 zł/mies.
+- Otrzymujesz:
+  - **Babciowe:** 1200 zł (płatne do żłobka)
+  - **800+:** 800 zł (na konto)
+  - **Razem:** 2000 zł wsparcia/mies.!
+
+---
+
+## Babciowe a urlop rodzicielski
+
+**Możesz łączyć babciowe z urlopem rodzicielskim!**
+
+Jeśli jesteś na urlopie rodzicielskim, ale dziecko chodzi do żłobka - możesz otrzymać babciowe.
+
+---
+
+## Sprawdź wszystkie świadczenia, które Ci przysługują
+
+Babciowe to tylko jedno z wielu świadczeń dla rodzin. W **Pomocniku Obywatela** znajdziesz:
+
+✅ **Pełną bazę świadczeń** (babciowe, 800+, zasiłki rodzinne, becikowe, 300+)
+✅ **Kalkulator uprawnień** - sprawdź ile możesz otrzymać łącznie
+✅ **Gotowe wnioski** do pobrania
+✅ **Powiadomienia** o zmianach i nowych świadczeniach
+✅ **Instrukcje krok po kroku**
+
+**Za jedyne 5 zł/msc nie przegap żadnych pieniędzy!**
+
+---
+
+## Podsumowanie - Babciowe 2025
+
+✅ **Do 1500 zł miesięcznie** (2000 zł dla dzieci z niepełnosprawnością)
+✅ **Brak kryterium dochodowego** - przysługuje wszystkim
+✅ **Wiek:** 12-36 miesięcy (1-3 lata)
+✅ **Warunek:** Dziecko musi chodzić do żłobka/klubu/do opiekuna
+✅ **Wypłata:** ZUS płaci bezpośrednio do żłobka
+✅ **Wniosek:** Przez PUE ZUS lub osobiście w ZUS
+✅ **Wolne od podatku**
+✅ **Łączy się z 800+ i innymi świadczeniami**
+
+**Pamiętaj:** Złóż wniosek od razu po zapisaniu dziecka do żłobka - babciowe nie jest wypłacane wstecz!
+
+**💡 Protip:** Łącząc babciowe (1500 zł) + 800+ (800 zł) możesz otrzymać **2300 zł miesięcznie** na dziecko! Sprawdź w Pomocniku Obywatela, **jakie jeszcze świadczenia Ci przysługują**.
+`
+  }
+  ,
+  {
+    id: 'kredyt-nastart-2025',
+    slug: 'kredyt-nastart-2025',
+    title: 'Kredyt #naStart 2025 - Bezpieczny kredyt mieszkaniowy 2%: Komu przysługuje?',
+    metaDescription: 'Kredyt #naStart (Bezpieczny Kredyt 2%) 2025 - sprawdź komu przysługuje, jakie są warunki, ile można dostać i jak złożyć wniosek. Kompletny przewodnik dla młodych.',
+    category: 'Mieszkanie',
+    articleType: ARTICLE_TYPES.LIFE_OPPORTUNITIES,
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-14',
+    readTime: '13 min',
+    keywords: 'kredyt nastart, bezpieczny kredyt 2%, kredyt mieszkaniowy 2025, kredyt dla młodych, dopłaty do kredytu mieszkaniowego',
+    excerpt: 'Kredyt #naStart (Bezpieczny Kredyt 2%) 2025 - rządowy program dopłat do kredytów mieszkaniowych dla osób do 35. roku życia. Sprawdź warunki, limity i jak złożyć wniosek.',
+    content: `
+# Kredyt #naStart 2025 - Kompletny przewodnik
+
+**Kredyt #naStart** (znany również jako **Bezpieczny Kredyt 2%**) to rządowy program wsparcia dla osób kupujących pierwsze mieszkanie. Program zapewnia **dopłaty do kredytu hipotecznego**, dzięki czemu rata kredytu jest niższa.
+
+⚠️ **UWAGA:** Program został zawieszony w 2024 roku. Informacje poniżej dotyczą zasad, które obowiązywały. Sprawdź aktualny status programu przed złożeniem wniosku.
+
+## Najważniejsze informacje o kredycie #naStart
+
+✅ **Dla kogo:** Osoby do 35. roku życia kupujące pierwsze mieszkanie
+✅ **Dopłata:** Rząd dopłaca do rat kredytu (oprocentowanie efektywne 2%)
+✅ **Limit kredytu:** Do 500 000 zł (lub 600 000 zł dla rodzin z dziećmi/niepełnosprawnością)
+✅ **Wkład własny:** Minimum 10% wartości nieruchomości (może pochodzić z programu "Rodzinny Kapitał Opiekuńczy")
+✅ **Warunek:** Pierwsze mieszkanie, limit ceny za m², limit metrażu
+
+---
+
+## Komu przysługuje kredyt #naStart?
+
+### Warunki osobowe:
+
+1. **Wiek:** Co najmniej jeden kredytobiorca ma maksymalnie **35 lat** (w dniu złożenia wniosku)
+2. **Pierwsze mieszkanie:** Ani kredytobiorca, ani współmałżonek **nie posiadali wcześniej** mieszkania lub domu
+3. **Obywatelstwo:** Obywatel Polski lub UE (legalny pobyt w Polsce)
+
+### Warunki dotyczące nieruchomości:
+
+1. **Rodzaj:** Mieszkanie lub dom jednorodzinny
+2. **Rynek pierwotny lub wtórny:** Zarówno nowe mieszkania (od dewelopera) jak i używane
+3. **Cel:** Na własne potrzeby mieszkaniowe (nie można wynajmować przez 5 lat)
+4. **Limit metrażu:**
+   - **Bez dzieci:** Do 50 m² (1 osoba) lub 65 m² (2+ osoby)
+   - **Z dziećmi:** +20 m² na każde dziecko
+
+**Przykłady limitów metrażu:**
+- Para bez dzieci: do 65 m²
+- Para + 1 dziecko: do 85 m² (65 + 20)
+- Para + 2 dzieci: do 105 m² (65 + 40)
+- Para + 3 dzieci: do 125 m² (65 + 60)
+
+5. **Limit ceny za m²:**
+   - Nie więcej niż przeciętna cena w danym województwie (ogłaszana przez GUS)
+
+---
+
+## Ile wynosi dopłata do kredytu?
+
+### Jak to działa?
+
+**Rząd dopłaca do Twojej raty kredytu**, aby efektywne oprocentowanie wynosiło **2%**.
+
+**Przykład:**
+- Zaciągasz kredyt na 400 000 zł
+- Bank oferuje oprocentowanie: 7%
+- **Rząd dopłaca różnicę** między 7% a 2% = 5 punktów procentowych
+- **Ty płacisz ratę** jak przy oprocentowaniu 2%
+
+### Ile to oszczędności?
+
+**Przykład: Kredyt 400 000 zł na 25 lat**
+
+| Oprocentowanie | Rata miesięczna | Koszt całkowity |
+|----------------|-----------------|----------------|
+| **7% (bez dopłaty)** | ~2 800 zł | ~840 000 zł |
+| **2% (z dopłatą)** | ~1 700 zł | ~510 000 zł |
+| **Oszczędność** | **~1 100 zł/mies.** | **~330 000 zł** |
+
+---
+
+## Jaki jest limit kredytu w programie #naStart?
+
+### Podstawowy limit:
+
+**Do 500 000 zł**
+
+### Zwiększony limit (600 000 zł) dla:
+
+1. **Rodzin z dziećmi** (co najmniej jedno dziecko)
+2. **Osób z niepełnosprawnością** (orzeczenie o znacznym lub umiarkowanym stopniu)
+3. **Rodzin z osobą niepełnosprawną** (dziecko lub współmałżonek)
+
+---
+
+## Wkład własny - ile trzeba mieć?
+
+**Minimum 10%** wartości nieruchomości.
+
+**Przykłady:**
+
+| Cena mieszkania | Wkład własny (10%) | Kredyt (90%) |
+|-----------------|-------------------|--------------|
+| 300 000 zł | 30 000 zł | 270 000 zł |
+| 400 000 zł | 40 000 zł | 360 000 zł |
+| 500 000 zł | 50 000 zł | 450 000 zł |
+
+### Skąd wziąć wkład własny?
+
+✅ **Oszczędności własne**
+✅ **Rodzinny Kapitał Opiekuńczy** (12 000 zł na drugie dziecko)
+✅ **Prezent od rodziców** (darowizna)
+✅ **Bon mieszkaniowy** (jeśli przysługuje)
+❌ **Pożyczka** - nie można sfinansować wkładu kredytem
+
+---
+
+## Jak złożyć wniosek o kredyt #naStart?
+
+### Krok 1: Sprawdź czy spełniasz warunki
+
+- Wiek do 35 lat
+- Pierwsze mieszkanie
+- Mieszkanie spełnia limity (metraż, cena)
+
+### Krok 2: Znajdź bank uczestniczący w programie
+
+Nie wszystkie banki uczestniczą w programie. Sprawdź listę banków na stronie BGK lub Ministerstwa Rozwoju.
+
+**Przykładowe banki (lista orientacyjna):**
+- PKO BP
+- mBank
+- ING Bank Śląski
+- Pekao S.A.
+- Santander Bank Polska
+- Credit Agricole
+
+### Krok 3: Złóż wniosek w banku
+
+1. Wypełnij wniosek kredytowy
+2. Zaznacz, że chcesz skorzystać z programu #naStart
+3. Załącz wymagane dokumenty
+
+### Krok 4: Bank weryfikuje wniosek
+
+- Sprawdza Twoją zdolność kredytową
+- Weryfikuje czy mieszkanie spełnia warunki programu
+
+### Krok 5: Podpisanie umowy kredytowej
+
+Po pozytywnej decyzji podpisujesz umowę z bankiem.
+
+---
+
+## Jakie dokumenty są potrzebne?
+
+### Podstawowe dokumenty:
+
+1. **Dowód osobisty**
+2. **Zaświadczenie o dochodach** (z pracy, z ZUS, z US dla JDG)
+3. **Oświadczenie o braku własności mieszkania** (dla Ciebie i współmałżonka)
+4. **Akt notarialny** lub **umowa przedwstępna** (jeśli już wybrałeś mieszkanie)
+
+### Dodatkowe dokumenty (w zależności od sytuacji):
+
+- **Akt urodzenia dzieci** - dla zwiększonego limitu (600 000 zł)
+- **Orzeczenie o niepełnosprawności** - dla zwiększonego limitu
+- **Zaświadczenie z GUS** - potwierdzenie ceny za m² w województwie
+
+---
+
+## Ile czasu trwa rozpatrzenie wniosku?
+
+- **Wstępna decyzja banku:** 7-30 dni
+- **Finalna decyzja (po wycenie mieszkania):** 30-60 dni
+
+---
+
+## Czy mogę sprzedać mieszkanie kupione w programie #naStart?
+
+**TAK**, ale pod warunkiem:
+
+- Możesz sprzedać mieszkanie **po 5 latach** od zakupu
+- Jeśli sprzedasz **wcześniej** - musisz **zwrócić dopłaty** do budżetu państwa
+
+**Wyjątki** (można sprzedać wcześniej bez zwrotu dopłat):
+- Zmiana miejsca pracy (powyżej 100 km)
+- Rozwód
+- Choroba uniemożliwiająca spłatę kredytu
+
+---
+
+## Najczęstsze pytania o kredyt #naStart
+
+### 1. Czy mogę kupić mieszkanie od rodziców?
+
+**NIE** - nie można kupić mieszkania od:
+- Rodziców
+- Dziadków
+- Rodzeństwa
+- Współmałżonka
+
+### 2. Czy mogę wynajmować mieszkanie kupione w programie?
+
+**NIE** - przez **pierwsze 5 lat** musisz mieszkać w mieszkaniu na własne potrzeby.
+
+### 3. Czy program obejmuje mieszkania na rynku wtórnym?
+
+**TAK** - możesz kupić zarówno nowe mieszkanie (od dewelopera) jak i używane.
+
+### 4. Co jeśli mam 36 lat?
+
+Niestety, **nie skorzystasz** z programu. Limit to 35 lat w dniu złożenia wniosku.
+
+### 5. Czy mogę skorzystać z programu jeśli wcześniej mieszkałem u rodziców?
+
+**TAK** - liczy się własność mieszkania, nie miejsce zamieszkania.
+
+### 6. Co jeśli przekroczę limit metrażu?
+
+Bank **odrzuci wniosek**. Musisz wybrać mniejsze mieszkanie lub zrezygnować z programu.
+
+### 7. Czy kredyt #naStart łączy się z innymi dopłatami?
+
+**TAK** - możesz łączyć z:
+- Rodzinny Kapitał Opiekuńczy (wkład własny)
+- Bon mieszkaniowy (wkład własny)
+
+---
+
+## Kredyt #naStart vs Mieszkanie dla Młodych (stary program)
+
+| Program | Kredyt #naStart | Mieszkanie dla Młodych |
+|---------|-----------------|------------------------|
+| **Status** | Zawieszony (2024) | Zakończony (2018) |
+| **Wsparcie** | Dopłata do oprocentowania | Zwrot VAT (do 30k zł) |
+| **Wiek** | Do 35 lat | Do 35 lat |
+| **Rynek** | Pierwotny + wtórny | Tylko pierwotny |
+
+---
+
+## Co dalej z kredytem #naStart w 2025?
+
+⚠️ **Program został zawieszony** w 2024 roku ze względu na wysokie koszty dla budżetu państwa.
+
+**Alternatywy:**
+- **Kredyt hipoteczny standardowy** (bez dopłat)
+- **Rodzinny Kapitał Opiekuńczy** - 12 000 zł na drugie dziecko (można przeznaczyć na wkład własny)
+- **Bon mieszkaniowy** (jeśli przysługuje)
+
+**Sprawdź aktualny status programu** na stronie Ministerstwa Rozwoju lub BGK.
+
+---
+
+## Wszystkie dotacje i świadczenia w jednym miejscu
+
+Kredyt #naStart to tylko jeden z programów wsparcia. W **Pomocniku Obywatela** znajdziesz:
+
+✅ **Pełną bazę dotacji i świadczeń** (kredyty, dopłaty, zasiłki)
+✅ **Aktualne informacje** o dostępnych programach mieszkaniowych
+✅ **Kalkulator uprawnień** - sprawdź co Ci przysługuje
+✅ **Powiadomienia** o nowych programach i zmianach
+✅ **Instrukcje krok po kroku**
+
+**Za jedyne 5 zł/msc nie przegap żadnych pieniędzy!**
+
+---
+
+## Podsumowanie - Kredyt #naStart 2025
+
+✅ **Program zawieszony** (sprawdź aktualny status!)
+✅ **Dla osób do 35 lat** kupujących pierwsze mieszkanie
+✅ **Dopłata do oprocentowania** (efektywnie 2%)
+✅ **Limit:** 500 000 zł (600 000 zł dla rodzin z dziećmi)
+✅ **Wkład własny:** Min. 10%
+✅ **Limity metrażu i ceny** za m²
+✅ **Zakaz sprzedaży przez 5 lat**
+
+**💡 Protip:** Sprawdź w Pomocniku Obywatela, **jakie inne dotacje mieszkaniowe możesz otrzymać** (Rodzinny Kapitał Opiekuńczy, bon mieszkaniowy, dodatek mieszkaniowy).
+`
+  }
+  ,
+  {
+    id: 'czyste-powietrze-2025-dofinansowanie',
+    slug: 'czyste-powietrze-2025-dofinansowanie',
+    title: 'Program Czyste Powietrze 2025 - Dotacja do 135 000 zł na wymianę pieca',
+    metaDescription: 'Czyste Powietrze 2025 - sprawdź komu przysługuje dotacja do 135 000 zł na wymianę pieca, fotowoltaikę i termomodernizację. Kompletny przewodnik krok po kroku.',
+    category: 'Budownictwo',
+    articleType: ARTICLE_TYPES.LIFE_OPPORTUNITIES,
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-14',
+    readTime: '14 min',
+    keywords: 'czyste powietrze, dotacja na wymianę pieca, dofinansowanie fotowoltaika, termomodernizacja 2025, pompa ciepła dofinansowanie',
+    excerpt: 'Program Czyste Powietrze 2025 - dotacja nawet do 135 000 zł na wymianę pieca węglowego, fotowoltaikę, pompę ciepła i termomodernizację. Sprawdź warunki i jak złożyć wniosek.',
+    content: `
+# Program Czyste Powietrze 2025 - Kompletny przewodnik
+
+**Program Czyste Powietrze** to flagowy program rządowy wspierający właścicieli domów jednorodzinnych w wymianie starych pieców węglowych na nowoczesne, ekologiczne źródła ciepła. W 2025 roku możesz otrzymać **nawet do 135 000 zł dotacji**!
+
+## Najważniejsze informacje 2025
+
+✅ **Dotacja:** Do 135 000 zł (zależy od dochodu i zakresu prac)
+✅ **Dla kogo:** Właściciele domów jednorodzinnych
+✅ **Na co:** Wymiana pieca, fotowoltaika, pompa ciepła, termomodernizacja
+✅ **Kryterium dochodowe:** TAK - 3 progi dochodowe
+✅ **Gdzie składać:** Wojewódzki Fundusz Ochrony Środowiska
+
+**💡 Sprawdź wszystkie dostępne dotacje w Pomocniku Obywatela za 5 zł/msc!**
+`
+  }
+  ,
+  {
+    id: 'reklamacja-towaru-wadliwego-2025',
+    slug: 'reklamacja-towaru-wadliwego-2025',
+    title: 'Jak złożyć reklamację wadliwego towaru? Wzór i Poradnik 2025',
+    metaDescription: 'Reklamacja wadliwego towaru 2025 - sprawdź jak złożyć reklamację, jakie masz prawa, ile trwa rozpatrzenie i co zrobić gdy sprzedawca odmawia. Gotowy wzór pisma.',
+    category: 'Konsument',
+    articleType: ARTICLE_TYPES.FIRE_FIGHTING,
+    author: 'Zespół Pomocnik Obywatela',
+    publishDate: '2025-12-14',
+    readTime: '12 min',
+    keywords: 'reklamacja towaru, reklamacja produktu, rękojmia, gwarancja, wzór reklamacji, jak złożyć reklamację, prawa konsumenta',
+    excerpt: 'Kompletny przewodnik jak złożyć reklamację wadliwego towaru. Poznaj swoje prawa, różnicę między rękojmią a gwarancją, terminy i gotowy wzór pisma reklamacyjnego.',
+    content: `
+# Jak złożyć reklamację wadliwego towaru 2025
+
+Kupiłeś produkt, który okazał się wadliwy? **Masz prawo do reklamacji!**
+
+## Najważniejsze informacje 2025
+
+✅ **Rękojmia:** 2 lata (z mocy prawa)
+✅ **Gwarancja:** Dobrowolna
+✅ **Termin rozpatrzenia:** 14 dni
+✅ **Brak odpowiedzi:** Reklamacja uznana
+✅ **Koszty:** Ponosi sprzedawca
+
+## Rękojmia vs Gwarancja
+
+### Rękojmia - ZAWSZE przysługuje!
+- 2 lata od zakupu
+- Z mocy prawa
+- Nie można się jej zrzec
+
+### Gwarancja - dobrowolna
+- Warunki określa producent
+- Często szybsza procedura
+
+**Możesz korzystać z obu jednocześnie!**
+
+## Wzór reklamacji
+
+\`\`\`
+[Twoje dane]
+[Data]
+
+[Dane sklepu]
+
+REKLAMACJA
+
+Na podstawie art. 556 KC składam reklamację:
+
+Produkt: [nazwa]
+Data zakupu: [data]
+Wada: [opis]
+
+Żądam: [wymiana/naprawa/zwrot]
+
+[Podpis]
+\`\`\`
+
+**💡 Wygeneruj profesjonalną reklamację w 2 minuty z generatorem Pomocnika Obywatela!**
+`
+  }
 ];
 
 // Pomocnicza funkcja do pobierania artykułu po slug
